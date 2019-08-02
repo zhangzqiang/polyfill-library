@@ -6,6 +6,7 @@ aliases = [
   "Symbol.keyFor"
 ]
 dependencies = [
+  "_sharedKeys",
   "Array.prototype.forEach",
   "Array.prototype.filter",
   "Array.prototype.map",
@@ -14,7 +15,8 @@ dependencies = [
   "Object.getOwnPropertyNames",
   "Object.getOwnPropertyDescriptor",
   "Object.freeze",
-  "Object.keys"
+  "Object.keys",
+  "Object.setPrototypeOf"
 ]
 license = "MIT"
 spec = "http://www.ecma-international.org/ecma-262/6.0/index.html#sec-symbol-objects"

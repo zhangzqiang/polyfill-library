@@ -1,3 +1,4 @@
+/* globals sharedKeys */
 // A modification of https://github.com/WebReflection/get-own-property-symbols
 // (C) Andrea Giammarchi - MIT Licensed
 
@@ -6,10 +7,13 @@
 
 	var setDescriptor;
 	var id = 0;
-	var random = '' + Math.random();
+	var random = '' + Math.floor(100000 + Math.random() * 900000);
 	var prefix = '__\x01symbol:';
 	var prefixLength = prefix.length;
 	var internalSymbol = '__\x01symbol@@' + random;
+	sharedKeys.random = random;
+	sharedKeys.prefix = prefix;
+	sharedKeys.internalSymbol = internalSymbol;
 	var DP = 'defineProperty';
 	var DPies = 'defineProperties';
 	var GOPN = 'getOwnPropertyNames';
@@ -105,11 +109,13 @@
 		} catch (e) {
 			ObjectProto[uid] = descriptor.value;
 		}
-		return freeze(source[uid] = defineProperty(
+		var sym = defineProperty(
 			Object(uid),
 			'constructor',
 			sourceConstructor
-		));
+		);
+		sym = Object.setPrototypeOf(sym, Symbol.prototype);
+		return freeze(source[uid] = sym);
 	};
 	var Symbol = function Symbol() {
 		var description = arguments[0];
@@ -120,6 +126,7 @@
 			prefix.concat(description || '', random, ++id)
 		);
 	};
+	Symbol.prototype.toString = String.prototype.toString;
 	var source = create(null);
 	var sourceConstructor = {
 		value: Symbol
