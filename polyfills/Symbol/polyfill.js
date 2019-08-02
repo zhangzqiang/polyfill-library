@@ -4,7 +4,7 @@
 (function (Object, GOPS, global) {
 	'use strict'; //so that ({}).toString.call(null) returns the correct [object Null] rather than [object Window]
 
-	var	setDescriptor;
+	var setDescriptor;
 	var id = 0;
 	var random = '' + Math.random();
 	var prefix = '__\x01symbol:';
@@ -22,7 +22,7 @@
 	var concat = Array.prototype.concat;
 	var cachedWindowNames = Object.getOwnPropertyNames ? Object.getOwnPropertyNames(window) : [];
 	var nGOPN = Object[GOPN];
-	var gOPN = function getOwnPropertyNames (obj) {
+	var gOPN = function getOwnPropertyNames(obj) {
 		if (toString.call(obj) === '[object Window]') {
 			try {
 				return nGOPN(obj);
@@ -69,7 +69,7 @@
 		newDescriptor.enumerable = false;
 		return newDescriptor;
 	};
-	var get = function get(){};
+	var get = function get() {};
 	var onlyNonSymbols = function (name) {
 		return name != internalSymbol &&
 			!hOP.call(source, name);
@@ -91,13 +91,13 @@
 			configurable: true,
 			get: get,
 			set: function (value) {
-			setDescriptor(this, uid, {
-				enumerable: false,
-				configurable: true,
-				writable: true,
-				value: value
-			});
-			addInternalIfNeeded(this, uid, true);
+				setDescriptor(this, uid, {
+					enumerable: false,
+					configurable: true,
+					writable: true,
+					value: value
+				});
+				addInternalIfNeeded(this, uid, true);
 			}
 		};
 		try {
@@ -119,12 +119,14 @@
 		return setAndGetSymbol(
 			prefix.concat(description || '', random, ++id)
 		);
-		};
+	};
 	var source = create(null);
-	var sourceConstructor = {value: Symbol};
+	var sourceConstructor = {
+		value: Symbol
+	};
 	var sourceMap = function (uid) {
 		return source[uid];
-		};
+	};
 	var $defineProperty = function defineProp(o, key, descriptor) {
 		var uid = '' + key;
 		if (onlySymbols(uid)) {
@@ -144,8 +146,7 @@
 	};
 	var $getOwnPropertySymbols = function getOwnPropertySymbols(o) {
 		return gOPN(o).filter(o === ObjectProto ? onlyInternalSymbols(o) : onlySymbols).map(sourceMap);
-		}
-	;
+	};
 
 	descriptor.value = $defineProperty;
 	defineProperty(Object, DP, descriptor);
@@ -161,13 +162,13 @@
 	descriptor.value = function defineProperties(o, descriptors) {
 		var symbols = $getOwnPropertySymbols(descriptors);
 		if (symbols.length) {
-		keys(descriptors).concat(symbols).forEach(function (uid) {
-			if (propertyIsEnumerable.call(descriptors, uid)) {
-			$defineProperty(o, uid, descriptors[uid]);
-			}
-		});
+			keys(descriptors).concat(symbols).forEach(function (uid) {
+				if (propertyIsEnumerable.call(descriptors, uid)) {
+					$defineProperty(o, uid, descriptors[uid]);
+				}
+			});
 		} else {
-		$defineProperties(o, descriptors);
+			$defineProperties(o, descriptors);
 		}
 		return o;
 	};
@@ -189,18 +190,17 @@
 	// defining `Symbol.keyFor(symbol)`
 	descriptor.value = function (symbol) {
 		if (onlyNonSymbols(symbol))
-		throw new TypeError(symbol + ' is not a symbol');
+			throw new TypeError(symbol + ' is not a symbol');
 		return hOP.call(source, symbol) ?
-		symbol.slice(prefixLength * 2, -random.length) :
-		void 0
-		;
+			symbol.slice(prefixLength * 2, -random.length) :
+			void 0;
 	};
 	defineProperty(Symbol, 'keyFor', descriptor);
 
 	descriptor.value = function getOwnPropertyDescriptor(o, key) {
 		var descriptor = gOPD(o, key);
 		if (descriptor && onlySymbols(key)) {
-		descriptor.enumerable = propertyIsEnumerable.call(o, key);
+			descriptor.enumerable = propertyIsEnumerable.call(o, key);
 		}
 		return descriptor;
 	};
@@ -208,12 +208,15 @@
 
 	descriptor.value = function (proto, descriptors) {
 		return arguments.length === 1 || typeof descriptors === "undefined" ?
-		create(proto) :
-		createWithSymbols(proto, descriptors);
+			create(proto) :
+			createWithSymbols(proto, descriptors);
 	};
 	defineProperty(Object, 'create', descriptor);
 
-	var strictModeSupported = (function(){ 'use strict'; return this; }).call(null) === null;
+	var strictModeSupported = (function () {
+		'use strict';
+		return this;
+	}).call(null) === null;
 	if (strictModeSupported) {
 		descriptor.value = function () {
 			var str = toString.call(this);
