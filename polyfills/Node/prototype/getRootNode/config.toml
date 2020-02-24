@@ -1,0 +1,23 @@
+aliases = []
+dependencies = []
+docs = "https://developer.mozilla.org/en-US/docs/Web/API/Node/getRootNode"
+spec = "https://dom.spec.whatwg.org/#dom-node-getrootnode"
+
+[browsers]
+android = "<6"
+bb = "*"
+chrome = "<54"
+edge = "*"
+edge_mob = "*"
+firefox = "<53"
+firefox_mob = "<53"
+ie = "*"
+ie_mob = "*"
+ios_chr = "10.3"
+ios_saf = "10.3"
+op_mini = "*"
+op_mob = "<41"
+opera = "<41"
+safari = "<10.1"
+samsung_mob = "<6"
+
