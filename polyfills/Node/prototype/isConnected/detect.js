@@ -1,0 +1,1 @@
+'isConnected' in Node.prototype
