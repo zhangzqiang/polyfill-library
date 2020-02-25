@@ -22,18 +22,6 @@ it("is not enumerable", function() {
 });
 
 describe("Node.prototype.getRootNode", function describeGetRootNode() {
-  var realms = [];
-
-  function createRealmn() {
-    var iframe = document.createElement("iframe");
-    iframe.src = window.location;
-    document.body.appendChild(iframe);
-
-    realms.push(iframe);
-
-    return iframe.contentWindow;
-  }
-
   function createShadowRoot(document) {
     var node = document.createElement("div");
     document.body.appendChild(node);
@@ -43,14 +31,6 @@ describe("Node.prototype.getRootNode", function describeGetRootNode() {
 
     return { root: shadowRoot, node: shadowNode };
   }
-
-  afterEach(function cleanupRealms() {
-    for (var i = 0; i < realms.length; i++) {
-      realms[i].remove();
-    }
-
-    realms = [];
-  });
 
   describe("returns the root of detached trees", function testGetRootDetached() {
     function run(document) {
@@ -64,12 +44,8 @@ describe("Node.prototype.getRootNode", function describeGetRootNode() {
       proclaim.deepStrictEqual(descendantNode.getRootNode(), rootNode);
     }
 
-    it("current realmn", function inRealmn() {
+    it("current realm", function inRealm() {
       run(window.document);
-    });
-
-    it("cross-realmn", function outRealmn() {
-      run(createRealmn().document);
     });
   });
 
@@ -86,12 +62,8 @@ describe("Node.prototype.getRootNode", function describeGetRootNode() {
       proclaim.deepStrictEqual(descendantNode.getRootNode(), document);
     }
 
-    it("current realmn", function inRealmn() {
+    it("current realm", function inRealm() {
       run(window.document);
-    });
-
-    it("cross-realmn", function outRealmn() {
-      run(createRealmn().document);
     });
   });
 
@@ -103,12 +75,8 @@ describe("Node.prototype.getRootNode", function describeGetRootNode() {
       proclaim.deepStrictEqual(document.getRootNode(), document);
     }
 
-    it("current realmn", function inRealmn() {
+    it("current realm", function inRealm() {
       run(window.document);
-    });
-
-    it("cross-realmn", function outRealmn() {
-      run(createRealmn().document);
     });
   });
 
@@ -118,22 +86,13 @@ describe("Node.prototype.getRootNode", function describeGetRootNode() {
       proclaim.deepStrictEqual(elems.node.getRootNode(), elems.root);
     }
 
-    it("current realmn", function inRealmn() {
+    it("current realm", function inRealm() {
       if (!supportsShadowRoot()) {
         this.skip();
         return;
       }
 
       run(window.document);
-    });
-
-    it("cross-realmn", function outRealmn() {
-      if (!supportsShadowRoot()) {
-        this.skip();
-        return;
-      }
-
-      run(createRealmn().document);
     });
   });
 
@@ -146,22 +105,13 @@ describe("Node.prototype.getRootNode", function describeGetRootNode() {
       );
     }
 
-    it("current realmn", function inRealmn() {
+    it("current realm", function inRealm() {
       if (!supportsShadowRoot()) {
         this.skip();
         return;
       }
 
       run(window.document);
-    });
-
-    it("cross-realmn", function outRealmn() {
-      if (!supportsShadowRoot()) {
-        this.skip();
-        return;
-      }
-
-      run(createRealmn().document);
     });
   });
 
@@ -174,22 +124,13 @@ describe("Node.prototype.getRootNode", function describeGetRootNode() {
       );
     }
 
-    it("current realmn", function inRealmn() {
+    it("current realm", function inRealm() {
       if (!supportsShadowRoot()) {
         this.skip();
         return;
       }
 
       run(window.document);
-    });
-
-    it("cross-realmn", function outRealmn() {
-      if (!supportsShadowRoot()) {
-        this.skip();
-        return;
-      }
-
-      run(createRealmn().document);
     });
   });
 });
