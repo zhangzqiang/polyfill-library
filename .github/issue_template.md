@@ -6,6 +6,7 @@ title: Issue: [type] [short description]
 <!--
 Please make sure you've checked that your issue hasn't already been raised within this repository.
 
+If you need help with submitting an issue, please get in touch with the Origami Team at origami.support@ft.com or #origami-support on Slack.
 -->
 ## What
 <!-- A clear description of what the problem or feature request is -->
@@ -30,5 +31,6 @@ If it is a feature request:
 ## Additional information
 For either type of issue:
 	- please add any other comments or details you might have
+	- if you've had a conversation about this with someone, please reference that person in this issue
 	- if there is a similar or related issue, please link to it
 -->
