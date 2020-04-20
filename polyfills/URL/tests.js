@@ -167,7 +167,6 @@ it('Parameter Encoding', function () {
 	proclaim.equal(url.searchParams.get('a  b'), 'a  b');
 });
 
-
 it('Base URL', function () {
 	// fully qualified URL
 	proclaim.equal(new URL('http://example.com', 'https://example.org').href, 'http://example.com/');
@@ -328,4 +327,10 @@ it('Regression tests', function() {
 	p.append('a', 1);
 	p.append('b', 2);
 	proclaim.equal(p.toString(), 'a=1&b=2');
+});
+
+it('invalud url throws error', function() {
+	proclaim["throws"](function(){
+		new URL( 'invalid' );
+	});
 });
