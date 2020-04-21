@@ -1,336 +1,168 @@
 /* eslint-env mocha, browser */
 /* global proclaim */
 
-it('URL IDL', function () {
-	var url = new URL('http://example.com:8080/foo/bar?a=1&b=2#p1');
-	proclaim.equal(typeof url.protocol, 'string', 'protocol');
-	proclaim.equal(typeof url.host, 'string', 'host');
-	proclaim.equal(typeof url.hostname, 'string', 'hostname');
-	proclaim.equal(typeof url.port, 'string', 'port');
-	proclaim.equal(typeof url.pathname, 'string', 'pathname');
-	proclaim.equal(typeof url.search, 'string', 'search');
-	proclaim.equal(typeof url.hash, 'string', 'hash');
-	proclaim.equal(typeof url.origin, 'string', 'origin');
-	proclaim.equal(typeof url.href, 'string', 'href');
-});
+describe("URL", function() {
+  describe("URL constructor", function() {
+    it("is a function", function() {
+      proclaim.isFunction(URL);
+    });
+    it("is has correct arity", function() {
+      proclaim.arity(URL, 1);
+    });
+    it("is has correct name", function() {
+      proclaim.hasName(URL, "URL");
+    });
+    it("works with absolute urls", function() {
+      proclaim.deepStrictEqual(
+        String(new URL("http://www.domain.com/a/b")),
+        "http://www.domain.com/a/b"
+      );
+    });
+    it("works with domain relative url and base parameter", function() {
+      proclaim.deepStrictEqual(
+        String(new URL("/c/d", "http://www.domain.com/a/b")),
+        "http://www.domain.com/c/d"
+      );
+    });
+    it("works with path relative url and base parameter", function() {
+      proclaim.deepStrictEqual(
+        String(new URL("b/c", "http://www.domain.com/a/b")),
+        "http://www.domain.com/a/b/c"
+      );
+      proclaim.deepStrictEqual(
+        String(new URL("b/c", new URL("http://www.domain.com/a/b"))),
+        "http://www.domain.com/a/b/c"
+      );
+    });
+    it("Calls toString on the parameter if it is not a string", function() {
+      proclaim.deepStrictEqual(
+        String(
+          new URL({
+            toString: function() {
+              return "https://example.org/";
+            }
+          })
+        ),
+        "https://example.org/"
+      );
+    });
 
-it('URL Stringifying', function() {
-	proclaim.equal(String(new URL('http://example.com')), 'http://example.com/');
-	proclaim.equal(String(new URL('http://example.com:8080')), 'http://example.com:8080/');
-});
+    it("works with nonspecial schemes", function() {
+      proclaim.deepStrictEqual(
+        String(new URL("nonspecial://example.com/")),
+        "nonspecial://example.com/"
+      );
+    });
+    it("works with non-ascii domains", function() {
+      proclaim.deepStrictEqual(
+        String(new URL("https://測試")),
+        "https://xn--g6w251d/"
+      );
+      proclaim.deepStrictEqual(
+        String(new URL("https://xxпривет.тест")),
+        "https://xn--xx-flcmn5bht.xn--e1aybc/"
+      );
+      proclaim.deepStrictEqual(
+        String(new URL("https://xxПРИВЕТ.тест")),
+        "https://xn--xx-flcmn5bht.xn--e1aybc/"
+      );
+      proclaim.deepStrictEqual(
+        String(new URL("http://Example.com/", "https://example.org/"))
+      );
+      proclaim.deepStrictEqual(
+        String(new URL("https://Example.com/", "https://example.org/"))
+      );
+      proclaim.deepStrictEqual(
+        String(new URL("nonspecial://Example.com/", "https://example.org/"))
+      );
+      proclaim.deepStrictEqual(
+        String(new URL("http:Example.com/", "https://example.org/"))
+      );
+      proclaim.deepStrictEqual(
+        String(new URL("https:Example.com/", "https://example.org/"))
+      );
+      proclaim.deepStrictEqual(
+        String(new URL("nonspecial:Example.com/", "https://example.org/"))
+      );
+    });
 
-it('URL Parsing', function () {
-	var url = new URL('http://example.com:8080/foo/bar?a=1&b=2#p1');
-	proclaim.equal(url.protocol, 'http:');
-	proclaim.equal(url.hostname, 'example.com');
-	proclaim.equal(url.port, '8080');
-	proclaim.equal(url.host, 'example.com:8080');
-	proclaim.equal(url.pathname, '/foo/bar');
-	proclaim.equal(url.search, '?a=1&b=2');
-	proclaim.equal(url.hash, '#p1');
-	proclaim.equal(url.origin, 'http://example.com:8080');
-	proclaim.equal(url.href, 'http://example.com:8080/foo/bar?a=1&b=2#p1');
-});
+    it("works with base 8/10/16 ipv4 and ipv6 addresses", function() {
+      proclaim.deepStrictEqual(
+        String(new URL("http://0300.168.0xF0")),
+        "http://192.168.0.240/"
+      );
+      proclaim.deepStrictEqual(
+        String(new URL("http://[20:0:0:1:0:0:0:ff]")),
+        "http://[20:0:0:1::ff]/"
+      );
+      proclaim.deepStrictEqual(
+        String(new URL("http://0300.168.0xG0")),
+        "http://0300.168.0xg0/"
+      );
+    });
 
-it('URL Mutation', function () {
-	var url = new URL('http://example.com');
-	proclaim.equal(url.href, 'http://example.com/');
-	proclaim.equal(url.origin, 'http://example.com');
-	proclaim.equal(url.host, 'example.com');
+    it("works with the file scheme", function() {
+      proclaim.deepStrictEqual(
+        String(new URL("file:///var/log/system.log")),
+        "file:///var/log/system.log"
+      );
+    });
 
-	url.protocol = 'ftp';
-	proclaim.equal(url.protocol, 'ftp:');
-	proclaim.equal(url.href, 'ftp://example.com/');
-
-	// Fails in native IE13 (Edge)
-	// Probable bug in IE.  https://twitter.com/patrickkettner/status/768726160070934529
-	//proclaim.equal(url.origin, 'ftp://example.com');
-
-	proclaim.equal(url.host, 'example.com');
-	url.protocol = 'http';
-	proclaim.equal(url.protocol, 'http:');
-	proclaim.equal(url.href, 'http://example.com/');
-	proclaim.equal(url.origin, 'http://example.com');
-	proclaim.equal(url.host, 'example.com');
-
-	url = new URL('http://example.com');
-	url.hostname = 'example.org';
-	proclaim.equal(url.href, 'http://example.org/');
-	proclaim.equal(url.origin, 'http://example.org');
-	proclaim.equal(url.host, 'example.org');
-	url.hostname = 'example.com';
-	proclaim.equal(url.href, 'http://example.com/');
-	proclaim.equal(url.origin, 'http://example.com');
-	proclaim.equal(url.host, 'example.com');
-
-	url = new URL('http://example.com');
-	url.port = 8080;
-	proclaim.equal(url.href, 'http://example.com:8080/');
-	proclaim.equal(url.origin, 'http://example.com:8080');
-	proclaim.equal(url.host, 'example.com:8080');
-	url.port = 80;
-	proclaim.equal(url.href, 'http://example.com/');
-	proclaim.equal(url.origin, 'http://example.com');
-	proclaim.equal(url.host, 'example.com');
-
-	url = new URL('http://example.com');
-	url.pathname = 'foo';
-	proclaim.equal(url.href, 'http://example.com/foo');
-	proclaim.equal(url.origin, 'http://example.com');
-	url.pathname = 'foo/bar';
-	proclaim.equal(url.href, 'http://example.com/foo/bar');
-	proclaim.equal(url.origin, 'http://example.com');
-	url.pathname = '';
-	proclaim.equal(url.href, 'http://example.com/');
-	proclaim.equal(url.origin, 'http://example.com');
-
-	url = new URL('http://example.com');
-	url.search = 'a=1&b=2';
-	proclaim.equal(url.href, 'http://example.com/?a=1&b=2');
-	proclaim.equal(url.origin, 'http://example.com');
-	url.search = '';
-	proclaim.equal(url.href, 'http://example.com/');
-	proclaim.equal(url.origin, 'http://example.com');
-
-	url = new URL('http://example.com');
-	url.hash = 'p1';
-	proclaim.equal(url.href, 'http://example.com/#p1');
-	proclaim.equal(url.origin, 'http://example.com');
-	url.hash = '';
-	proclaim.equal(url.href, 'http://example.com/');
-	proclaim.equal(url.origin, 'http://example.com');
-});
-
-it('Parameter Mutation', function () {
-	var url = new URL('http://example.com');
-	proclaim.equal(url.href, 'http://example.com/');
-	proclaim.equal(url.search, '');
-	proclaim.equal(url.searchParams.get('a'), null);
-	proclaim.equal(url.searchParams.get('b'), null);
-
-	url.searchParams.append('a', '1');
-	proclaim.equal(url.searchParams.get('a'), '1');
-	proclaim.deepEqual(url.searchParams.getAll('a'), ['1']);
-	proclaim.equal(url.search, '?a=1');
-	proclaim.equal(url.href, 'http://example.com/?a=1');
-
-	url.searchParams.append('b', '2');
-	proclaim.equal(url.searchParams.get('b'), '2');
-	proclaim.deepEqual(url.searchParams.getAll('b'), ['2']);
-	proclaim.equal(url.search, '?a=1&b=2');
-	proclaim.equal(url.href, 'http://example.com/?a=1&b=2');
-
-	url.searchParams.append('a', '3');
-	proclaim.equal(url.searchParams.get('a'), '1');
-	proclaim.deepEqual(url.searchParams.getAll('a'), ['1', '3']);
-	proclaim.equal(url.search, '?a=1&b=2&a=3');
-	proclaim.equal(url.href, 'http://example.com/?a=1&b=2&a=3');
-
-	url.searchParams['delete']('a');
-	proclaim.equal(url.search, '?b=2');
-	proclaim.deepEqual(url.searchParams.getAll('a'), []);
-	proclaim.equal(url.href, 'http://example.com/?b=2');
-
-	url.searchParams['delete']('b');
-	proclaim.deepEqual(url.searchParams.getAll('b'), []);
-	proclaim.equal(url.href, 'http://example.com/');
-
-	url.href = 'http://example.com?m=9&n=3';
-	proclaim.equal(url.searchParams.has('a'), false);
-	proclaim.equal(url.searchParams.has('b'), false);
-	proclaim.equal(url.searchParams.get('m'), 9);
-	proclaim.equal(url.searchParams.get('n'), 3);
-
-	url.href = 'http://example.com';
-	url.searchParams.set('a', '1');
-	proclaim.deepEqual(url.searchParams.getAll('a'), ['1']);
-	url.search = 'a=1&b=1&b=2&c=1';
-	url.searchParams.set('b', '3');
-	proclaim.deepEqual(url.searchParams.getAll('b'), ['3']);
-	proclaim.equal(url.href, 'http://example.com/?a=1&b=3&c=1');
-});
-
-it('Parameter Encoding', function () {
-	var url = new URL('http://example.com');
-	proclaim.equal(url.href, 'http://example.com/');
-	proclaim.equal(url.search, '');
-	url.searchParams.append('this\x00&that\x7f\xff', '1+2=3');
-	proclaim.equal(url.searchParams.get('this\x00&that\x7f\xff'), '1+2=3');
-
-	// The following fail in FF (tested in 38) against native impl
-	//proclaim.equal(url.search, '?this%00%26that%7F%C3%BF=1%2B2%3D3');
-	//proclaim.equal(url.href, 'http://example.com/?this%00%26that%7F%C3%BF=1%2B2%3D3');
-
-	url.search = '';
-	url.searchParams.append('a  b', 'a  b');
-	proclaim.equal(url.search, '?a++b=a++b');
-	proclaim.equal(url.searchParams.get('a  b'), 'a  b');
-});
-
-it('Base URL', function () {
-	// fully qualified URL
-	proclaim.equal(new URL('http://example.com', 'https://example.org').href, 'http://example.com/');
-	proclaim.equal(new URL('http://example.com/foo/bar', 'https://example.org').href, 'http://example.com/foo/bar');
-
-	// protocol relative
-	proclaim.equal(new URL('//example.com', 'https://example.org').href, 'https://example.com/');
-
-	// path relative
-	proclaim.equal(new URL('/foo/bar', 'https://example.org').href, 'https://example.org/foo/bar');
-	proclaim.equal(new URL('/foo/bar', 'https://example.org/baz/bat').href, 'https://example.org/foo/bar');
-	proclaim.equal(new URL('./bar', 'https://example.org').href, 'https://example.org/bar');
-	proclaim.equal(new URL('./bar', 'https://example.org/foo/').href, 'https://example.org/foo/bar');
-	proclaim.equal(new URL('bar', 'https://example.org/foo/').href, 'https://example.org/foo/bar');
-	proclaim.equal(new URL('../bar', 'https://example.org/foo/').href, 'https://example.org/bar');
-	proclaim.equal(new URL('../bar', 'https://example.org/foo/').href, 'https://example.org/bar');
-	proclaim.equal(new URL('../../bar', 'https://example.org/foo/baz/bat/').href, 'https://example.org/foo/bar');
-	proclaim.equal(new URL('../../bar', 'https://example.org/foo/baz/bat').href, 'https://example.org/bar');
-	proclaim.equal(new URL('../../bar', 'https://example.org/foo/baz/').href, 'https://example.org/bar');
-	proclaim.equal(new URL('../../bar', 'https://example.org/foo/').href, 'https://example.org/bar');
-	proclaim.equal(new URL('../../bar', 'https://example.org/foo/').href, 'https://example.org/bar');
-
-	// search/hash relative
-	proclaim.equal(new URL('bar?ab#cd', 'https://example.org/foo/').href, 'https://example.org/foo/bar?ab#cd');
-	proclaim.equal(new URL('bar?ab#cd', 'https://example.org/foo').href, 'https://example.org/bar?ab#cd');
-	proclaim.equal(new URL('?ab#cd', 'https://example.org/foo').href, 'https://example.org/foo?ab#cd');
-	proclaim.equal(new URL('?ab', 'https://example.org/foo').href, 'https://example.org/foo?ab');
-	proclaim.equal(new URL('#cd', 'https://example.org/foo').href, 'https://example.org/foo#cd');
-});
-
-it('URLSearchParams', function () {
-	var url = new URL('http://example.com?a=1&b=2');
-	proclaim.ok(url.searchParams instanceof URLSearchParams);
-
-	proclaim.equal(String(new URLSearchParams()), '');
-	proclaim.equal(String(new URLSearchParams('')), '');
-	proclaim.equal(String(new URLSearchParams('a=1')), 'a=1');
-	proclaim.equal(String(new URLSearchParams('a=1&b=1')), 'a=1&b=1');
-	proclaim.equal(String(new URLSearchParams('a=1&b&a')), 'a=1&b=&a=');
-
-	// The following fail in FF (tested in 38) against native impl
-	// but FF38 passes the detect
-	/*
-	proclaim.equal(String(new URLSearchParams('?')), '');
-	proclaim.equal(String(new URLSearchParams('?a=1')), 'a=1');
-	proclaim.equal(String(new URLSearchParams('?a=1&b=1')), 'a=1&b=1');
-	proclaim.equal(String(new URLSearchParams('?a=1&b&a')), 'a=1&b=&a=');
-
-	proclaim.equal(String(new URLSearchParams(new URLSearchParams('?'))), '');
-	proclaim.equal(String(new URLSearchParams(new URLSearchParams('?a=1'))), 'a=1');
-	proclaim.equal(String(new URLSearchParams(new URLSearchParams('?a=1&b=1'))), 'a=1&b=1');
-	proclaim.equal(String(new URLSearchParams(new URLSearchParams('?a=1&b&a'))), 'a=1&b=&a=');
-	*/
-});
-
-it('URLSearchParams mutation', function () {
-	var p = new URLSearchParams();
-	proclaim.equal(p.get('a'), null);
-	proclaim.equal(p.get('b'), null);
-
-	p.append('a', '1');
-	proclaim.equal(p.get('a'), '1');
-	proclaim.deepEqual(p.getAll('a'), ['1']);
-	proclaim.equal(String(p), 'a=1');
-
-	p.append('b', '2');
-	proclaim.equal(p.get('b'), '2');
-	proclaim.deepEqual(p.getAll('b'), ['2']);
-	proclaim.equal(String(p), 'a=1&b=2');
-
-	p.append('a', '3');
-	proclaim.equal(p.get('a'), '1');
-	proclaim.deepEqual(p.getAll('a'), ['1', '3']);
-	proclaim.equal(String(p), 'a=1&b=2&a=3');
-
-	p['delete']('a');
-	proclaim.equal(String(p), 'b=2');
-	proclaim.deepEqual(p.getAll('a'), []);
-
-	p['delete']('b');
-	proclaim.deepEqual(p.getAll('b'), []);
-
-	p = new URLSearchParams('m=9&n=3');
-	proclaim.equal(p.has('a'), false);
-	proclaim.equal(p.has('b'), false);
-	proclaim.equal(p.get('m'), 9);
-	proclaim.equal(p.get('n'), 3);
-
-	p = new URLSearchParams();
-	p.set('a', '1');
-	proclaim.deepEqual(p.getAll('a'), ['1']);
-	p = new URLSearchParams('a=1&b=1&b=2&c=1');
-	p.set('b', '3');
-	proclaim.deepEqual(p.getAll('b'), ['3']);
-	proclaim.equal(String(p), 'a=1&b=3&c=1');
-
-	// Ensure copy constructor copies by value, not reference.
-	var sp1 = new URLSearchParams('a=1');
-	proclaim.equal(String(sp1), 'a=1');
-	var sp2 = new URLSearchParams(sp1);
-	proclaim.equal(String(sp2), 'a=1');
-	sp1.append('b', '2');
-	sp2.append('c', '3');
-	proclaim.equal(String(sp1), 'a=1&b=2');
-	proclaim.equal(String(sp2), 'a=1&c=3');
-});
-
-it('URLSearchParams sort', function() {
-	var url = new URL("https://example.org/?q=🏳️‍🌈&key=e1f7bc78");
-	url.searchParams.sort();
-	proclaim.deepEqual(url.search, '?key=e1f7bc78&q=%F0%9F%8F%B3%EF%B8%8F%E2%80%8D%F0%9F%8C%88');
-
-	var sp = new URLSearchParams();
-	sp.append('a', 3);
-	sp.append('b', 2);
-	sp.append('a', 1);
-	sp.sort();
-
-	proclaim.deepEqual(String(sp), 'a=3&a=1&b=2');
-});
-// The following fail in FF (tested in 38) against native impl
-// but FF38 passes the detect
-/*
-it('URLSearchParams serialization', function() {
-	var p = new URLSearchParams();
-	p.append('this\x00&that\x7f\xff', '1+2=3');
-	proclaim.equal(p.get('this\x00&that\x7f\xff'), '1+2=3');
-	proclaim.equal(String(p), 'this%00%26that%7F%C3%BF=1%2B2%3D3');
-	p = new URLSearchParams();
-	p.append('a  b', 'a  b');
-	proclaim.equal(String(p), 'a++b=a++b');
-	proclaim.equal(p.get('a  b'), 'a  b');
-});
-
-it('URLSearchParams iterable methods', function () {
-	var params = new URLSearchParams('a=1&b=2');
-	proclaim.deepEqual(toArray(params.entries()), [['a', '1'], ['b', '2']]);
-	proclaim.deepEqual(toArray(params.keys()), ['a', 'b']);
-	proclaim.deepEqual(toArray(params.values()), ['1', '2']);
-
-	if ('Symbol' in self && 'iterator' in self.Symbol) {
-		proclaim.deepEqual(toArray(params[Symbol.iterator]()), [['a', '1'], ['b', '2']]);
-	}
-});
-*/
-
-// Not implemented by the polyfill!
-/*
-it('URL contains native static methods', function () {
-		proclaim.ok(typeof URL.createObjectURL == 'function');
-		proclaim.ok(typeof URL.revokeObjectURL == 'function');
-});
-*/
-
-it('Regression tests', function() {
-	// IE mangles the pathname when assigning to search with 'about:' URLs
-	var p = new URL('about:blank').searchParams;
-	p.append('a', 1);
-	p.append('b', 2);
-	proclaim.equal(p.toString(), 'a=1&b=2');
-});
-
-it('invalud url throws error', function() {
-	proclaim["throws"](function(){
-		new URL( 'invalid' );
-	});
+    it("throws if called with no parameters", function() {
+      proclaim["throws"](function() {
+        new URL();
+      });
+    });
+    it("throws if called with empty string", function() {
+      proclaim["throws"](function() {
+        new URL("");
+      });
+    });
+    it("throws if called with empty string and blank base url", function() {
+      proclaim["throws"](function() {
+        new URL("", "about:blank");
+      });
+    });
+    it("throws if called with an invalid url", function() {
+      proclaim["throws"](function() {
+        new URL("abc");
+      });
+    });
+    it("throws if called without a scheme", function() {
+      proclaim["throws"](function() {
+        new URL("//abc");
+      });
+    });
+    it("throws if called with an invalid base url", function() {
+      proclaim["throws"](function() {
+        new URL("http:///www.domain.com/", "abc");
+      });
+    });
+    it("throws if called with a null base url", function() {
+      proclaim["throws"](function() {
+        new URL("http:///www.domain.com/", null);
+      });
+      proclaim["throws"](function() {
+        new URL("//abc", null);
+      });
+    });
+    it("throws if called with invalid IPv6 address", function() {
+      proclaim["throws"](function() {
+        new URL("http://[20:0:0:1:0:0:0:ff");
+      });
+      proclaim["throws"](function() {
+        new URL("http://[20:0:0:1:0:0:0:fg]");
+      });
+    });
+    it("throws if called with a forbidden host codepoint", function() {
+      proclaim["throws"](function() {
+        new URL("http://a%b");
+      }); // no error in FF
+    });
+    it("throws if called with an invalid scheme", function() {
+      proclaim["throws"](function() {
+        new URL("1http://example.com");
+      }, "incorrect scheme");
+    });
+  });
 });
