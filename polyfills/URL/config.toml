@@ -8,13 +8,17 @@ aliases = [
   "URLSearchParams"
 ]
 dependencies = [
-  "Object.defineProperties",
-  "Array.prototype.forEach",
-  "Array.isArray"
+  "String.prototype.charCodeAt",
+  "String.prototype.codePointAt",
+  "String.fromCharCode",
+  "Object.assign",
+  "Array.from",
+  "Object.defineProperty",
+  "Object.getPrototypeOf",
+  "Object.keys",
+  "Array.prototype.entries",
+  "Symbol.iterator"
 ]
-notes = [ "Polyfill requires Object getters so fails in IE < 8" ]
-license = "CC0-1.0"
-repo = "https://github.com/inexorabletash/polyfill"
 docs = "https://developer.mozilla.org/en-US/docs/Web/API/URL"
 
 [browsers]
