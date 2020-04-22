@@ -49,7 +49,7 @@
   var INVALID_HOST = "Invalid host";
   var INVALID_PORT = "Invalid port";
 
-  var EOF = {};
+  var EOF;
 
   // https://url.spec.whatwg.org/#forbidden-host-code-point
   function containsForbiddenHostCodePoint(string) {
@@ -110,7 +110,7 @@
   // The application/x-www-form-urlencoded parser takes a byte sequence input, and then runs these steps:
   function parseUrlencoded(input) {
     // 1. Let sequences be the result of splitting input on 0x26 (&).
-    var sequences = strictlySplitByteSequence(input, p("&"));
+    var sequences = strictlySplitByteSequence(input, "&");
     // 2. Let output be an initially empty list of name-value tuples where both name and value hold a string.
     var output = [];
     // 3. For each byte sequence bytes in sequences:
@@ -124,7 +124,7 @@
       // 3.3. Otherwise, let name have the value of bytes and let value be the empty byte sequence.
       var name;
       var value;
-      var indexOfEqual = bytes.indexOf(p("="));
+      var indexOfEqual = bytes.indexOf("=");
 
       if (indexOfEqual >= 0) {
         name = bytes.slice(0, indexOfEqual);
@@ -134,8 +134,8 @@
         value = "";
       }
       // 3.4. Replace any 0x2B (+) in name and value with 0x20 (SP).
-      name = replaceByteInByteSequence(name, p("+"), p(" "));
-      value = replaceByteInByteSequence(value, p("+"), p(" "));
+      name = replaceByteInByteSequence(name, ("+"), (" "));
+      value = replaceByteInByteSequence(value, ("+"), (" "));
       // 3.5. Let nameString and valueString be the result of running UTF-8 decode without BOM on the percent decoding of name and value, respectively.
       var nameString = percentDecode(name).toString();
       var valueString = percentDecode(value).toString();
@@ -295,7 +295,7 @@
   // eslint-disable-next-line no-unused-vars
   function domainToASCII(domain, beStrict) {
     // 1. If beStrict is not given, set it to false.
-    if (arguments.length < 2) {
+    if (arguments.length < 1) {
       beStrict = false;
     }
     // 2. Let result be the result of running Unicode ToASCII with domain_name set to domain, UseSTD3ASCIIRules set to beStrict, CheckHyphens set to false, CheckBidi set to true, CheckJoiners set to true, Transitional_Processing set to false, and VerifyDnsLength set to beStrict.
@@ -361,11 +361,11 @@
   };
 
   function isASCIIDigit(c) {
-    return c >= 0x30 && c <= 0x39;
+    return /\d/.test(c)
   }
 
   function isASCIIAlpha(c) {
-    return (c >= 0x41 && c <= 0x5a) || (c >= 0x61 && c <= 0x7a);
+    return /[A-Za-z]/.test(c);
   }
 
   function isASCIIAlphanumeric(c) {
@@ -373,39 +373,36 @@
   }
 
   function isASCIIHex(c) {
-    return (
-      isASCIIDigit(c) || (c >= 0x41 && c <= 0x46) || (c >= 0x61 && c <= 0x66)
-    );
+    return /^[\dA-Fa-f]+$/.test(c);
   }
 
   // https://url.spec.whatwg.org/#percent-decode
   function percentDecode(input) {
     // 1. Let output be an empty byte sequence.
     var output = "";
-    var ptr = 0;
     // 2. For each byte byte in input:
     for (var i = 0; i < input.length; ++i) {
       // 2.1. If byte is not 0x25 (%), then append byte to output.
-      if (input[i] !== p("%")) {
-        output[ptr++] = input[i];
+      if (input[i] !== codePointFor("%")) {
+        output += input[i];
         // 2.2. Otherwise, if byte is 0x25 (%) and the next two bytes after byte in input are not in the ranges 0x30 (0) to 0x39 (9), 0x41 (A) to 0x46 (F), and 0x61 (a) to 0x66 (f), all inclusive, append byte to output.
       } else if (
-        (input[i] === p("%") && !isASCIIHex(input[i + 1])) ||
+        (input[i] === codePointFor("%") && !isASCIIHex(input[i + 1])) ||
         !isASCIIHex(input[i + 2])
       ) {
-        output[ptr++] = input[i];
+        output += input[i];
         // 2.3. Otherwise:
       } else {
         // 2.3.1. Let bytePoint be the two bytes after byte in input, decoded, and then interpreted as hexadecimal number.
         var bytePoint = parseInt(input.slice(i + 1, i + 3).toString(), 16);
         // 2.3.2. Append a byte whose value is bytePoint to output
-        output[ptr++] = bytePoint;
+        output += bytePoint;
         // 2.3.3. Skip the next two bytes in input.
         i += 2;
       }
     }
     // 3. Return output.
-    return output.slice(0, ptr);
+    return output;
   }
 
   // States:
@@ -440,10 +437,10 @@
     wss: 443
   };
 
-  function at(input, idx) {
-    var c = input[idx];
-    return isNaN(c) ? undefined : String.fromCodePoint(c);
-  }
+  // function at(input, idx) {
+  //   var c = input[idx];
+  //   return isNaN(c) ? undefined : String.fromCodePoint(c);
+  // }
 
   // https://url.spec.whatwg.org/#is-special
   // A URL is special if its scheme is a special scheme. A URL is not special if its scheme is not a special scheme.
@@ -505,7 +502,7 @@
     return encodeURIComponent(char);
   }
 
-  function p(char) {
+  function codePointFor(char) {
     return char.codePointAt(0);
   }
 
@@ -642,13 +639,11 @@
     // 4. Let pointer be a pointer into input, initially 0 (pointing to the first code point).
     var pointer = 0;
 
-    input = ucs2decode(input);
-
     // 5. If c is U+003A (:), then:
     var c = input[pointer];
-    if (c === p(":")) {
+    if (c === ":") {
       // 5.1. If remaining does not start with U+003A (:), validation error, return failure.
-      if (input[pointer + 1] !== p(":")) {
+      if (input[pointer + 1] !== ":") {
         return failure;
       }
       // 5.2. Increase pointer by 2.
@@ -666,7 +661,7 @@
       }
 
       // 6.2. If c is U+003A (:), then:
-      if (input[pointer] === p(":")) {
+      if (input[pointer] === ":") {
         // 6.2.1. If compress is non-null, validation error, return failure.
         if (compress !== null) {
           return failure;
@@ -684,13 +679,13 @@
 
       // 6.4. While length is less than 4 and c is an ASCII hex digit, set value to value × 0x10 + c interpreted as hexadecimal number, and increase pointer and length by 1.
       while (length < 4 && isASCIIHex(input[pointer])) {
-        value = value * 0x10 + parseInt(at(input, pointer), 16);
+        value = value * 0x10 + parseInt(input.charAt(pointer), 16);
         ++pointer;
         ++length;
       }
 
       // 6.5. If c is U+002E (.), then:
-      if (input[pointer] === p(".")) {
+      if (input[pointer] === ".") {
         // 6.5.1. If length is 0, validation error, return failure.
         if (length === 0) {
           return failure;
@@ -712,7 +707,7 @@
           // 6.5.5.2. If numbersSeen is greater than 0, then:
           if (numbersSeen > 0) {
             // 6.5.5.2.1. If c is a U+002E (.) and numbersSeen is less than 4, then increase pointer by 1.
-            if (input[pointer] === p(".") && numbersSeen < 4) {
+            if (input[pointer] === "." && numbersSeen < 4) {
               pointer += 1;
               // 6.5.5.2.2. Otherwise, validation error, return failure.
             } else {
@@ -727,7 +722,7 @@
           // 6.5.5.4. While c is an ASCII digit:
           while (isASCIIDigit(input[pointer])) {
             // 6.5.5.4.1. Let number be c interpreted as decimal number.
-            var number = parseInt(at(input, pointer), 10);
+            var number = parseInt(input.charAt(pointer), 10);
             // 6.5.5.4.2. If ipv4Piece is null, then set ipv4Piece to number.
             if (ipv4Piece === null) {
               ipv4Piece = number;
@@ -766,7 +761,7 @@
         // 6.5.7. Break.
         break;
         // 6.6. Otherwise, if c is U+003A (:):
-      } else if (input[pointer] === p(":")) {
+      } else if (input[pointer] === ":") {
         // 6.6.1. Increase pointer by 1.
         pointer += 1;
         // 6.6.2. If c is the EOF code point, validation error, return failure.
@@ -828,7 +823,7 @@
 
     // 2. Let output be the empty string.
     var output = "";
-    var decoded = ucs2decode(input);
+    var decoded = Array.from(input);
     // 3. For each code point in input, UTF-8 percent encode it using the C0 control percent-encode set, and append the result to output.
     for (var i = 0; i < decoded.length; ++i) {
       output += percentEncode(decoded[i], C0ControlPercentEncodeSet);
@@ -840,7 +835,7 @@
   // https://url.spec.whatwg.org/#concept-host-parser
   function parseHost(input, isNotSpecialArg) {
     // 1. If isNotSpecial is not given, then set isNotSpecial to false.
-    if (arguments.length > 1) {
+    if (arguments.length < 1) {
       isNotSpecialArg = false;
     }
     // 2. If input starts with U+005B ([), then:
@@ -924,7 +919,7 @@
     this.input = res;
 
     // 4. Let state be state override if given, or scheme start state otherwise.
-    this.state = stateOverride || "scheme start";
+    this.state = stateOverride || SCHEME_START;
     // 5. If base is not given, set it to null.
     this.base = base || null;
     // 6. Let encoding be UTF-8.
@@ -937,18 +932,16 @@
     this.arrFlag = false;
     this.passwordTokenSeenFlag = false;
 
-    this.input = ucs2decode(this.input);
-
     // 10. Let pointer be a pointer to first code point in input.
     this.pointer = 0;
 
-    var codePoints = Array.from(input);
+    var codePoints = Array.from(this.input);
 
     // 11. Keep running the following state machine by switching on state.
     // If after a run pointer points to the EOF code point, go to the next step.
     // Otherwise, increase pointer by one and continue with the state machine.
     while (this.pointer <= codePoints.length) {
-      var c = codePoints[this.pointer];
+      var c = codePoints[this.pointer] || EOF;
       switch (this.state) {
         // https://url.spec.whatwg.org/#scheme-start-state
         case SCHEME_START: {
@@ -961,7 +954,10 @@
             this.state = NO_SCHEME;
             continue;
             // 3. Otherwise, validation error, return failure.
-          } else return INVALID_SCHEME;
+          } else {
+            this.failure = INVALID_SCHEME
+            return this;
+          }
           break;
         }
 
@@ -979,53 +975,53 @@
             if (stateOverride) {
               // 2.1.1. If url’s scheme is a special scheme and buffer is not a special scheme, then return.
               if (
-                isSpecial(url) === true &&
+                isSpecial(this.url) === true &&
                 !has(specialSchemes, this.buffer)
               ) {
-                return;
+                return this;
               }
               // 2.1.2. If url’s scheme is not a special scheme and buffer is a special scheme, then return.
               if (
-                isSpecial(url) === false &&
+                isSpecial(this.url) === false &&
                 has(specialSchemes, this.buffer)
               ) {
-                return;
+                return this;
               }
               // 2.1.3. If url includes credentials or has a non-null port, and buffer is "file", then return.
               if (
                 this.buffer == "file" &&
-                (includesCredentials(url) || url.port !== null)
+                (includesCredentials(this.url) || this.url.port !== null)
               ) {
-                return;
+                return this;
               }
               // 2.1.4. If url’s scheme is "file" and its host is an empty host or null, then return.
-              if (url.scheme == "file" && !url.host) {
-                return;
+              if (this.url.scheme == "file" && !this.url.host) {
+                return this;
               }
             }
             // 2.2. Set url’s scheme to buffer.
-            url.scheme = this.buffer;
+            this.url.scheme = this.buffer;
             // 2.3. If state override is given, then:
             if (stateOverride) {
               // 2.3.1 If url’s port is url’s scheme’s default port, then set url’s port to null.
-              if (isSpecial(url) && specialSchemes[url.scheme] == url.port)
-                url.port = null;
+              if (isSpecial(this.url) && specialSchemes[this.url.scheme] == this.url.port)
+                this.url.port = null;
               // 2.3.2 Return.
-              return;
+              return this;
             }
             // 2.4. Set buffer to the empty string.
             this.buffer = "";
             // 2.5. If url’s scheme is "file", then:
-            if (url.scheme == "file") {
+            if (this.url.scheme == "file") {
               // 2.5.1. If remaining does not start with "//", validation error.
               // TODO
               // 2.5.2. Set state to file state.
               this.state = FILE;
               // 2.6. Otherwise, if url is special, base is non-null, and base’s scheme is equal to url’s scheme, set state to special relative or authority state.
-            } else if (isSpecial(url) && base && base.scheme == url.scheme) {
+            } else if (isSpecial(this.url) && base && base.scheme == this.url.scheme) {
               this.state = SPECIAL_RELATIVE_OR_AUTHORITY;
               // 2.7. Otherwise, if url is special, set state to special authority slashes state.
-            } else if (isSpecial(url)) {
+            } else if (isSpecial(this.url)) {
               this.state = SPECIAL_AUTHORITY_SLASHES;
               // 2.8. Otherwise, if remaining starts with an U+002F (/), set state to path or authority state and increase pointer by one.
             } else if (codePoints[this.pointer + 1] == "/") {
@@ -1033,8 +1029,8 @@
               this.pointer++;
               // 2.9. Otherwise, set url’s cannot-be-a-base-URL flag, append an empty string to url’s path, and set state to cannot-be-a-base-URL path state.
             } else {
-              url.cannotBeABaseURL = true;
-              url.path.push("");
+              this.url.path.push("");
+              this.url.cannotBeABaseURL = true;
               this.state = CANNOT_BE_A_BASE_URL_PATH;
             }
             // 3. Otherwise, if state override is not given, set buffer to the empty string, state to no scheme state, and start over (from the first code point in input).
@@ -1044,21 +1040,26 @@
             this.pointer = 0;
             continue;
             // 4. Otherwise, validation error, return failure.
-          } else return INVALID_SCHEME;
+          } else {
+            this.failure = INVALID_SCHEME;
+            return this;
+          }
           break;
         }
         // https://url.spec.whatwg.org/#no-scheme-state
         case NO_SCHEME: {
           // 1. If base is null, or base’s cannot-be-a-base-URL flag is set and c is not U+0023 (#), validation error, return failure.
-          if (!base || (base.cannotBeABaseURL && c != "#"))
-            return INVALID_SCHEME;
+          if (!base || (base.cannotBeABaseURL && c != "#")) {
+            this.failure = INVALID_SCHEME;
+            return this;
+          }
           // 2. Otherwise, if base’s cannot-be-a-base-URL flag is set and c is U+0023 (#), set url’s scheme to base’s scheme, url’s path to a copy of base’s path, url’s query to base’s query, url’s fragment to the empty string, set url’s cannot-be-a-base-URL flag, and set state to fragment state.
           if (base.cannotBeABaseURL && c == "#") {
-            url.scheme = base.scheme;
-            url.path = base.path.slice();
-            url.query = base.query;
-            url.fragment = "";
-            url.cannotBeABaseURL = true;
+            this.url.scheme = base.scheme;
+            this.url.path = base.path.slice();
+            this.url.query = base.query;
+            this.url.fragment = "";
+            this.url.cannotBeABaseURL = true;
             this.state = FRAGMENT;
             break;
           }
@@ -1095,40 +1096,40 @@
         // https://url.spec.whatwg.org/#relative-state
         case RELATIVE: {
           // 1. Set url’s scheme to base’s scheme, and then, switching on c:
-          url.scheme = base.scheme;
+          this.url.scheme = base.scheme;
           // The EOF code point
           if (c == EOF) {
             // 1. Set url’s username to base’s username, url’s password to base’s password, url’s host to base’s host, url’s port to base’s port, url’s path to a copy of base’s path, and url’s query to base’s query.
-            url.username = base.username;
-            url.password = base.password;
-            url.host = base.host;
-            url.port = base.port;
-            url.path = base.path.slice();
-            url.query = base.query;
+            this.url.username = base.username;
+            this.url.password = base.password;
+            this.url.host = base.host;
+            this.url.port = base.port;
+            this.url.path = base.path.slice();
+            this.url.query = base.query;
             // U+002F (/)
-          } else if (c == "/" || (c == "\\" && isSpecial(url))) {
+          } else if (c == "/" || (c == "\\" && isSpecial(this.url))) {
             // 1. Set state to relative slash state.
             this.state = RELATIVE_SLASH;
             // U+003F (?)
           } else if (c == "?") {
             // 1. Set url’s username to base’s username, url’s password to base’s password, url’s host to base’s host, url’s port to base’s port, url’s path to a copy of base’s path, url’s query to the empty string, and state to query state.
-            url.username = base.username;
-            url.password = base.password;
-            url.host = base.host;
-            url.port = base.port;
-            url.path = base.path.slice();
-            url.query = "";
+            this.url.username = base.username;
+            this.url.password = base.password;
+            this.url.host = base.host;
+            this.url.port = base.port;
+            this.url.path = base.path.slice();
+            this.url.query = "";
             this.state = QUERY;
             // U+0023 (#)
           } else if (c == "#") {
             // 1. Set url’s username to base’s username, url’s password to base’s password, url’s host to base’s host, url’s port to base’s port, url’s path to a copy of base’s path, url’s query to base’s query, url’s fragment to the empty string, and state to fragment state.
-            url.username = base.username;
-            url.password = base.password;
-            url.host = base.host;
-            url.port = base.port;
-            url.path = base.path.slice();
-            url.query = base.query;
-            url.fragment = "";
+            this.url.username = base.username;
+            this.url.password = base.password;
+            this.url.host = base.host;
+            this.url.port = base.port;
+            this.url.path = base.path.slice();
+            this.url.query = base.query;
+            this.url.fragment = "";
             this.state = FRAGMENT;
             // Otherwise
           } else {
@@ -1138,12 +1139,12 @@
             // 2. Otherwise, run these steps:
             // 2.1. Set url’s username to base’s username, url’s password to base’s password, url’s host to base’s host, url’s port to base’s port, url’s path to a copy of base’s path, and then remove url’s path’s last item, if any.
             // 2.2 Set state to path state, and decrease pointer by one
-            url.username = base.username;
-            url.password = base.password;
-            url.host = base.host;
-            url.port = base.port;
-            url.path = base.path.slice();
-            url.path.pop();
+            this.url.username = base.username;
+            this.url.password = base.password;
+            this.url.host = base.host;
+            this.url.port = base.port;
+            this.url.path = base.path.slice();
+            this.url.path.pop();
             this.state = PATH;
             continue;
           }
@@ -1152,7 +1153,7 @@
         // https://url.spec.whatwg.org/#relative-slash-state
         case RELATIVE_SLASH: {
           // 1. If url is special and c is U+002F (/) or U+005C (\), then:
-          if (isSpecial(url) && (c == "/" || c == "\\")) {
+          if (isSpecial(this.url) && (c == "/" || c == "\\")) {
             // 1.1. If c is U+005C (\), validation error.
             // 1.2. Set state to special authority ignore slashes state.
             this.state = SPECIAL_AUTHORITY_IGNORE_SLASHES;
@@ -1161,10 +1162,10 @@
             this.state = AUTHORITY;
             // 3. Otherwise, set url’s username to base’s username, url’s password to base’s password, url’s host to base’s host, url’s port to base’s port, state to path state, and then, decrease pointer by one.
           } else {
-            url.username = base.username;
-            url.password = base.password;
-            url.host = base.host;
-            url.port = base.port;
+            this.url.username = base.username;
+            this.url.password = base.password;
+            this.url.host = base.host;
+            this.url.port = base.port;
             this.state = PATH;
             continue;
           }
@@ -1223,10 +1224,10 @@
               );
               // 1.4.3. If passwordTokenSeenFlag is set, then append encodedCodePoints to url’s password.
               if (this.passwordTokenSeenFlag) {
-                url.password += encodedCodePoints;
+                this.url.password += encodedCodePoints;
                 // 1.4.4. Otherwise, append encodedCodePoints to url’s username.
               } else {
-                url.username += encodedCodePoints;
+                this.url.username += encodedCodePoints;
               }
             }
             // 1.5. Set buffer to the empty string.
@@ -1239,11 +1240,12 @@
             c == "/" ||
             c == "?" ||
             c == "#" ||
-            (c == "\\" && isSpecial(url))
+            (c == "\\" && isSpecial(this.url))
           ) {
             // 1.2.1. If @ flag is set and buffer is the empty string, validation error, return failure.
             if (this.atFlag && this.buffer == "") {
-              return INVALID_AUTHORITY;
+              this.failure = INVALID_AUTHORITY;
+              return this;
             }
             // 1.2.2. Decrease pointer by the number of code points in buffer plus one, set buffer to the empty string, and set state to host state.
             this.pointer -= Array.from(this.buffer).length + 1;
@@ -1258,22 +1260,31 @@
         case HOST:
         case HOSTNAME: {
           // 1. If state override is given and url’s scheme is "file", then decrease pointer by one and set state to file host state.
-          if (stateOverride && url.scheme == "file") {
+          if (stateOverride && this.url.scheme == "file") {
             this.state = FILE_HOST;
             continue;
             // 2. Otherwise, if c is U+003A (:) and the [] flag is unset, then:
           } else if (c == ":" && !this.arrFlag) {
             // 2.1. If buffer is the empty string, validation error, return failure.
-            if (this.buffer == "") return INVALID_HOST;
+            if (this.buffer == "") {
+              this.failure = INVALID_HOST;
+              return this;
+            }
             // 2.2. Let host be the result of host parsing buffer with url is not special.
-            var host = parseHost(url, this.buffer);
+            var host = parseHost(this.buffer, !isSpecial(this.url));
             // 2.3. If host is failure, then return failure.
-            if (host) return host;
+            if (host === failure) {
+              this.failure = host;
+              return this;
+            }
             // 2.4. Set url’s host to host, buffer to the empty string, and state to port state.
+            this.url.host = host;
             this.buffer = "";
             this.state = PORT;
             // 2.5. If state override is given and state override is hostname state, then return.
-            if (stateOverride == HOSTNAME) return;
+            if (stateOverride == HOSTNAME) {
+              return this;
+            }
             // 3. Otherwise, if one of the following is true
             // c is the EOF code point, U+002F (/), U+003F (?), or U+0023 (#)
             // url is special and c is U+005C (\)
@@ -1282,26 +1293,36 @@
             c == "/" ||
             c == "?" ||
             c == "#" ||
-            (c == "\\" && isSpecial(url))
+            (c == "\\" && isSpecial(this.url))
           ) {
             // 3.1. If url is special and buffer is the empty string, validation error, return failure.
-            if (isSpecial(url) && this.buffer == "") return INVALID_HOST;
+            if (isSpecial(this.url) && this.buffer == "") {
+              this.failure = INVALID_HOST;
+              return this;
+            }
             // 3.2. Otherwise, if state override is given, buffer is the empty string, and either url includes credentials or url’s port is non-null, validation error, return.
             if (
               stateOverride &&
               this.buffer == "" &&
-              (includesCredentials(url) || url.port !== null)
-            )
-              return;
+              (includesCredentials(this.url) || this.url.port !== null)
+            ) {
+              return this;
+            }
             // 3.3. Let host be the result of host parsing buffer with url is not special.
-            host = parseHost(url, this.buffer);
+            host = parseHost(this.buffer, !isSpecial(this.url));
             // 3.4. If host is failure, then return failure.
-            if (host) return host;
+            if (host === failure) {
+              this.failure = host;
+              return this;
+            }
             // 3.5. Set url’s host to host, buffer to the empty string, and state to path start state.
+            this.url.host = host;
             this.buffer = "";
             this.state = PATH_START;
             // 3.6. If state override is given, then return.
-            if (stateOverride) return;
+            if (stateOverride) {
+              return this;
+            }
             continue;
             // 4. Otherwise
           } else {
@@ -1331,7 +1352,7 @@
             c == "/" ||
             c == "?" ||
             c == "#" ||
-            (c == "\\" && isSpecial(url)) ||
+            (c == "\\" && isSpecial(this.url)) ||
             stateOverride
           ) {
             // 2.1. If buffer is not the empty string, then:
@@ -1343,12 +1364,13 @@
               // 2.1.2. If port is greater than 216 − 1, validation error, 
               // return failure.
               if (port > 0xffff) {
-                return INVALID_PORT;
+                this.failure = INVALID_PORT;
+                return this;
               }
               // 2.1.3. Set url’s port to null, if port is url’s scheme’s 
               // default port, and to port otherwise.
-              url.port =
-                isSpecial(url) && port === specialSchemes[url.scheme]
+              this.url.port =
+                isSpecial(this.url) && port === specialSchemes[this.url.scheme]
                   ? null
                   : port;
               // 2.1.4. Set buffer to the empty string.
@@ -1356,19 +1378,22 @@
             }
             // 2.2. If state override is given, then return.
             if (stateOverride) {
-              return;
+              return this;
             }
             // 2.3. Set state to path start state, and decrease pointer by one.
             this.state = PATH_START;
             continue;
             // 3. Otherwise, validation error, return failure.
-          } else return INVALID_PORT;
+          } else {
+            this.failure = INVALID_PORT;
+            return this;
+          }
           break;
         }
         // https://url.spec.whatwg.org/#file-state
         case FILE: {
           // 1. Set url’s scheme to "file".
-          url.scheme = "file";
+          this.url.scheme = "file";
           // 2. If c is U+002F (/) or U+005C (\), then:
           if (c == "/" || c == "\\") {
             // 2.1. If c is U+005C (\), validation error.
@@ -1381,27 +1406,27 @@
             if (c == EOF) {
               // 1. Set url’s host to base’s host, url’s path to a copy of 
               // base’s path, and url’s query to base’s query.
-              url.host = base.host;
-              url.path = base.path.slice();
-              url.query = base.query;
+              this.url.host = base.host;
+              this.url.path = base.path.slice();
+              this.url.query = base.query;
               // U+003F (?)
             } else if (c == "?") {
               // 1. Set url’s host to base’s host, url’s path to a copy of 
               // base’s path, url’s query to the empty string, and state to 
               // query state.
-              url.host = base.host;
-              url.path = base.path.slice();
-              url.query = "";
+              this.url.host = base.host;
+              this.url.path = base.path.slice();
+              this.url.query = "";
               this.state = QUERY;
               // U+0023 (#)
             } else if (c == "#") {
               // 1. Set url’s host to base’s host, url’s path to a copy of 
               // base’s path, url’s query to base’s query, url’s fragment 
               // to the empty string, and state to fragment state.
-              url.host = base.host;
-              url.path = base.path.slice();
-              url.query = base.query;
-              url.fragment = "";
+              this.url.host = base.host;
+              this.url.path = base.path.slice();
+              this.url.query = base.query;
+              this.url.fragment = "";
               this.state = FRAGMENT;
               // Otherwise
             } else {
@@ -1413,9 +1438,9 @@
                   codePoints.slice(this.pointer).join("")
                 )
               ) {
-                url.host = base.host;
-                url.path = base.path.slice();
-                shortenUrlPath(url);
+                this.url.host = base.host;
+                this.url.path = base.path.slice();
+                shortenUrlPath(this.url);
                 // 1. Let path be url’s path.
               }
               // 2. Otherwise, validation error.
@@ -1453,10 +1478,10 @@
               // 2.1.1. If base’s path[0] is a normalized Windows drive letter,
               // then append base’s path[0] to url’s path.
               if (isNormalizedWindowsDriveLetter(base.path[0])) {
-                url.path.push(base.path[0]);
+                this.url.path.push(base.path[0]);
                 // 2.1.2. Otherwise, set url’s host to base’s host.
               } else {
-                url.host = base.host;
+                this.url.host = base.host;
               }
             }
             // 2.2. Set state to path state, and decrease pointer by one.
@@ -1476,23 +1501,26 @@
               // 1.2. Otherwise, if buffer is the empty string, then:
             } else if (this.buffer == "") {
               // 1.2.1. Set url’s host to the empty string.
-              url.host = "";
+              this.url.host = "";
               // 1.2.2. If state override is given, then return.
-              if (stateOverride) return;
+              if (stateOverride) return this;
               // 1.2.3. Set state to path start state.
               this.state = PATH_START;
               // 1.3. Otherwise, run these steps:
             } else {
               // 1.3.1. Let host be the result of host parsing buffer with url
               //  is not special.
-              host = parseHost(url, this.buffer);
+              host = parseHost(this.buffer, !isSpecial(this.url));
               // 1.3.2. If host is failure, then return failure.
-              if (host) return host;
+              if (host === failure) {
+                this.failure = host;
+                return this;
+              }
               // 1.3.3. If host is "localhost", then set host to the empty string.
-              if (url.host == "localhost") url.host = "";
+              if (this.url.host == "localhost") this.url.host = "";
               // 1.3.4. Set url’s host to host.  -- Done as part of step 1.3.1
               // 1.3.5. If state override is given, then return.
-              if (stateOverride) return;
+              if (stateOverride) return this;
               // 1.3.6. Set buffer to the empty string and state to path start
               // state
               this.buffer = "";
@@ -1506,7 +1534,7 @@
         // https://url.spec.whatwg.org/#path-start-state
         case PATH_START: {
           // 1. If url is special, then:
-          if (isSpecial(url)) {
+          if (isSpecial(this.url)) {
             // 1.1. If c is U+005C (\), validation error.
             // 1.2. Set state to path state.
             this.state = PATH;
@@ -1516,12 +1544,12 @@
             // 2. Otherwise, if state override is not given and c is U+003F (?),
             // set url’s query to the empty string and state to query state.
           } else if (!stateOverride && c == "?") {
-            url.query = "";
+            this.url.query = "";
             this.state = QUERY;
             // 3. Otherwise, if state override is not given and c is U+0023 (#),
             // set url’s fragment to the empty string and state to fragment state.
           } else if (!stateOverride && c == "#") {
-            url.fragment = "";
+            this.url.fragment = "";
             this.state = FRAGMENT;
             // 4. Otherwise, if c is not the EOF code point:
           } else if (c != EOF) {
@@ -1541,7 +1569,7 @@
           if (
             c == EOF ||
             c == "/" ||
-            (c == "\\" && isSpecial(url)) ||
+            (c == "\\" && isSpecial(this.url)) ||
             (!stateOverride && (c == "?" || c == "#"))
           ) {
             // 1.1. If url is special and c is U+005C (\), validation error.
@@ -1551,33 +1579,33 @@
             if (isDoubleDot(this.buffer)) {
               shortenUrlPath(url);
               // 1. Let path be url’s path.
-              if (c != "/" && !(c == "\\" && isSpecial(url))) {
-                url.path.push("");
+              if (c != "/" && !(c == "\\" && isSpecial(this.url))) {
+                this.url.path.push("");
               }
               // 1.3. Otherwise, if buffer is a single-dot path segment and if
               // neither c is U+002F (/), nor url is special and c is
               // U+005C (\), append the empty string to url’s path.
             } else if (isSingleDot(this.buffer)) {
-              if (c != "/" && !(c == "\\" && isSpecial(url))) {
-                url.path.push("");
+              if (c != "/" && !(c == "\\" && isSpecial(this.url))) {
+                this.url.path.push("");
               }
               // 1.4. Otherwise, if buffer is not a single-dot path segment, then:
             } else {
               // 1.4.1. If url’s scheme is "file", url’s path is empty, and 
               // buffer is a Windows drive letter, then:
               if (
-                url.scheme == "file" &&
-                !url.path.length &&
+                this.url.scheme == "file" &&
+                !this.url.path.length &&
                 isWindowsDriveLetter(this.buffer)
               ) {
                 // 1.4.1.1 If url’s host is neither the empty string nor null, 
                 // validation error, set url’s host to the empty string.
-                if (url.host) url.host = "";
+                if (this.url.host) this.url.host = "";
                 // 1.4.1.2 Replace the second code point in buffer with U+003A (:).
                 this.buffer = this.buffer.charAt(0) + ":";
               }
               // 1.4.2. Append buffer to url’s path.
-              url.path.push(this.buffer);
+              this.url.path.push(this.buffer);
             }
             // 1.5. Set buffer to the empty string.
             this.buffer = "";
@@ -1585,20 +1613,20 @@
             // U+003F (?), or U+0023 (#), then while url’s path’s size is 
             // greater than 1 and url’s path[0] is the empty string, 
             // validation error, remove the first item from url’s path.
-            if (url.scheme == "file" && (c == EOF || c == "?" || c == "#")) {
-              while (url.path.length > 1 && url.path[0] === "") {
-                url.path.shift();
+            if (this.url.scheme == "file" && (c == EOF || c == "?" || c == "#")) {
+              while (this.url.path.length > 1 && this.url.path[0] === "") {
+                this.url.path.shift();
               }
             }
             // 1.7. If c is U+003F (?), then set url’s query to the empty 
             // string and state to query state.
             if (c == "?") {
-              url.query = "";
+              this.url.query = "";
               this.state = QUERY;
               // 1.8. If c is U+0023 (#), then set url’s fragment to the 
               // empty string and state to fragment state.
             } else if (c == "#") {
-              url.fragment = "";
+              this.url.fragment = "";
               this.state = FRAGMENT;
             }
             // 2. Otherwise, run these steps:
@@ -1614,18 +1642,18 @@
         case CANNOT_BE_A_BASE_URL_PATH:
           // 1. If c is U+003F (?), then set url’s query to the empty string and state to query state.
           if (c == "?") {
-            url.query = "";
+            this.url.query = "";
             this.state = QUERY;
             // 2. Otherwise, if c is U+0023 (#), then set url’s fragment to the empty string and state to fragment state.
           } else if (c == "#") {
-            url.fragment = "";
+            this.url.fragment = "";
             this.state = FRAGMENT;
             // 3. Otherwise:
           } else if (c != EOF) {
             // 1. If c is not the EOF code point, not a URL code point, and not U+0025 (%), validation error.
             // 2. If c is U+0025 (%) and remaining does not start with two ASCII hex digits, validation error.
             // 3. If c is not the EOF code point, UTF-8 percent encode c using the C0 control percent-encode set, and append the result to url’s path[0].
-            url.path[0] += percentEncode(c, C0ControlPercentEncodeSet);
+            this.url.path[0] += percentEncode(c, C0ControlPercentEncodeSet);
           }
           break;
         // https://url.spec.whatwg.org/#query-state
@@ -1636,7 +1664,7 @@
           // then set encoding to UTF-8.
           // 2. If state override is not given and c is U+0023 (#), then set url’s fragment to the empty string and state to fragment state.
           if (!stateOverride && c == "#") {
-            url.fragment = "";
+            this.url.fragment = "";
             this.state = FRAGMENT;
             // 3. Otherwise, if c is not the EOF code point:
           } else if (c != EOF) {
@@ -1654,13 +1682,13 @@
             // byte is 0x22 ("), 0x23 (#), 0x3C (<), or 0x3E (>)
             // byte is 0x27 (') and url is special
             // then append byte, percent encoded, to url’s query.
-            if (c == "'" && isSpecial(url)) {
-              url.query += "%27";
+            if (c == "'" && isSpecial(this.url)) {
+              this.url.query += "%27";
             } else if (c == "#") {
-              url.query += "%23";
+              this.url.query += "%23";
               // 3.5.2. Otherwise, append a code point whose value is byte to url’s query.
             } else {
-              url.query += percentEncode(c, C0ControlPercentEncodeSet);
+              this.url.query += percentEncode(c, C0ControlPercentEncodeSet);
             }
           }
           break;
@@ -1677,14 +1705,14 @@
           // 1.2. If c is U+0025 (%) and remaining does not start with two ASCII hex digits, validation error.
           // 1.3. UTF-8 percent encode c using the fragment percent-encode set and append the result to url’s fragment.
           if (c != EOF)
-            url.fragment += percentEncode(c, fragmentPercentEncodeSet);
+            this.url.fragment += percentEncode(c, fragmentPercentEncodeSet);
           break;
         }
       }
 
       this.pointer++;
     }
-    return this.url;
+    return this;
   }
 
   // https://url.spec.whatwg.org/#dom-url-url
@@ -1731,13 +1759,17 @@
 
   function URL(url /* , base */) {
     var base = arguments[1];
+    if (arguments.length  == 0) {
+      throw new TypeError('At least 1 argument required, but only 0 passed');
+    }
+    url = String(url);
 
     // 1. var parsedBase be null.
     var parsedBase = null;
     // 2 If base is given, then:
     if (base !== undefined) {
       // 2.1 var parsedBase be the result of running the basic URL parser on base.
-      parsedBase = basicURLParse(base);
+      parsedBase = basicURLParse(String(base));
       if (parsedBase === null) {
         // 2.2 If parsedBase is failure, then throw a TypeError.
         throw new TypeError("Invalid base URL: " + base);
@@ -1764,7 +1796,7 @@
     // question mark by default. Therefore the doNotStripQMark hack is used.
     // 8. Set result’s query object to a new URLSearchParams object using query, and then set that query object’s url object to result.
     doNotStripQMark = true;
-    this._query = new URLSearchParams([query]);
+    this._query = new URLSearchParams(query);
     this._query._url = this;
 
     if (!supportsDescriptors) {
@@ -1875,6 +1907,8 @@
   if (supportsDescriptors) {
     // https://url.spec.whatwg.org/#dom-url-href
     Object.defineProperty(URL.prototype, "href", {
+      enumerable: true,
+      configurable: true,
       // The href attribute’s getter and the toJSON() method, when invoked, must return the serialization of context object’s url.
       get: function href() {
         return serializeURL(this._url);
@@ -1903,6 +1937,8 @@
     });
     // https://url.spec.whatwg.org/#dom-url-origin
     Object.defineProperty(URL.prototype, "origin", {
+      enumerable: true,
+      configurable: true,
       // The origin attribute’s getter must return the serialization of context object’s url’s origin. [HTML]
       get: function origin() {
         return serializeURLOrigin(this._url);
@@ -1910,6 +1946,8 @@
     });
     // https://url.spec.whatwg.org/#dom-url-protocol
     Object.defineProperty(URL.prototype, "protocol", {
+      enumerable: true,
+      configurable: true,
       // The protocol attribute’s getter must return context object url’s scheme, followed by U+003A (:).
       get: function protocol() {
         return this._url.scheme + ":";
@@ -1918,12 +1956,14 @@
       set: function protocol(v) {
         basicURLParse(v + ":", {
           url: this._url,
-          stateOverride: "scheme start"
+          stateOverride: SCHEME_START
         });
       }
     });
     // https://url.spec.whatwg.org/#dom-url-username
     Object.defineProperty(URL.prototype, "username", {
+      enumerable: true,
+      configurable: true,
       // The username attribute’s getter must return context object’s url’s username.
       get: function username() {
         return this._url.username;
@@ -1940,6 +1980,8 @@
     });
     // https://url.spec.whatwg.org/#dom-url-password
     Object.defineProperty(URL.prototype, "password", {
+      enumerable: true,
+      configurable: true,
       // The password attribute’s getter must return context object’s url’s password.
       get: function password() {
         return this._url.password;
@@ -1956,6 +1998,8 @@
     });
     // https://url.spec.whatwg.org/#dom-url-host
     Object.defineProperty(URL.prototype, "host", {
+      enumerable: true,
+      configurable: true,
       get: getHost,
       // The host attribute’s setter must run these steps:
       set: function host(v) {
@@ -1966,12 +2010,14 @@
         // 2. Basic URL parse the given value with context object’s url as url and host state as state override.
         basicURLParse(v, {
           url: this._url,
-          stateOverride: "host"
+          stateOverride: HOST
         });
       }
     });
     // https://url.spec.whatwg.org/#dom-url-hostname
     Object.defineProperty(URL.prototype, "hostname", {
+      enumerable: true,
+      configurable: true,
       // The hostname attribute’s getter must run these steps:
       get: getHostname,
       // The hostname attribute’s setter must run these steps:
@@ -1983,12 +2029,14 @@
         // 2. Basic URL parse the given value with context object’s url as url and hostname state as state override.
         basicURLParse(v, {
           url: this._url,
-          stateOverride: "hostname"
+          stateOverride: HOSTNAME
         });
       }
     });
     // https://url.spec.whatwg.org/#dom-url-port
     Object.defineProperty(URL.prototype, "port", {
+      enumerable: true,
+      configurable: true,
       // The port attribute’s getter must run these steps:
       get: getPort,
       // The port attribute’s setter must run these steps:
@@ -2003,15 +2051,17 @@
           this._url.port = null;
           // 3. Otherwise, basic URL parse the given value with context object’s url as url and port state as state override.
         } else {
-          basicURLParse(v, {
+          basicURLParse(String(v), {
             url: this._url,
-            stateOverride: "port"
+            stateOverride: PORT
           });
         }
       }
     });
     // https://url.spec.whatwg.org/#dom-url-pathname
     Object.defineProperty(URL.prototype, "pathname", {
+      enumerable: true,
+      configurable: true,
       // The pathname attribute’s getter must run these steps:
       get: getPathname,
       // The pathname attribute’s setter must run these steps:
@@ -2025,12 +2075,14 @@
         // 3. Basic URL parse the given value with context object’s url as url and path start state as state override.
         basicURLParse(v, {
           url: this._url,
-          stateOverride: "path start"
+          stateOverride: PATH_START
         });
       }
     });
     // https://url.spec.whatwg.org/#dom-url-search
     Object.defineProperty(URL.prototype, "search", {
+      enumerable: true,
+      configurable: true,
       // The search attribute’s getter must run these steps:
       get: getSearch,
       // The search attribute’s setter must run these steps:
@@ -2050,7 +2102,7 @@
         // 5. Basic URL parse input with url as url and query state as state override.
         basicURLParse(input, {
           url: url,
-          stateOverride: "query"
+          stateOverride: QUERY
         });
         // 6. Set context object’s query object’s list to the result of parsing input.
         this._query._list = parseUrlencoded(input);
@@ -2058,6 +2110,8 @@
     });
     // https://url.spec.whatwg.org/#dom-url-searchparams
     Object.defineProperty(URL.prototype, "searchParams", {
+      enumerable: true,
+      configurable: true,
       // The searchParams attribute’s getter must return context object’s query object.
       get: function searchParams() {
         return this._query;
@@ -2065,6 +2119,8 @@
     });
     // https://url.spec.whatwg.org/#dom-url-hash
     Object.defineProperty(URL.prototype, "hash", {
+      enumerable: true,
+      configurable: true,
       // The hash attribute’s getter must run these steps:
       get: getHash,
       // The hash attribute’s setter must run these steps:
@@ -2081,7 +2137,7 @@
         // 4. Basic URL parse input with context object’s url as url and fragment state as state override.
         basicURLParse(input, {
           url: this._url,
-          stateOverride: "fragment"
+          stateOverride: FRAGMENT
         });
       }
     });
@@ -2091,7 +2147,7 @@
     // 1. Set url’s username to the empty string.
     url.username = "";
     // 2. For each code point in username, UTF-8 percent encode it using the userinfo percent-encode set, and append the result to url’s username.
-    var decoded = ucs2decode(username);
+    var decoded = username;
     for (var i = 0; i < decoded.length; ++i) {
       url.username += percentEncode(decoded[i], userinfoPercentEncodeSet);
     }
@@ -2102,7 +2158,7 @@
     // 1. Set url’s password to the empty string.
     url.password = "";
     // 2. For each code point in password, UTF-8 percent encode it using the userinfo percent-encode set, and append the result to url’s password.
-    var decoded = ucs2decode(password);
+    var decoded = password;
     for (var i = 0; i < decoded.length; ++i) {
       url.password += percentEncode(decoded[i], userinfoPercentEncodeSet);
     }
@@ -2121,22 +2177,22 @@
     // 2. If url’s host is non-null:
     if (url.host !== null) {
       // 2.1. Append "//" to output.
-      output = "//" + output;
+      output = output + '//';
 
       // 2.2. If url includes credentials, then:
       if (includesCredentials(url)) {
         // 2.2.1. Append url’s username to output.
-        output = url.username + output;
+        output = output + url.username;
         // 2.2.2. If url’s password is not the empty string, then append U+003A (:), followed by url’s password, to output.
         if (url.password !== "") {
-          output = ":" + url.password + output;
+          output = output + ":" + url.password;
         }
         // 2.2.3. Append U+0040 (@) to output.
-        output = "@" + output;
+        output = output + "@";
       }
 
       // 2.3. Append url’s host, serialized, to output.
-      output = serializeHost(url.host) + output;
+      output = output + serializeHost(url.host);
 
       // 2.4. If url’s port is non-null, append U+003A (:) followed by url’s port, serialized, to output.
       if (url.port !== null) {
@@ -2144,28 +2200,28 @@
       }
       // 3. Otherwise, if url’s host is null and url’s scheme is "file", append "//" to output.
     } else if (url.host === null && url.scheme === "file") {
-      output = "//" + output;
+      output = output + "//";
     }
 
     // 4. If url’s cannot-be-a-base-URL flag is set, append url’s path[0] to output.
     if (url.cannotBeABaseURL) {
-      output = url.path[0] + output;
+      output = output + url.path[0];
       // 5. Otherwise, then for each string in url’s path, append U+002F (/) followed by the string to output.
     } else {
       for (var i = 0; i < url.path.length; i++) {
         var string = url.path[i];
-        output = "/" + string + output;
+        output = output + "/" + string;
       }
     }
 
     // 6. If url’s query is non-null, append U+003F (?), followed by url’s query, to output.
     if (url.query !== null) {
-      output = "?" + url.query + output;
+      output = output + "?" + url.query;
     }
 
     // 7. If the exclude fragment flag is unset and url’s fragment is non-null, append U+0023 (#), followed by url’s fragment, to output.
     if (!excludeFragment && url.fragment !== null) {
-      output = "#" + url.fragment + output;
+      output = output + "#" + url.fragment;
     }
 
     // 8. Return output.
@@ -2203,12 +2259,12 @@
     // 2. Otherwise, let result be origin's scheme.
     var result = origin.scheme;
     // 3. Append "://" to result.
-    result = "://" + result;
+    result = result + "://";
     // 4. Append origin's host, serialized, to result.
-    result = serializeHost(origin.host) + result;
+    result = result + serializeHost(origin.host);
     // 5. If origin's port is non-null, append a U+003A COLON character (:), and origin's port, serialized, to result.
     if (origin.port !== null) {
-      result = ":" + origin.port + result;
+      result = result + ":" + origin.port;
     }
     // 6. Return result.
     return result;
@@ -2306,45 +2362,36 @@
     return host;
   }
 
-  global.URL = URL;
-  // if (NativeURL) {
-  //   var nativeCreateObjectURL = NativeURL.createObjectURL;
-  //   var nativeRevokeObjectURL = NativeURL.revokeObjectURL;
-  //   // `URL.createObjectURL` method
-  //   // https://developer.mozilla.org/en-US/docs/Web/API/URL/createObjectURL
-  //   // eslint-disable-next-line no-unused-vars
-  //   if (nativeCreateObjectURL) redefine(URLConstructor, 'createObjectURL', function createObjectURL(blob) {
-  //     return nativeCreateObjectURL.apply(NativeURL, arguments);
-  //   });
-  //   // `URL.revokeObjectURL` method
-  //   // https://developer.mozilla.org/en-US/docs/Web/API/URL/revokeObjectURL
-  //   // eslint-disable-next-line no-unused-vars
-  //   if (nativeRevokeObjectURL) redefine(URLConstructor, 'revokeObjectURL', function revokeObjectURL(url) {
-  //     return nativeRevokeObjectURL.apply(NativeURL, arguments);
-  //   });
-  // }
-
   var doNotStripQMark = false;
+  // https://url.spec.whatwg.org/#dom-urlsearchparams-urlsearchparams
   function URLSearchParams(init) {
     this._list = [];
     this._url = null;
 
+    // 1. If init is a string and starts with U+003F (?), remove the first code point from init.
     if (!doNotStripQMark && typeof init === "string" && init[0] === "?") {
       init = init.slice(1);
     }
     doNotStripQMark = false;
 
+    // 2. Return a new URLSearchParams object using init.
+    // https://url.spec.whatwg.org/#concept-urlsearchparams-new
+    // 1. Let query be a new URLSearchParams object.
+    // 2. If init is a sequence, then for each pair in init: 
     if (Array.isArray(init)) {
       for (var i = 0; i < init.length; i++) {
         var pair = init[i];
+        // 2.1 If pair does not contain exactly two items, then throw a TypeError. 
         if (pair.length !== 2) {
           throw new TypeError(
             "Failed to construct 'URLSearchParams': parameter 1 sequence's element does not " +
               "contain exactly two elements."
           );
         }
+        // 2.2 Append a new name-value pair whose name is pair’s first item, and value is pair’s second item, to query’s list. 
         this._list.push([pair[0], pair[1]]);
       }
+    // 3. Otherwise, if init is a record, then for each name → value in init, append a new name-value pair whose name is name and value is value, to query’s list. 
     } else if (
       typeof init === "object" &&
       Object.getPrototypeOf(init) === null
@@ -2355,27 +2402,29 @@
         var value = init[name];
         this._list.push([name, value]);
       }
+    // 4. Otherwise, init is a string, then set query’s list to the result of parsing init. 
     } else {
-      this._list = parseUrlencoded(init);
+      this._list = parseUrlencoded(String(init));
     }
+    // 5. Return query.
   }
 
   function serializeUrlencodedByte(input) {
     var output = "";
     for (var i=0;i<input.length;i++) {
       var byte = input[i];
-      if (byte === p(" ")) {
+      if (byte === codePointFor(" ")) {
         output += "+";
-      } else if (byte === p("*") ||
-                 byte === p("-") ||
-                 byte === p(".") ||
-                 (byte >= p("0") && byte <= p("9")) ||
-                 (byte >= p("A") && byte <= p("Z")) ||
-                 byte === p("_") ||
-                 (byte >= p("a") && byte <= p("z"))) {
+      } else if (byte === codePointFor("*") ||
+                 byte === codePointFor("-") ||
+                 byte === codePointFor(".") ||
+                 (byte >= codePointFor("0") && byte <= codePointFor("9")) ||
+                 (byte >= codePointFor("A") && byte <= codePointFor("Z")) ||
+                 byte === codePointFor("_") ||
+                 (byte >= codePointFor("a") && byte <= codePointFor("z"))) {
         output += String.fromCodePoint(byte);
       } else {
-        output += percentEncode(byte);
+        output += percentEncode(byte, C0ControlPercentEncodeSet);
       }
     }
     return output;
@@ -2388,7 +2437,7 @@
     }
   
     var output = "";
-    var entries = tuples.entries();
+    var entries = Array.from(tuples.entries());
     for (var j = 0; j<entries.length;j++) {
       var i = entries[j][0];
       var tuple = entries[j][1];
@@ -2508,4 +2557,23 @@
   URLSearchParams.prototype.toString = function() {
     return serializeUrlencoded(this._list);
   };
+
+  global.URL = URL;
+  global.URLSearchParams = URLSearchParams;
+  // if (NativeURL) {
+  //   var nativeCreateObjectURL = NativeURL.createObjectURL;
+  //   var nativeRevokeObjectURL = NativeURL.revokeObjectURL;
+  //   // `URL.createObjectURL` method
+  //   // https://developer.mozilla.org/en-US/docs/Web/API/URL/createObjectURL
+  //   // eslint-disable-next-line no-unused-vars
+  //   if (nativeCreateObjectURL) redefine(URLConstructor, 'createObjectURL', function createObjectURL(blob) {
+  //     return nativeCreateObjectURL.apply(NativeURL, arguments);
+  //   });
+  //   // `URL.revokeObjectURL` method
+  //   // https://developer.mozilla.org/en-US/docs/Web/API/URL/revokeObjectURL
+  //   // eslint-disable-next-line no-unused-vars
+  //   if (nativeRevokeObjectURL) redefine(URLConstructor, 'revokeObjectURL', function revokeObjectURL(url) {
+  //     return nativeRevokeObjectURL.apply(NativeURL, arguments);
+  //   });
+  // }
 })(self);

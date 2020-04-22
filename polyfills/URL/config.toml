@@ -8,9 +8,7 @@ aliases = [
   "URLSearchParams"
 ]
 dependencies = [
-  "String.prototype.charCodeAt",
   "String.prototype.codePointAt",
-  "String.fromCharCode",
   "Object.assign",
   "Array.from",
   "Object.defineProperty",

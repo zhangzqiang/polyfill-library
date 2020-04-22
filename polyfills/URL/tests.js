@@ -85,24 +85,12 @@ describe("URL", function() {
         String(new URL("https://xxПРИВЕТ.тест")),
         "https://xn--xx-flcmn5bht.xn--e1aybc/"
       );
-      proclaim.deepStrictEqual(
-        String(new URL("http://Example.com/", "https://example.org/"))
-      );
-      proclaim.deepStrictEqual(
-        String(new URL("https://Example.com/", "https://example.org/"))
-      );
-      proclaim.deepStrictEqual(
-        String(new URL("nonspecial://Example.com/", "https://example.org/"))
-      );
-      proclaim.deepStrictEqual(
-        String(new URL("http:Example.com/", "https://example.org/"))
-      );
-      proclaim.deepStrictEqual(
-        String(new URL("https:Example.com/", "https://example.org/"))
-      );
-      proclaim.deepStrictEqual(
-        String(new URL("nonspecial:Example.com/", "https://example.org/"))
-      );
+      proclaim.deepStrictEqual(String(new URL('http://Example.com/', 'https://example.org/')), 'http://example.com/');
+      proclaim.deepStrictEqual(String(new URL('https://Example.com/', 'https://example.org/')), 'https://example.com/');
+      proclaim.deepStrictEqual(String(new URL('nonspecial://Example.com/', 'https://example.org/')), 'nonspecial://Example.com/');
+      proclaim.deepStrictEqual(String(new URL('http:Example.com/', 'https://example.org/')), 'http://example.com/');
+      proclaim.deepStrictEqual(String(new URL('https:Example.com/', 'https://example.org/')), 'https://example.org/Example.com/');
+      proclaim.deepStrictEqual(String(new URL('nonspecial:Example.com/', 'https://example.org/')), 'nonspecial:Example.com/');
     });
 
     it("works with base 8/10/16 ipv4 and ipv6 addresses", function() {
@@ -181,7 +169,7 @@ describe("URL", function() {
     it("throws if called with an invalid scheme", function() {
       proclaim["throws"](function() {
         new URL("1http://example.com");
-      }, "incorrect scheme");
+      });
     });
   });
   describe("URL#href", function() {
@@ -453,19 +441,18 @@ describe("URL", function() {
 
   describe("URL#host", function() {
     it("works", function() {
-      var url = new URL("http://example.com:81/path");
-
       if (supportsDescriptors) {
         var descriptor = Object.getOwnPropertyDescriptor(
           URL.prototype,
           "host"
-        );
-        proclaim.isTrue(descriptor.enumerable);
-        proclaim.isTrue(descriptor.configurable);
-        proclaim.isFunction(descriptor.get);
-        proclaim.isFunction(descriptor.set);
-      }
-
+          );
+          proclaim.isTrue(descriptor.enumerable);
+          proclaim.isTrue(descriptor.configurable);
+          proclaim.isFunction(descriptor.get);
+          proclaim.isFunction(descriptor.set);
+        }
+        
+      var url = new URL("http://example.com:81/path");
       proclaim.deepStrictEqual(url.host, "example.com:81");
 
       if (supportsDescriptors) {
@@ -764,8 +751,6 @@ describe("URL", function() {
 
   describe("URL#searchParams", function() {
     it("works", function() {
-      var url = new URL("http://example.com/?foo=bar&bar=baz");
-
       if (supportsDescriptors) {
         var descriptor = Object.getOwnPropertyDescriptor(
           URL.prototype,
@@ -776,6 +761,7 @@ describe("URL", function() {
         proclaim.isFunction(descriptor.get);
       }
 
+      var url = new URL("http://example.com/?foo=bar&bar=baz");
       proclaim.isInstanceOf(url.searchParams, URLSearchParams);
       proclaim.deepStrictEqual(url.searchParams.get("foo"), "bar");
       proclaim.deepStrictEqual(url.searchParams.get("bar"), "baz");
@@ -882,13 +868,6 @@ describe("URL", function() {
         url.searchParams.append("foo", "bar");
         proclaim.deepStrictEqual(url.toString(), "http://example.com/?foo=bar");
       }
-    });
-  });
-
-  describe("URL#@@toStringTag", function() {
-    it("works", function() {
-      var url = new URL("http://example.com/");
-      proclaim.deepStrictEqual({}.toString.call(url), "[object URL]");
     });
   });
 });
