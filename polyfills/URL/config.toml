@@ -15,7 +15,8 @@ dependencies = [
   "Object.getPrototypeOf",
   "Object.keys",
   "Array.prototype.entries",
-  "Symbol.iterator"
+  "Symbol.iterator",
+  "Reflect.has"
 ]
 docs = "https://developer.mozilla.org/en-US/docs/Web/API/URL"
 
