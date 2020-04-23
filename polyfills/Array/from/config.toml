@@ -33,7 +33,7 @@ spec = "https://tc39.github.io/ecma262/#sec-array.from"
 docs = "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/from"
 
 [browsers]
-chrome = "<45"
+chrome = "<49"
 firefox = "4 - 31"
 ie = "6 - 11"
 ie_mob = "10 - *"
