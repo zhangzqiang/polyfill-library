@@ -1696,8 +1696,3 @@ describe('URLSearchParams#@@iterator', function() {
   }
   proclaim.deepStrictEqual(result, 'a1c3');
 });
-
-describe('URLSearchParams#@@toStringTag', function() {
-  var params = new URLSearchParams('a=b');
-  proclaim.deepStrictEqual(({}).toString.call(params), '[object URLSearchParams]');
-});
