@@ -1,4 +1,5 @@
 /* global Reflect, Symbol */
+var NativeURL = URL;
 (function(global) {
   var has = Reflect.has;
   var failure = {};
@@ -2560,20 +2561,34 @@
 
   global.URL = URL;
   global.URLSearchParams = URLSearchParams;
-  // if (NativeURL) {
-  //   var nativeCreateObjectURL = NativeURL.createObjectURL;
-  //   var nativeRevokeObjectURL = NativeURL.revokeObjectURL;
-  //   // `URL.createObjectURL` method
-  //   // https://developer.mozilla.org/en-US/docs/Web/API/URL/createObjectURL
-  //   // eslint-disable-next-line no-unused-vars
-  //   if (nativeCreateObjectURL) redefine(URLConstructor, 'createObjectURL', function createObjectURL(blob) {
-  //     return nativeCreateObjectURL.apply(NativeURL, arguments);
-  //   });
-  //   // `URL.revokeObjectURL` method
-  //   // https://developer.mozilla.org/en-US/docs/Web/API/URL/revokeObjectURL
-  //   // eslint-disable-next-line no-unused-vars
-  //   if (nativeRevokeObjectURL) redefine(URLConstructor, 'revokeObjectURL', function revokeObjectURL(url) {
-  //     return nativeRevokeObjectURL.apply(NativeURL, arguments);
-  //   });
-  // }
+  if (NativeURL) {
+    var nativeCreateObjectURL = NativeURL.createObjectURL;
+    var nativeRevokeObjectURL = NativeURL.revokeObjectURL;
+    // `URL.createObjectURL` method
+    // https://developer.mozilla.org/en-US/docs/Web/API/URL/createObjectURL
+    // eslint-disable-next-line no-unused-vars
+    if (nativeCreateObjectURL) {
+      Object.defineProperty(URLConstructor, 'createObjectURL', {
+        enumerable: false,
+        configurable: true,
+        writable: true,
+        value: function createObjectURL(blob) {
+          return nativeCreateObjectURL.apply(NativeURL, arguments);
+        }
+      });
+    }
+    // `URL.revokeObjectURL` method
+    // https://developer.mozilla.org/en-US/docs/Web/API/URL/revokeObjectURL
+    // eslint-disable-next-line no-unused-vars
+    if (nativeRevokeObjectURL) {
+      Object.defineProperty(URLConstructor, 'revokeObjectURL', {
+        enumerable: false,
+        configurable: true,
+        writable: true,
+        value: function revokeObjectURL(url) {
+        return nativeRevokeObjectURL.apply(NativeURL, arguments);
+        }
+      });
+    }
+  }
 })(self);
