@@ -2568,11 +2568,11 @@ var NativeURL = URL;
     // https://developer.mozilla.org/en-US/docs/Web/API/URL/createObjectURL
     // eslint-disable-next-line no-unused-vars
     if (nativeCreateObjectURL) {
-      Object.defineProperty(URLConstructor, 'createObjectURL', {
+      Object.defineProperty(URL, 'createObjectURL', {
         enumerable: false,
         configurable: true,
         writable: true,
-        value: function createObjectURL(blob) {
+        value: function createObjectURL(_blob) {
           return nativeCreateObjectURL.apply(NativeURL, arguments);
         }
       });
@@ -2581,11 +2581,11 @@ var NativeURL = URL;
     // https://developer.mozilla.org/en-US/docs/Web/API/URL/revokeObjectURL
     // eslint-disable-next-line no-unused-vars
     if (nativeRevokeObjectURL) {
-      Object.defineProperty(URLConstructor, 'revokeObjectURL', {
+      Object.defineProperty(URL, 'revokeObjectURL', {
         enumerable: false,
         configurable: true,
         writable: true,
-        value: function revokeObjectURL(url) {
+        value: function revokeObjectURL(_url) {
         return nativeRevokeObjectURL.apply(NativeURL, arguments);
         }
       });
