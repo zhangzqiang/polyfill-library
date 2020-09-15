@@ -44,7 +44,7 @@ const browsers = browserlist
       return b.startsWith(browser);
     } else {
       return true;
-  }
+    }
   })
   .filter(uaString => {
     if (uaString.startsWith("ios/")) {
@@ -89,7 +89,7 @@ const testResults = {};
 const pollTick = 1000;
 const testBrowserTimeout = 10 * 60 * 1000;
 const mode =
-  ["all", "control", "targeted"].filter(x => process.argv.includes(x))[0] || "all";
+  ["all", "control", "targeted"].find(x => process.argv.includes(x)) || "all";
 const testResultsFile = path.join(__dirname, `results-${mode}.json`);
 
 const director = process.argv.includes("director");
@@ -284,10 +284,14 @@ const printProgress = (function() {
     await closeTunnel();
     console.log("Tunnel closed");
 
-    const totalFailureCount = jobs.reduce(
-      (out, job) => out + (job.state === "complete" ? job.results.failed : 1),
-      0
-    );
+    let totalFailureCount = 0;
+    for (const job of jobs) {
+      if (job.state === "complete") {
+        totalFailureCount += job.results.failed;
+      } else {
+        totalFailureCount += 1;
+      }
+    }
     if (totalFailureCount) {
       console.log(cli.bold.white("\nFailures:"));
       jobs.forEach(job => {

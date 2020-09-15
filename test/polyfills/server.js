@@ -11,23 +11,23 @@ const handlebars = require("handlebars");
 
 const directorTemplate = handlebars.compile(
   fs.readFileSync(path.join(__dirname, "./test-director.handlebars"), {
-    encoding: "UTF-8"
+    encoding: "utf-8"
   })
 );
 const runnerTemplate = handlebars.compile(
   fs.readFileSync(path.join(__dirname, "./test-runner.handlebars"), {
-    encoding: "UTF-8"
+    encoding: "utf-8"
   })
 );
 
 function createPolyfillLibraryConfigFor(features, always) {
-  return features.split(",").reduce((config, feature) => {
-    return Object.assign(config, {
-      [feature]: {
-        flags: new Set(always ? ["always", "gated"] : [])
-      }
-    });
-  }, {});
+  const polyfillLibraryConfig = {};
+  for (const feature of features.split(",")) {
+    polyfillLibraryConfig[feature] = {
+      flags: new Set(always ? ["always", "gated"] : [])
+    };
+  }
+  return polyfillLibraryConfig;
 }
 
 const express = require("express");
