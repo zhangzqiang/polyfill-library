@@ -2,7 +2,23 @@ aliases = [
   "Intl",
   "Intl.DateTimeFormat.prototype.formatToParts"
 ]
-dependencies = [ "Intl.getCanonicalLocales", "Intl.NumberFormat", "WeakMap", "Set" ]
+dependencies = [ 
+  "Array.isArray",
+  "Array.prototype.filter",
+  "Array.prototype.indexOf",
+  "Array.prototype.lastIndexOf",
+  "Array.prototype.map",
+  "Array.prototype.reduce",
+  "Date.now",
+  "Intl.getCanonicalLocales", 
+  "Intl.NumberFormat",
+  "Object.assign",
+  "Object.create",
+  "Object.keys",
+  "Object.setPrototypeOf",
+  "Set",
+  "WeakMap"
+]
 license = "MIT"
 spec = "https://tc39.es/ecma402/#datetimeformat-objects"
 repo = "https://github.com/formatjs/formatjs/tree/master/packages/intl-datetimeformat"
@@ -27,5 +43,5 @@ samsung_mob = "*"
 
 [install]
 module = "@formatjs/intl-datetimeformat"
-paths = [ "dist/umd/polyfill.js" ]
+paths = [ "polyfill.umd.js" ]
 postinstall = "update.task.js"

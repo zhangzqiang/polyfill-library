@@ -1,7 +1,7 @@
 /* eslint-env mocha, browser */
 /* global proclaim */
 
-before(function() {
+before(function () {
   if (
     Intl.PluralRules &&
     typeof Intl.PluralRules.__addLocaleData === "function"
@@ -13,7 +13,7 @@ before(function() {
             cardinal: ["one", "other"],
             ordinal: ["one", "two", "few", "other"]
           },
-          fn: function(n, ord) {
+          fn: function (n, ord) {
             var s = String(n).split("."),
               v0 = !s[1],
               t0 = Number(s[0]) == n,
@@ -43,401 +43,394 @@ before(function() {
       data: {
         en: {
           units: {
-            degree: {
-              displayName: "degrees",
-              "long": {
-                other: { symbol: ["degrees"], pattern: "{0} {1}" },
-                one: { symbol: ["degree"], pattern: "{0} {1}" }
+            simple: {
+              degree: {
+                "long": { other: "{0} degrees", one: "{0} degree" },
+                "short": { other: "{0} deg" },
+                narrow: { other: "{0}°" },
+                perUnit: {}
               },
-              "short": { other: { symbol: ["deg"], pattern: "{0} {1}" } },
-              narrow: { other: { symbol: ["°"], pattern: "{0}{1}" } }
+              hectare: {
+                "long": { other: "{0} hectares", one: "{0} hectare" },
+                "short": { other: "{0} ha" },
+                narrow: { other: "{0}ha" },
+                perUnit: {}
+              },
+              acre: {
+                "long": { other: "{0} acres", one: "{0} acre" },
+                "short": { other: "{0} ac" },
+                narrow: { other: "{0}ac" },
+                perUnit: {}
+              },
+              percent: {
+                "long": { other: "{0} per cent" },
+                "short": { other: "{0}%" },
+                narrow: { other: "{0}%" },
+                perUnit: {}
+              },
+              "liter-per-kilometer": {
+                "long": {
+                  other: "{0} litres per kilometre",
+                  one: "{0} litre per kilometre"
+                },
+                "short": { other: "{0} l/km" },
+                narrow: { other: "{0}l/km" },
+                perUnit: {}
+              },
+              "mile-per-gallon": {
+                "long": {
+                  other: "{0} miles per US gallon",
+                  one: "{0} mile per US gallon"
+                },
+                "short": { other: "{0} mpg US" },
+                narrow: { other: "{0}mpgUS" },
+                perUnit: {}
+              },
+              petabyte: {
+                "long": { other: "{0} petabytes", one: "{0} petabyte" },
+                "short": { other: "{0} PB" },
+                narrow: { other: "{0}PB" },
+                perUnit: {}
+              },
+              terabyte: {
+                "long": { other: "{0} terabytes", one: "{0} terabyte" },
+                "short": { other: "{0} TB" },
+                narrow: { other: "{0}TB" },
+                perUnit: {}
+              },
+              terabit: {
+                "long": { other: "{0} terabits", one: "{0} terabit" },
+                "short": { other: "{0} Tb" },
+                narrow: { other: "{0}Tb" },
+                perUnit: {}
+              },
+              gigabyte: {
+                "long": { other: "{0} gigabytes", one: "{0} gigabyte" },
+                "short": { other: "{0} GB" },
+                narrow: { other: "{0}GB" },
+                perUnit: {}
+              },
+              gigabit: {
+                "long": { other: "{0} gigabits", one: "{0} gigabit" },
+                "short": { other: "{0} Gb" },
+                narrow: { other: "{0}Gb" },
+                perUnit: {}
+              },
+              megabyte: {
+                "long": { other: "{0} megabytes", one: "{0} megabyte" },
+                "short": { other: "{0} MB" },
+                narrow: { other: "{0}MB" },
+                perUnit: {}
+              },
+              megabit: {
+                "long": { other: "{0} megabits", one: "{0} megabit" },
+                "short": { other: "{0} Mb" },
+                narrow: { other: "{0}Mb" },
+                perUnit: {}
+              },
+              kilobyte: {
+                "long": { other: "{0} kilobytes", one: "{0} kilobyte" },
+                "short": { other: "{0} kB" },
+                narrow: { other: "{0}kB" },
+                perUnit: {}
+              },
+              kilobit: {
+                "long": { other: "{0} kilobits", one: "{0} kilobit" },
+                "short": { other: "{0} kb" },
+                narrow: { other: "{0}kb" },
+                perUnit: {}
+              },
+              "byte": {
+                "long": { other: "{0} bytes", one: "{0} byte" },
+                "short": { other: "{0} byte" },
+                narrow: { other: "{0}B" },
+                perUnit: {}
+              },
+              bit: {
+                "long": { other: "{0} bits", one: "{0} bit" },
+                "short": { other: "{0} bit" },
+                narrow: { other: "{0}bit" },
+                perUnit: {}
+              },
+              year: {
+                "long": { other: "{0} years", one: "{0} year" },
+                "short": { other: "{0} yrs", one: "{0} yr" },
+                narrow: { other: "{0}y" },
+                perUnit: {
+                  "long": "{0} per year",
+                  "short": "{0}/y",
+                  narrow: "{0}/y"
+                }
+              },
+              month: {
+                "long": { other: "{0} months", one: "{0} month" },
+                "short": { other: "{0} mths", one: "{0} mth" },
+                narrow: { other: "{0}m" },
+                perUnit: {
+                  "long": "{0} per month",
+                  "short": "{0}/m",
+                  narrow: "{0}/m"
+                }
+              },
+              week: {
+                "long": { other: "{0} weeks", one: "{0} week" },
+                "short": { other: "{0} wks", one: "{0} wk" },
+                narrow: { other: "{0}w" },
+                perUnit: {
+                  "long": "{0} per week",
+                  "short": "{0}/w",
+                  narrow: "{0}/w"
+                }
+              },
+              day: {
+                "long": { other: "{0} days", one: "{0} day" },
+                "short": { other: "{0} days", one: "{0} day" },
+                narrow: { other: "{0}d" },
+                perUnit: {
+                  "long": "{0} per day",
+                  "short": "{0}/d",
+                  narrow: "{0}/d"
+                }
+              },
+              hour: {
+                "long": { other: "{0} hours", one: "{0} hour" },
+                "short": { other: "{0} hrs", one: "{0} hr" },
+                narrow: { other: "{0}h" },
+                perUnit: {
+                  "long": "{0} per hour",
+                  "short": "{0}/h",
+                  narrow: "{0}/h"
+                }
+              },
+              minute: {
+                "long": { other: "{0} minutes", one: "{0} minute" },
+                "short": { other: "{0} mins", one: "{0} min" },
+                narrow: { other: "{0}m" },
+                perUnit: {
+                  "long": "{0} per minute",
+                  "short": "{0}/min",
+                  narrow: "{0}/min"
+                }
+              },
+              second: {
+                "long": { other: "{0} seconds", one: "{0} second" },
+                "short": { other: "{0} secs", one: "{0} sec" },
+                narrow: { other: "{0}s" },
+                perUnit: {
+                  "long": "{0} per second",
+                  "short": "{0}/s",
+                  narrow: "{0}/s"
+                }
+              },
+              millisecond: {
+                "long": { other: "{0} milliseconds", one: "{0} millisecond" },
+                "short": { other: "{0} ms" },
+                narrow: { other: "{0}ms" },
+                perUnit: {}
+              },
+              kilometer: {
+                "long": { other: "{0} kilometres", one: "{0} kilometre" },
+                "short": { other: "{0} km" },
+                narrow: { other: "{0}km" },
+                perUnit: {
+                  "long": "{0} per kilometre",
+                  "short": "{0}/km",
+                  narrow: "{0}/km"
+                }
+              },
+              meter: {
+                "long": { other: "{0} metres", one: "{0} metre" },
+                "short": { other: "{0} m" },
+                narrow: { other: "{0}m" },
+                perUnit: {
+                  "long": "{0} per metre",
+                  "short": "{0}/m",
+                  narrow: "{0}/m"
+                }
+              },
+              centimeter: {
+                "long": { other: "{0} centimetres", one: "{0} centimetre" },
+                "short": { other: "{0} cm" },
+                narrow: { other: "{0}cm" },
+                perUnit: {
+                  "long": "{0} per centimetre",
+                  "short": "{0}/cm",
+                  narrow: "{0}/cm"
+                }
+              },
+              millimeter: {
+                "long": { other: "{0} millimetres", one: "{0} millimetre" },
+                "short": { other: "{0} mm" },
+                narrow: { other: "{0}mm" },
+                perUnit: {}
+              },
+              mile: {
+                "long": { other: "{0} miles", one: "{0} mile" },
+                "short": { other: "{0} mi" },
+                narrow: { other: "{0}mi" },
+                perUnit: {}
+              },
+              yard: {
+                "long": { other: "{0} yards", one: "{0} yard" },
+                "short": { other: "{0} yd" },
+                narrow: { other: "{0}yd" },
+                perUnit: {}
+              },
+              foot: {
+                "long": { other: "{0} feet", one: "{0} foot" },
+                "short": { other: "{0} ft" },
+                narrow: { other: "{0}′" },
+                perUnit: {
+                  "long": "{0} per foot",
+                  "short": "{0}/ft",
+                  narrow: "{0}/ft"
+                }
+              },
+              inch: {
+                "long": { other: "{0} inches", one: "{0} inch" },
+                "short": { other: "{0} in" },
+                narrow: { other: "{0}″" },
+                perUnit: {
+                  "long": "{0} per inch",
+                  "short": "{0}/in",
+                  narrow: "{0}/in"
+                }
+              },
+              "mile-scandinavian": {
+                "long": {
+                  other: "{0} miles-scandinavian",
+                  one: "{0} mile-scandinavian"
+                },
+                "short": { other: "{0} smi" },
+                narrow: { other: "{0}smi" },
+                perUnit: {}
+              },
+              kilogram: {
+                "long": { other: "{0} kilograms", one: "{0} kilogram" },
+                "short": { other: "{0} kg" },
+                narrow: { other: "{0}kg" },
+                perUnit: {
+                  "long": "{0} per kilogram",
+                  "short": "{0}/kg",
+                  narrow: "{0}/kg"
+                }
+              },
+              gram: {
+                "long": { other: "{0} grams", one: "{0} gram" },
+                "short": { other: "{0} g" },
+                narrow: { other: "{0}g" },
+                perUnit: {
+                  "long": "{0} per gram",
+                  "short": "{0}/g",
+                  narrow: "{0}/g"
+                }
+              },
+              stone: {
+                "long": { other: "{0} stone" },
+                "short": { other: "{0} st" },
+                narrow: { other: "{0}st" },
+                perUnit: {}
+              },
+              pound: {
+                "long": { other: "{0} pounds", one: "{0} pound" },
+                "short": { other: "{0} lb" },
+                narrow: { other: "{0}lb" },
+                perUnit: {
+                  "long": "{0} per pound",
+                  "short": "{0}/lb",
+                  narrow: "{0}/lb"
+                }
+              },
+              ounce: {
+                "long": { other: "{0} ounces", one: "{0} ounce" },
+                "short": { other: "{0} oz" },
+                narrow: { other: "{0}oz" },
+                perUnit: {
+                  "long": "{0} per ounce",
+                  "short": "{0}/oz",
+                  narrow: "{0}/oz"
+                }
+              },
+              "kilometer-per-hour": {
+                "long": {
+                  other: "{0} kilometres per hour",
+                  one: "{0} kilometre per hour"
+                },
+                "short": { other: "{0} km/h" },
+                narrow: { other: "{0}km/h" },
+                perUnit: {}
+              },
+              "meter-per-second": {
+                "long": {
+                  other: "{0} metres per second",
+                  one: "{0} metre per second"
+                },
+                "short": { other: "{0} m/s" },
+                narrow: { other: "{0}m/s" },
+                perUnit: {}
+              },
+              "mile-per-hour": {
+                "long": { other: "{0} miles per hour", one: "{0} mile per hour" },
+                "short": { other: "{0} mph" },
+                narrow: { other: "{0}mph" },
+                perUnit: {}
+              },
+              celsius: {
+                "long": {
+                  other: "{0} degrees Celsius",
+                  one: "{0} degree Celsius"
+                },
+                "short": { other: "{0}°C" },
+                narrow: { other: "{0}°" },
+                perUnit: {}
+              },
+              fahrenheit: {
+                "long": {
+                  other: "{0} degrees Fahrenheit",
+                  one: "{0} degree Fahrenheit"
+                },
+                "short": { other: "{0}°F" },
+                narrow: { other: "{0}°F" },
+                perUnit: {}
+              },
+              liter: {
+                "long": { other: "{0} litres", one: "{0} litre" },
+                "short": { other: "{0} l" },
+                narrow: { other: "{0}l" },
+                perUnit: {
+                  "long": "{0} per litre",
+                  "short": "{0}/l",
+                  narrow: "{0}/l"
+                }
+              },
+              milliliter: {
+                "long": { other: "{0} millilitres", one: "{0} millilitre" },
+                "short": { other: "{0} ml" },
+                narrow: { other: "{0}ml" },
+                perUnit: {}
+              },
+              gallon: {
+                "long": { other: "{0} US gallons", one: "{0} US gallon" },
+                "short": { other: "{0} gal US" },
+                narrow: { other: "{0}galUS" },
+                perUnit: {
+                  "long": "{0} per US gallon",
+                  "short": "{0}/gal US",
+                  narrow: "{0}/galUS"
+                }
+              },
+              "fluid-ounce": {
+                "long": {
+                  other: "{0} US fluid ounces",
+                  one: "{0} US fluid ounce"
+                },
+                "short": { other: "{0} US fl oz" },
+                narrow: { other: "{0}fl oz" },
+                perUnit: {}
+              }
             },
-            acre: {
-              displayName: "acres",
-              "long": {
-                other: { symbol: ["acres"], pattern: "{0} {1}" },
-                one: { symbol: ["acre"], pattern: "{0} {1}" }
-              },
-              "short": { other: { symbol: ["ac"], pattern: "{0} {1}" } },
-              narrow: { other: { symbol: ["ac"], pattern: "{0}{1}" } }
-            },
-            hectare: {
-              displayName: "hectares",
-              "long": {
-                other: { symbol: ["hectares"], pattern: "{0} {1}" },
-                one: { symbol: ["hectare"], pattern: "{0} {1}" }
-              },
-              "short": { other: { symbol: ["ha"], pattern: "{0} {1}" } },
-              narrow: { other: { symbol: ["ha"], pattern: "{0}{1}" } }
-            },
-            percent: {
-              displayName: "percent",
-              "long": { other: { symbol: ["percent"], pattern: "{0} {1}" } },
-              "short": { other: { symbol: ["%"], pattern: "{0}{1}" } },
-              narrow: { other: { symbol: ["%"], pattern: "{0}{1}" } }
-            },
-            bit: {
-              displayName: "bits",
-              "long": {
-                other: { symbol: ["bits"], pattern: "{0} {1}" },
-                one: { symbol: ["bit"], pattern: "{0} {1}" }
-              },
-              "short": { other: { symbol: ["bit"], pattern: "{0} {1}" } },
-              narrow: { other: { symbol: ["bit"], pattern: "{0}{1}" } }
-            },
-            "byte": {
-              displayName: "bytes",
-              "long": {
-                other: { symbol: ["bytes"], pattern: "{0} {1}" },
-                one: { symbol: ["byte"], pattern: "{0} {1}" }
-              },
-              "short": { other: { symbol: ["byte"], pattern: "{0} {1}" } },
-              narrow: { other: { symbol: ["B"], pattern: "{0}{1}" } }
-            },
-            gigabit: {
-              displayName: "gigabits",
-              "long": {
-                other: { symbol: ["gigabits"], pattern: "{0} {1}" },
-                one: { symbol: ["gigabit"], pattern: "{0} {1}" }
-              },
-              "short": { other: { symbol: ["Gb"], pattern: "{0} {1}" } },
-              narrow: { other: { symbol: ["Gb"], pattern: "{0}{1}" } }
-            },
-            gigabyte: {
-              displayName: "gigabytes",
-              "long": {
-                other: { symbol: ["gigabytes"], pattern: "{0} {1}" },
-                one: { symbol: ["gigabyte"], pattern: "{0} {1}" }
-              },
-              "short": { other: { symbol: ["GB"], pattern: "{0} {1}" } },
-              narrow: { other: { symbol: ["GB"], pattern: "{0}{1}" } }
-            },
-            kilobit: {
-              displayName: "kilobits",
-              "long": {
-                other: { symbol: ["kilobits"], pattern: "{0} {1}" },
-                one: { symbol: ["kilobit"], pattern: "{0} {1}" }
-              },
-              "short": { other: { symbol: ["kb"], pattern: "{0} {1}" } },
-              narrow: { other: { symbol: ["kb"], pattern: "{0}{1}" } }
-            },
-            kilobyte: {
-              displayName: "kilobytes",
-              "long": {
-                other: { symbol: ["kilobytes"], pattern: "{0} {1}" },
-                one: { symbol: ["kilobyte"], pattern: "{0} {1}" }
-              },
-              "short": { other: { symbol: ["kB"], pattern: "{0} {1}" } },
-              narrow: { other: { symbol: ["kB"], pattern: "{0}{1}" } }
-            },
-            megabit: {
-              displayName: "megabits",
-              "long": {
-                other: { symbol: ["megabits"], pattern: "{0} {1}" },
-                one: { symbol: ["megabit"], pattern: "{0} {1}" }
-              },
-              "short": { other: { symbol: ["Mb"], pattern: "{0} {1}" } },
-              narrow: { other: { symbol: ["Mb"], pattern: "{0}{1}" } }
-            },
-            megabyte: {
-              displayName: "megabytes",
-              "long": {
-                other: { symbol: ["megabytes"], pattern: "{0} {1}" },
-                one: { symbol: ["megabyte"], pattern: "{0} {1}" }
-              },
-              "short": { other: { symbol: ["MB"], pattern: "{0} {1}" } },
-              narrow: { other: { symbol: ["MB"], pattern: "{0}{1}" } }
-            },
-            petabyte: {
-              displayName: "petabytes",
-              "long": {
-                other: { symbol: ["petabytes"], pattern: "{0} {1}" },
-                one: { symbol: ["petabyte"], pattern: "{0} {1}" }
-              },
-              "short": { other: { symbol: ["PB"], pattern: "{0} {1}" } },
-              narrow: { other: { symbol: ["PB"], pattern: "{0}{1}" } }
-            },
-            terabit: {
-              displayName: "terabits",
-              "long": {
-                other: { symbol: ["terabits"], pattern: "{0} {1}" },
-                one: { symbol: ["terabit"], pattern: "{0} {1}" }
-              },
-              "short": { other: { symbol: ["Tb"], pattern: "{0} {1}" } },
-              narrow: { other: { symbol: ["Tb"], pattern: "{0}{1}" } }
-            },
-            terabyte: {
-              displayName: "terabytes",
-              "long": {
-                other: { symbol: ["terabytes"], pattern: "{0} {1}" },
-                one: { symbol: ["terabyte"], pattern: "{0} {1}" }
-              },
-              "short": { other: { symbol: ["TB"], pattern: "{0} {1}" } },
-              narrow: { other: { symbol: ["TB"], pattern: "{0}{1}" } }
-            },
-            day: {
-              displayName: "days",
-              "long": {
-                other: { symbol: ["days"], pattern: "{0} {1}" },
-                one: { symbol: ["day"], pattern: "{0} {1}" }
-              },
-              "short": {
-                other: { symbol: ["days"], pattern: "{0} {1}" },
-                one: { symbol: ["day"], pattern: "{0} {1}" }
-              },
-              narrow: { other: { symbol: ["d"], pattern: "{0}{1}" } }
-            },
-            hour: {
-              displayName: "hours",
-              "long": {
-                other: { symbol: ["hours"], pattern: "{0} {1}" },
-                one: { symbol: ["hour"], pattern: "{0} {1}" }
-              },
-              "short": { other: { symbol: ["hr"], pattern: "{0} {1}" } },
-              narrow: { other: { symbol: ["h"], pattern: "{0}{1}" } }
-            },
-            millisecond: {
-              displayName: "milliseconds",
-              "long": {
-                other: { symbol: ["milliseconds"], pattern: "{0} {1}" },
-                one: { symbol: ["millisecond"], pattern: "{0} {1}" }
-              },
-              "short": { other: { symbol: ["ms"], pattern: "{0} {1}" } },
-              narrow: { other: { symbol: ["ms"], pattern: "{0}{1}" } }
-            },
-            minute: {
-              displayName: "minutes",
-              "long": {
-                other: { symbol: ["minutes"], pattern: "{0} {1}" },
-                one: { symbol: ["minute"], pattern: "{0} {1}" }
-              },
-              "short": { other: { symbol: ["min"], pattern: "{0} {1}" } },
-              narrow: { other: { symbol: ["m"], pattern: "{0}{1}" } }
-            },
-            month: {
-              displayName: "months",
-              "long": {
-                other: { symbol: ["months"], pattern: "{0} {1}" },
-                one: { symbol: ["month"], pattern: "{0} {1}" }
-              },
-              "short": {
-                other: { symbol: ["mths"], pattern: "{0} {1}" },
-                one: { symbol: ["mth"], pattern: "{0} {1}" }
-              },
-              narrow: { other: { symbol: ["m"], pattern: "{0}{1}" } }
-            },
-            second: {
-              displayName: "seconds",
-              "long": {
-                other: { symbol: ["seconds"], pattern: "{0} {1}" },
-                one: { symbol: ["second"], pattern: "{0} {1}" }
-              },
-              "short": { other: { symbol: ["sec"], pattern: "{0} {1}" } },
-              narrow: { other: { symbol: ["s"], pattern: "{0}{1}" } }
-            },
-            week: {
-              displayName: "weeks",
-              "long": {
-                other: { symbol: ["weeks"], pattern: "{0} {1}" },
-                one: { symbol: ["week"], pattern: "{0} {1}" }
-              },
-              "short": {
-                other: { symbol: ["wks"], pattern: "{0} {1}" },
-                one: { symbol: ["wk"], pattern: "{0} {1}" }
-              },
-              narrow: { other: { symbol: ["w"], pattern: "{0}{1}" } }
-            },
-            year: {
-              displayName: "years",
-              "long": {
-                other: { symbol: ["years"], pattern: "{0} {1}" },
-                one: { symbol: ["year"], pattern: "{0} {1}" }
-              },
-              "short": {
-                other: { symbol: ["yrs"], pattern: "{0} {1}" },
-                one: { symbol: ["yr"], pattern: "{0} {1}" }
-              },
-              narrow: { other: { symbol: ["y"], pattern: "{0}{1}" } }
-            },
-            centimeter: {
-              displayName: "centimeters",
-              "long": {
-                other: { symbol: ["centimeters"], pattern: "{0} {1}" },
-                one: { symbol: ["centimeter"], pattern: "{0} {1}" }
-              },
-              "short": { other: { symbol: ["cm"], pattern: "{0} {1}" } },
-              narrow: { other: { symbol: ["cm"], pattern: "{0}{1}" } }
-            },
-            foot: {
-              displayName: "feet",
-              "long": {
-                other: { symbol: ["feet"], pattern: "{0} {1}" },
-                one: { symbol: ["foot"], pattern: "{0} {1}" }
-              },
-              "short": { other: { symbol: ["ft"], pattern: "{0} {1}" } },
-              narrow: { other: { symbol: ["′"], pattern: "{0}{1}" } }
-            },
-            inch: {
-              displayName: "inches",
-              "long": {
-                other: { symbol: ["inches"], pattern: "{0} {1}" },
-                one: { symbol: ["inch"], pattern: "{0} {1}" }
-              },
-              "short": { other: { symbol: ["in"], pattern: "{0} {1}" } },
-              narrow: { other: { symbol: ["″"], pattern: "{0}{1}" } }
-            },
-            kilometer: {
-              displayName: "kilometers",
-              "long": {
-                other: { symbol: ["kilometers"], pattern: "{0} {1}" },
-                one: { symbol: ["kilometer"], pattern: "{0} {1}" }
-              },
-              "short": { other: { symbol: ["km"], pattern: "{0} {1}" } },
-              narrow: { other: { symbol: ["km"], pattern: "{0}{1}" } }
-            },
-            meter: {
-              displayName: "meters",
-              "long": {
-                other: { symbol: ["meters"], pattern: "{0} {1}" },
-                one: { symbol: ["meter"], pattern: "{0} {1}" }
-              },
-              "short": { other: { symbol: ["m"], pattern: "{0} {1}" } },
-              narrow: { other: { symbol: ["m"], pattern: "{0}{1}" } }
-            },
-            "mile-scandinavian": {
-              displayName: "mile-scandinavian",
-              "long": {
-                other: { symbol: ["miles-scandinavian"], pattern: "{0} {1}" },
-                one: { symbol: ["mile-scandinavian"], pattern: "{0} {1}" }
-              },
-              "short": { other: { symbol: ["smi"], pattern: "{0} {1}" } },
-              narrow: { other: { symbol: ["smi"], pattern: "{0}{1}" } }
-            },
-            mile: {
-              displayName: "miles",
-              "long": {
-                other: { symbol: ["miles"], pattern: "{0} {1}" },
-                one: { symbol: ["mile"], pattern: "{0} {1}" }
-              },
-              "short": { other: { symbol: ["mi"], pattern: "{0} {1}" } },
-              narrow: { other: { symbol: ["mi"], pattern: "{0}{1}" } }
-            },
-            millimeter: {
-              displayName: "millimeters",
-              "long": {
-                other: { symbol: ["millimeters"], pattern: "{0} {1}" },
-                one: { symbol: ["millimeter"], pattern: "{0} {1}" }
-              },
-              "short": { other: { symbol: ["mm"], pattern: "{0} {1}" } },
-              narrow: { other: { symbol: ["mm"], pattern: "{0}{1}" } }
-            },
-            yard: {
-              displayName: "yards",
-              "long": {
-                other: { symbol: ["yards"], pattern: "{0} {1}" },
-                one: { symbol: ["yard"], pattern: "{0} {1}" }
-              },
-              "short": { other: { symbol: ["yd"], pattern: "{0} {1}" } },
-              narrow: { other: { symbol: ["yd"], pattern: "{0}{1}" } }
-            },
-            gram: {
-              displayName: "grams",
-              "long": {
-                other: { symbol: ["grams"], pattern: "{0} {1}" },
-                one: { symbol: ["gram"], pattern: "{0} {1}" }
-              },
-              "short": { other: { symbol: ["g"], pattern: "{0} {1}" } },
-              narrow: { other: { symbol: ["g"], pattern: "{0}{1}" } }
-            },
-            kilogram: {
-              displayName: "kilograms",
-              "long": {
-                other: { symbol: ["kilograms"], pattern: "{0} {1}" },
-                one: { symbol: ["kilogram"], pattern: "{0} {1}" }
-              },
-              "short": { other: { symbol: ["kg"], pattern: "{0} {1}" } },
-              narrow: { other: { symbol: ["kg"], pattern: "{0}{1}" } }
-            },
-            ounce: {
-              displayName: "ounces",
-              "long": {
-                other: { symbol: ["ounces"], pattern: "{0} {1}" },
-                one: { symbol: ["ounce"], pattern: "{0} {1}" }
-              },
-              "short": { other: { symbol: ["oz"], pattern: "{0} {1}" } },
-              narrow: { other: { symbol: ["oz"], pattern: "{0}{1}" } }
-            },
-            pound: {
-              displayName: "pounds",
-              "long": {
-                other: { symbol: ["pounds"], pattern: "{0} {1}" },
-                one: { symbol: ["pound"], pattern: "{0} {1}" }
-              },
-              "short": { other: { symbol: ["lb"], pattern: "{0} {1}" } },
-              narrow: { other: { symbol: ["#"], pattern: "{0}{1}" } }
-            },
-            stone: {
-              displayName: "stones",
-              "long": {
-                other: { symbol: ["stones"], pattern: "{0} {1}" },
-                one: { symbol: ["stone"], pattern: "{0} {1}" }
-              },
-              "short": { other: { symbol: ["st"], pattern: "{0} {1}" } },
-              narrow: { other: { symbol: ["st"], pattern: "{0}{1}" } }
-            },
-            celsius: {
-              displayName: "degrees Celsius",
-              "long": {
-                other: { symbol: ["degrees Celsius"], pattern: "{0} {1}" },
-                one: { symbol: ["degree Celsius"], pattern: "{0} {1}" }
-              },
-              "short": { other: { symbol: ["°C"], pattern: "{0}{1}" } },
-              narrow: { other: { symbol: ["°C"], pattern: "{0}{1}" } }
-            },
-            fahrenheit: {
-              displayName: "degrees Fahrenheit",
-              "long": {
-                other: { symbol: ["degrees Fahrenheit"], pattern: "{0} {1}" },
-                one: { symbol: ["degree Fahrenheit"], pattern: "{0} {1}" }
-              },
-              "short": { other: { symbol: ["°F"], pattern: "{0}{1}" } },
-              narrow: { other: { symbol: ["°"], pattern: "{0}{1}" } }
-            },
-            "fluid-ounce": {
-              displayName: "fluid ounces",
-              "long": {
-                other: { symbol: ["fluid ounces"], pattern: "{0} {1}" },
-                one: { symbol: ["fluid ounce"], pattern: "{0} {1}" }
-              },
-              "short": { other: { symbol: ["fl oz"], pattern: "{0} {1}" } },
-              narrow: { other: { symbol: ["fl oz"], pattern: "{0}{1}" } }
-            },
-            gallon: {
-              displayName: "gallons",
-              "long": {
-                other: { symbol: ["gallons"], pattern: "{0} {1}" },
-                one: { symbol: ["gallon"], pattern: "{0} {1}" }
-              },
-              "short": { other: { symbol: ["gal"], pattern: "{0} {1}" } },
-              narrow: { other: { symbol: ["gal"], pattern: "{0}{1}" } }
-            },
-            liter: {
-              displayName: "liters",
-              "long": {
-                other: { symbol: ["liters"], pattern: "{0} {1}" },
-                one: { symbol: ["liter"], pattern: "{0} {1}" }
-              },
-              "short": { other: { symbol: ["L"], pattern: "{0} {1}" } },
-              narrow: { other: { symbol: ["L"], pattern: "{0}{1}" } }
-            },
-            milliliter: {
-              displayName: "milliliters",
-              "long": {
-                other: { symbol: ["milliliters"], pattern: "{0} {1}" },
-                one: { symbol: ["milliliter"], pattern: "{0} {1}" }
-              },
-              "short": { other: { symbol: ["mL"], pattern: "{0} {1}" } },
-              narrow: { other: { symbol: ["mL"], pattern: "{0}{1}" } }
+            compound: {
+              per: { "long": "{0} per {1}", "short": "{0}/{1}", narrow: "{0}/{1}" }
             }
           },
           currencies: {
@@ -819,24 +812,24 @@ before(function() {
             },
             BYB: {
               displayName: {
-                other: "Belarusian rubles (1994–1999)",
-                one: "Belarusian ruble (1994–1999)"
+                other: "Belarusian new roubles (1994–1999)",
+                one: "Belarusian new rouble (1994–1999)"
               },
               symbol: "BYB",
               narrow: "BYB"
             },
             BYN: {
               displayName: {
-                other: "Belarusian rubles",
-                one: "Belarusian ruble"
+                other: "Belarusian roubles",
+                one: "Belarusian rouble"
               },
               symbol: "BYN",
               narrow: "р."
             },
             BYR: {
               displayName: {
-                other: "Belarusian rubles (2000–2016)",
-                one: "Belarusian ruble (2000–2016)"
+                other: "Belarusian roubles (2000–2016)",
+                one: "Belarusian rouble (2000–2016)"
               },
               symbol: "BYR",
               narrow: "BYR"
@@ -1325,7 +1318,7 @@ before(function() {
             },
             JPY: {
               displayName: { other: "Japanese yen" },
-              symbol: "¥",
+              symbol: "JP¥",
               narrow: "¥"
             },
             KES: {
@@ -1469,7 +1462,7 @@ before(function() {
               narrow: "Ls"
             },
             LVR: {
-              displayName: { other: "Latvian rubles", one: "Latvian ruble" },
+              displayName: { other: "Latvian roubles", one: "Latvian rouble" },
               symbol: "LVR",
               narrow: "LVR"
             },
@@ -1843,14 +1836,14 @@ before(function() {
               narrow: "RSD"
             },
             RUB: {
-              displayName: { other: "Russian rubles", one: "Russian ruble" },
+              displayName: { other: "Russian roubles", one: "Russian rouble" },
               symbol: "RUB",
               narrow: "₽"
             },
             RUR: {
               displayName: {
-                other: "Russian rubles (1991–1998)",
-                one: "Russian ruble (1991–1998)"
+                other: "Russian roubles (1991–1998)",
+                one: "Russian rouble (1991–1998)"
               },
               symbol: "RUR",
               narrow: "р."
@@ -1917,8 +1910,8 @@ before(function() {
             },
             SHP: {
               displayName: {
-                other: "St. Helena pounds",
-                one: "St. Helena pound"
+                other: "St Helena pounds",
+                one: "St Helena pound"
               },
               symbol: "SHP",
               narrow: "£"
@@ -2025,8 +2018,8 @@ before(function() {
             },
             TJR: {
               displayName: {
-                other: "Tajikistani rubles",
-                one: "Tajikistani ruble"
+                other: "Tajikistani roubles",
+                one: "Tajikistani rouble"
               },
               symbol: "TJR",
               narrow: "TJR"
@@ -2138,7 +2131,7 @@ before(function() {
             },
             USD: {
               displayName: { other: "US dollars", one: "US dollar" },
-              symbol: "$",
+              symbol: "US$",
               narrow: "$"
             },
             USN: {
@@ -2524,6 +2517,7 @@ before(function() {
             percent: { latn: "#,##0%" },
             decimal: {
               latn: {
+                standard: "#,##0.###",
                 "long": {
                   1000: { other: "0 thousand" },
                   10000: { other: "00 thousand" },
@@ -2557,8 +2551,8 @@ before(function() {
             currency: {
               latn: {
                 currencySpacing: {
-                  beforeInsertBetween: " ",
-                  afterInsertBetween: " "
+                  beforeInsertBetween: " ",
+                  afterInsertBetween: " "
                 },
                 standard: "¤#,##0.00",
                 accounting: "¤#,##0.00;(¤#,##0.00)",
@@ -2583,104 +2577,7 @@ before(function() {
           nu: ["latn"]
         }
       },
-      availableLocales: ["en"],
-      aliases: {},
-      parentLocales: {
-        "en-150": "en-001",
-        "en-AG": "en-001",
-        "en-AI": "en-001",
-        "en-AU": "en-001",
-        "en-BB": "en-001",
-        "en-BM": "en-001",
-        "en-BS": "en-001",
-        "en-BW": "en-001",
-        "en-BZ": "en-001",
-        "en-CA": "en-001",
-        "en-CC": "en-001",
-        "en-CK": "en-001",
-        "en-CM": "en-001",
-        "en-CX": "en-001",
-        "en-CY": "en-001",
-        "en-DG": "en-001",
-        "en-DM": "en-001",
-        "en-ER": "en-001",
-        "en-FJ": "en-001",
-        "en-FK": "en-001",
-        "en-FM": "en-001",
-        "en-GB": "en-001",
-        "en-GD": "en-001",
-        "en-GG": "en-001",
-        "en-GH": "en-001",
-        "en-GI": "en-001",
-        "en-GM": "en-001",
-        "en-GY": "en-001",
-        "en-HK": "en-001",
-        "en-IE": "en-001",
-        "en-IL": "en-001",
-        "en-IM": "en-001",
-        "en-IN": "en-001",
-        "en-IO": "en-001",
-        "en-JE": "en-001",
-        "en-JM": "en-001",
-        "en-KE": "en-001",
-        "en-KI": "en-001",
-        "en-KN": "en-001",
-        "en-KY": "en-001",
-        "en-LC": "en-001",
-        "en-LR": "en-001",
-        "en-LS": "en-001",
-        "en-MG": "en-001",
-        "en-MO": "en-001",
-        "en-MS": "en-001",
-        "en-MT": "en-001",
-        "en-MU": "en-001",
-        "en-MW": "en-001",
-        "en-MY": "en-001",
-        "en-NA": "en-001",
-        "en-NF": "en-001",
-        "en-NG": "en-001",
-        "en-NR": "en-001",
-        "en-NU": "en-001",
-        "en-NZ": "en-001",
-        "en-PG": "en-001",
-        "en-PH": "en-001",
-        "en-PK": "en-001",
-        "en-PN": "en-001",
-        "en-PW": "en-001",
-        "en-RW": "en-001",
-        "en-SB": "en-001",
-        "en-SC": "en-001",
-        "en-SD": "en-001",
-        "en-SG": "en-001",
-        "en-SH": "en-001",
-        "en-SL": "en-001",
-        "en-SS": "en-001",
-        "en-SX": "en-001",
-        "en-SZ": "en-001",
-        "en-TC": "en-001",
-        "en-TK": "en-001",
-        "en-TO": "en-001",
-        "en-TT": "en-001",
-        "en-TV": "en-001",
-        "en-TZ": "en-001",
-        "en-UG": "en-001",
-        "en-VC": "en-001",
-        "en-VG": "en-001",
-        "en-VU": "en-001",
-        "en-WS": "en-001",
-        "en-ZA": "en-001",
-        "en-ZM": "en-001",
-        "en-ZW": "en-001",
-        "en-AT": "en-150",
-        "en-BE": "en-150",
-        "en-CH": "en-150",
-        "en-DE": "en-150",
-        "en-DK": "en-150",
-        "en-FI": "en-150",
-        "en-NL": "en-150",
-        "en-SE": "en-150",
-        "en-SI": "en-150"
-      }
+      availableLocales: ["en"]
     });
   }
 
@@ -2691,8 +2588,8 @@ before(function() {
     Intl.DateTimeFormat.__addLocaleData({
       data: {
         en: {
-          am: "AM",
-          pm: "PM",
+          am: "am",
+          pm: "pm",
           weekday: {
             narrow: ["S", "M", "T", "W", "T", "F", "S"],
             "short": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
@@ -2811,13 +2708,22 @@ before(function() {
               "long": ["East Africa Time", "East Africa Time"]
             },
             "Africa/Johannesburg": {
-              "long": ["South Africa Standard Time", "South Africa Standard Time"]
+              "long": [
+                "South Africa Standard Time",
+                "South Africa Standard Time"
+              ]
             },
             "Africa/Maseru": {
-              "long": ["South Africa Standard Time", "South Africa Standard Time"]
+              "long": [
+                "South Africa Standard Time",
+                "South Africa Standard Time"
+              ]
             },
             "Africa/Mbabane": {
-              "long": ["South Africa Standard Time", "South Africa Standard Time"]
+              "long": [
+                "South Africa Standard Time",
+                "South Africa Standard Time"
+              ]
             },
             "Africa/Lagos": {
               "long": ["West Africa Standard Time", "West Africa Summer Time"]
@@ -2856,8 +2762,7 @@ before(function() {
               "long": ["West Kazakhstan Time", "West Kazakhstan Time"]
             },
             "America/Juneau": {
-              "long": ["Alaska Standard Time", "Alaska Daylight Time"],
-              "short": ["AKST", "AKDT"]
+              "long": ["Alaska Standard Time", "Alaska Daylight Time"]
             },
             "Asia/Almaty": {
               "long": ["East Kazakhstan Time", "East Kazakhstan Time"]
@@ -2866,88 +2771,67 @@ before(function() {
               "long": ["Amazon Standard Time", "Amazon Summer Time"]
             },
             "America/Chicago": {
-              "long": ["Central Standard Time", "Central Daylight Time"],
-              "short": ["CST", "CDT"]
+              "long": ["Central Standard Time", "Central Daylight Time"]
             },
             "America/Belize": {
-              "long": ["Central Standard Time", "Central Daylight Time"],
-              "short": ["CST", "CDT"]
+              "long": ["Central Standard Time", "Central Daylight Time"]
             },
             "America/Winnipeg": {
-              "long": ["Central Standard Time", "Central Daylight Time"],
-              "short": ["CST", "CDT"]
+              "long": ["Central Standard Time", "Central Daylight Time"]
             },
             "America/Costa_Rica": {
-              "long": ["Central Standard Time", "Central Daylight Time"],
-              "short": ["CST", "CDT"]
+              "long": ["Central Standard Time", "Central Daylight Time"]
             },
             "America/Guatemala": {
-              "long": ["Central Standard Time", "Central Daylight Time"],
-              "short": ["CST", "CDT"]
+              "long": ["Central Standard Time", "Central Daylight Time"]
             },
             "America/Tegucigalpa": {
-              "long": ["Central Standard Time", "Central Daylight Time"],
-              "short": ["CST", "CDT"]
+              "long": ["Central Standard Time", "Central Daylight Time"]
             },
             "America/Mexico_City": {
-              "long": ["Central Standard Time", "Central Daylight Time"],
-              "short": ["CST", "CDT"]
+              "long": ["Central Standard Time", "Central Daylight Time"]
             },
             "America/El_Salvador": {
-              "long": ["Central Standard Time", "Central Daylight Time"],
-              "short": ["CST", "CDT"]
+              "long": ["Central Standard Time", "Central Daylight Time"]
             },
             "America/New_York": {
-              "long": ["Eastern Standard Time", "Eastern Daylight Time"],
-              "short": ["EST", "EDT"]
+              "long": ["Eastern Standard Time", "Eastern Daylight Time"]
             },
             "America/Nassau": {
-              "long": ["Eastern Standard Time", "Eastern Daylight Time"],
-              "short": ["EST", "EDT"]
+              "long": ["Eastern Standard Time", "Eastern Daylight Time"]
             },
             "America/Toronto": {
-              "long": ["Eastern Standard Time", "Eastern Daylight Time"],
-              "short": ["EST", "EDT"]
+              "long": ["Eastern Standard Time", "Eastern Daylight Time"]
             },
             "America/Port-au-Prince": {
-              "long": ["Eastern Standard Time", "Eastern Daylight Time"],
-              "short": ["EST", "EDT"]
+              "long": ["Eastern Standard Time", "Eastern Daylight Time"]
             },
             "America/Jamaica": {
-              "long": ["Eastern Standard Time", "Eastern Daylight Time"],
-              "short": ["EST", "EDT"]
+              "long": ["Eastern Standard Time", "Eastern Daylight Time"]
             },
             "America/Cayman": {
-              "long": ["Eastern Standard Time", "Eastern Daylight Time"],
-              "short": ["EST", "EDT"]
+              "long": ["Eastern Standard Time", "Eastern Daylight Time"]
             },
             "America/Panama": {
-              "long": ["Eastern Standard Time", "Eastern Daylight Time"],
-              "short": ["EST", "EDT"]
+              "long": ["Eastern Standard Time", "Eastern Daylight Time"]
             },
             "America/Denver": {
-              "long": ["Mountain Standard Time", "Mountain Daylight Time"],
-              "short": ["MST", "MDT"]
+              "long": ["Mountain Standard Time", "Mountain Daylight Time"]
             },
             "America/Edmonton": {
-              "long": ["Mountain Standard Time", "Mountain Daylight Time"],
-              "short": ["MST", "MDT"]
+              "long": ["Mountain Standard Time", "Mountain Daylight Time"]
             },
             "America/Hermosillo": {
-              "long": ["Mountain Standard Time", "Mountain Daylight Time"],
-              "short": ["MST", "MDT"]
+              "long": ["Mountain Standard Time", "Mountain Daylight Time"]
             },
             "America/Los_Angeles": {
-              "long": ["Pacific Standard Time", "Pacific Daylight Time"],
-              "short": ["PST", "PDT"]
+              "long": ["Pacific Standard Time", "Pacific Daylight Time"]
             },
             "America/Vancouver": {
-              "long": ["Pacific Standard Time", "Pacific Daylight Time"],
-              "short": ["PST", "PDT"]
+              "long": ["Pacific Standard Time", "Pacific Daylight Time"]
             },
             "America/Tijuana": {
-              "long": ["Pacific Standard Time", "Pacific Daylight Time"],
-              "short": ["PST", "PDT"]
+              "long": ["Pacific Standard Time", "Pacific Daylight Time"]
             },
             "Asia/Anadyr": {
               "long": ["Anadyr Standard Time", "Anadyr Summer Time"]
@@ -2986,96 +2870,73 @@ before(function() {
               "long": ["Turkmenistan Standard Time", "Turkmenistan Summer Time"]
             },
             "America/Halifax": {
-              "long": ["Atlantic Standard Time", "Atlantic Daylight Time"],
-              "short": ["AST", "ADT"]
+              "long": ["Atlantic Standard Time", "Atlantic Daylight Time"]
             },
             "America/Antigua": {
-              "long": ["Atlantic Standard Time", "Atlantic Daylight Time"],
-              "short": ["AST", "ADT"]
+              "long": ["Atlantic Standard Time", "Atlantic Daylight Time"]
             },
             "America/Anguilla": {
-              "long": ["Atlantic Standard Time", "Atlantic Daylight Time"],
-              "short": ["AST", "ADT"]
+              "long": ["Atlantic Standard Time", "Atlantic Daylight Time"]
             },
             "America/Aruba": {
-              "long": ["Atlantic Standard Time", "Atlantic Daylight Time"],
-              "short": ["AST", "ADT"]
+              "long": ["Atlantic Standard Time", "Atlantic Daylight Time"]
             },
             "America/Barbados": {
-              "long": ["Atlantic Standard Time", "Atlantic Daylight Time"],
-              "short": ["AST", "ADT"]
+              "long": ["Atlantic Standard Time", "Atlantic Daylight Time"]
             },
             "Atlantic/Bermuda": {
-              "long": ["Atlantic Standard Time", "Atlantic Daylight Time"],
-              "short": ["AST", "ADT"]
+              "long": ["Atlantic Standard Time", "Atlantic Daylight Time"]
             },
             "America/Kralendijk": {
-              "long": ["Atlantic Standard Time", "Atlantic Daylight Time"],
-              "short": ["AST", "ADT"]
+              "long": ["Atlantic Standard Time", "Atlantic Daylight Time"]
             },
             "America/Curacao": {
-              "long": ["Atlantic Standard Time", "Atlantic Daylight Time"],
-              "short": ["AST", "ADT"]
+              "long": ["Atlantic Standard Time", "Atlantic Daylight Time"]
             },
             "America/Dominica": {
-              "long": ["Atlantic Standard Time", "Atlantic Daylight Time"],
-              "short": ["AST", "ADT"]
+              "long": ["Atlantic Standard Time", "Atlantic Daylight Time"]
             },
             "America/Grenada": {
-              "long": ["Atlantic Standard Time", "Atlantic Daylight Time"],
-              "short": ["AST", "ADT"]
+              "long": ["Atlantic Standard Time", "Atlantic Daylight Time"]
             },
             "America/Thule": {
-              "long": ["Atlantic Standard Time", "Atlantic Daylight Time"],
-              "short": ["AST", "ADT"]
+              "long": ["Atlantic Standard Time", "Atlantic Daylight Time"]
             },
             "America/Guadeloupe": {
-              "long": ["Atlantic Standard Time", "Atlantic Daylight Time"],
-              "short": ["AST", "ADT"]
+              "long": ["Atlantic Standard Time", "Atlantic Daylight Time"]
             },
             "America/St_Kitts": {
-              "long": ["Atlantic Standard Time", "Atlantic Daylight Time"],
-              "short": ["AST", "ADT"]
+              "long": ["Atlantic Standard Time", "Atlantic Daylight Time"]
             },
             "America/St_Lucia": {
-              "long": ["Atlantic Standard Time", "Atlantic Daylight Time"],
-              "short": ["AST", "ADT"]
+              "long": ["Atlantic Standard Time", "Atlantic Daylight Time"]
             },
             "America/Marigot": {
-              "long": ["Atlantic Standard Time", "Atlantic Daylight Time"],
-              "short": ["AST", "ADT"]
+              "long": ["Atlantic Standard Time", "Atlantic Daylight Time"]
             },
             "America/Martinique": {
-              "long": ["Atlantic Standard Time", "Atlantic Daylight Time"],
-              "short": ["AST", "ADT"]
+              "long": ["Atlantic Standard Time", "Atlantic Daylight Time"]
             },
             "America/Montserrat": {
-              "long": ["Atlantic Standard Time", "Atlantic Daylight Time"],
-              "short": ["AST", "ADT"]
+              "long": ["Atlantic Standard Time", "Atlantic Daylight Time"]
             },
             "America/Puerto_Rico": {
-              "long": ["Atlantic Standard Time", "Atlantic Daylight Time"],
-              "short": ["AST", "ADT"]
+              "long": ["Atlantic Standard Time", "Atlantic Daylight Time"]
             },
             "America/Lower_Princes": {
-              "long": ["Atlantic Standard Time", "Atlantic Daylight Time"],
-              "short": ["AST", "ADT"]
+              "long": ["Atlantic Standard Time", "Atlantic Daylight Time"]
             },
             "America/Port_of_Spain": {
-              "long": ["Atlantic Standard Time", "Atlantic Daylight Time"],
-              "short": ["AST", "ADT"]
+              "long": ["Atlantic Standard Time", "Atlantic Daylight Time"]
             },
             "America/St_Vincent": {
-              "long": ["Atlantic Standard Time", "Atlantic Daylight Time"],
-              "short": ["AST", "ADT"]
+              "long": ["Atlantic Standard Time", "Atlantic Daylight Time"]
             },
             "America/Tortola": {
-              "long": ["Atlantic Standard Time", "Atlantic Daylight Time"],
-              "short": ["AST", "ADT"]
+              "long": ["Atlantic Standard Time", "Atlantic Daylight Time"]
             },
             "America/St_Thomas": {
-              "long": ["Atlantic Standard Time", "Atlantic Daylight Time"],
-              "short": ["AST", "ADT"]
+              "long": ["Atlantic Standard Time", "Atlantic Daylight Time"]
             },
             "Australia/Adelaide": {
               "long": [
@@ -3122,7 +2983,10 @@ before(function() {
             },
             "Antarctica/Casey": { "long": ["Casey Time", "Casey Time"] },
             "Pacific/Saipan": {
-              "long": ["North Mariana Islands Time", "North Mariana Islands Time"]
+              "long": [
+                "North Mariana Islands Time",
+                "North Mariana Islands Time"
+              ]
             },
             "Pacific/Guam": {
               "long": ["Guam Standard Time", "Guam Standard Time"]
@@ -3165,7 +3029,10 @@ before(function() {
             "America/Paramaribo": { "long": ["Suriname Time", "Suriname Time"] },
             "Asia/Dili": { "long": ["East Timor Time", "East Timor Time"] },
             "Pacific/Easter": {
-              "long": ["Easter Island Standard Time", "Easter Island Summer Time"]
+              "long": [
+                "Easter Island Standard Time",
+                "Easter Island Summer Time"
+              ]
             },
             "America/Guayaquil": { "long": ["Ecuador Time", "Ecuador Time"] },
             "Europe/Paris": {
@@ -3533,8 +3400,7 @@ before(function() {
               "long": [
                 "Hawaii-Aleutian Standard Time",
                 "Hawaii-Aleutian Daylight Time"
-              ],
-              "short": ["HAST", "HADT"]
+              ]
             },
             "Asia/Hong_Kong": {
               "long": ["Hong Kong Standard Time", "Hong Kong Summer Time"]
@@ -3639,7 +3505,10 @@ before(function() {
             "Pacific/Nauru": { "long": ["Nauru Time", "Nauru Time"] },
             "Asia/Katmandu": { "long": ["Nepal Time", "Nepal Time"] },
             "Pacific/Noumea": {
-              "long": ["New Caledonia Standard Time", "New Caledonia Summer Time"]
+              "long": [
+                "New Caledonia Standard Time",
+                "New Caledonia Summer Time"
+              ]
             },
             "Pacific/Auckland": {
               "long": ["New Zealand Standard Time", "New Zealand Daylight Time"]
@@ -3648,7 +3517,10 @@ before(function() {
               "long": ["New Zealand Standard Time", "New Zealand Daylight Time"]
             },
             "America/St_Johns": {
-              "long": ["Newfoundland Standard Time", "Newfoundland Daylight Time"]
+              "long": [
+                "Newfoundland Standard Time",
+                "Newfoundland Daylight Time"
+              ]
             },
             "Pacific/Niue": { "long": ["Niue Time", "Niue Time"] },
             "Pacific/Norfolk": {
@@ -3682,8 +3554,8 @@ before(function() {
             },
             "America/Miquelon": {
               "long": [
-                "St. Pierre & Miquelon Standard Time",
-                "St. Pierre & Miquelon Daylight Time"
+                "St Pierre & Miquelon Standard Time",
+                "St Pierre & Miquelon Daylight Time"
               ]
             },
             "Pacific/Pitcairn": { "long": ["Pitcairn Time", "Pitcairn Time"] },
@@ -3708,7 +3580,10 @@ before(function() {
               "long": ["South Georgia Time", "South Georgia Time"]
             },
             "Asia/Yekaterinburg": {
-              "long": ["Yekaterinburg Standard Time", "Yekaterinburg Summer Time"]
+              "long": [
+                "Yekaterinburg Standard Time",
+                "Yekaterinburg Summer Time"
+              ]
             },
             "Antarctica/Syowa": { "long": ["Syowa Time", "Syowa Time"] },
             "Pacific/Tahiti": { "long": ["Tahiti Time", "Tahiti Time"] },
@@ -3755,641 +3630,566 @@ before(function() {
           },
           gmtFormat: "GMT{0}",
           hourFormat: "+HH:mm;-HH:mm",
+          dateFormat: {
+            full: "EEEE, d MMMM y",
+            "long": "d MMMM y",
+            medium: "d MMM y",
+            "short": "dd/MM/y"
+          },
+          timeFormat: {
+            full: "h:mm:ss a zzzz",
+            "long": "h:mm:ss a z",
+            medium: "h:mm:ss a",
+            "short": "h:mm a"
+          },
+          dateTimeFormat: {
+            full: "{1} 'at' {0}",
+            "long": "{1} 'at' {0}",
+            medium: "{1}, {0}",
+            "short": "{1}, {0}"
+          },
           formats: {
-            gregory: [
-              "h B",
-              "h:mm B",
-              "h:mm:ss B",
-              "d",
-              "ccc",
-              "E h:mm B",
-              "E h:mm:ss B",
-              "d E",
-              "E h:mm a",
-              "E HH:mm",
-              "E h:mm:ss a",
-              "E HH:mm:ss",
-              "y G",
-              "MMM y G",
-              "MMM d, y G",
-              "E, MMM d, y G",
-              "h a",
-              "HH",
-              "h:mm a",
-              "HH:mm",
-              "h:mm:ss a",
-              "HH:mm:ss",
-              "h:mm:ss a v",
-              "HH:mm:ss v",
-              "h:mm a v",
-              "HH:mm v",
-              "L",
-              "M/d",
-              "E, M/d",
-              "LLL",
-              "MMM d",
-              "E, MMM d",
-              "MMMM d",
-              "'week' W 'of' MMMM",
-              "'week' W 'of' MMMM",
-              "mm:ss",
-              "y",
-              "M/y",
-              "M/d/y",
-              "E, M/d/y",
-              "MMM y",
-              "MMM d, y",
-              "E, MMM d, y",
-              "MMMM y",
-              "QQQ y",
-              "QQQQ y",
-              "'week' w 'of' Y",
-              "'week' w 'of' Y",
-              "EEEE, MMMM d, y",
-              "MMMM d, y",
-              "MMM d, y",
-              "M/d/yy",
-              "h:mm:ss a zzzz",
-              "h:mm:ss a z",
-              "h:mm:ss a",
-              "h:mm a",
-              "EEEE, MMMM d, y 'at' h:mm:ss a zzzz",
-              "MMMM d, y 'at' h:mm:ss a zzzz",
-              "MMM d, y, h:mm:ss a zzzz",
-              "M/d/yy, h:mm:ss a zzzz",
-              "d, h:mm:ss a zzzz",
-              "ccc, h:mm:ss a zzzz",
-              "d E, h:mm:ss a zzzz",
-              "y G, h:mm:ss a zzzz",
-              "MMM y G, h:mm:ss a zzzz",
-              "MMM d, y G, h:mm:ss a zzzz",
-              "E, MMM d, y G, h:mm:ss a zzzz",
-              "L, h:mm:ss a zzzz",
-              "M/d, h:mm:ss a zzzz",
-              "E, M/d, h:mm:ss a zzzz",
-              "LLL, h:mm:ss a zzzz",
-              "MMM d, h:mm:ss a zzzz",
-              "E, MMM d, h:mm:ss a zzzz",
-              "MMMM d 'at' h:mm:ss a zzzz",
-              "'week' W 'of' MMMM 'at' h:mm:ss a zzzz",
-              "'week' W 'of' MMMM 'at' h:mm:ss a zzzz",
-              "y, h:mm:ss a zzzz",
-              "M/y, h:mm:ss a zzzz",
-              "M/d/y, h:mm:ss a zzzz",
-              "E, M/d/y, h:mm:ss a zzzz",
-              "MMM y, h:mm:ss a zzzz",
-              "MMM d, y, h:mm:ss a zzzz",
-              "E, MMM d, y, h:mm:ss a zzzz",
-              "MMMM y 'at' h:mm:ss a zzzz",
-              "QQQ y, h:mm:ss a zzzz",
-              "QQQQ y, h:mm:ss a zzzz",
-              "'week' w 'of' Y, h:mm:ss a zzzz",
-              "'week' w 'of' Y, h:mm:ss a zzzz",
-              "EEEE, MMMM d, y 'at' h:mm:ss a z",
-              "MMMM d, y 'at' h:mm:ss a z",
-              "MMM d, y, h:mm:ss a z",
-              "M/d/yy, h:mm:ss a z",
-              "d, h:mm:ss a z",
-              "ccc, h:mm:ss a z",
-              "d E, h:mm:ss a z",
-              "y G, h:mm:ss a z",
-              "MMM y G, h:mm:ss a z",
-              "MMM d, y G, h:mm:ss a z",
-              "E, MMM d, y G, h:mm:ss a z",
-              "L, h:mm:ss a z",
-              "M/d, h:mm:ss a z",
-              "E, M/d, h:mm:ss a z",
-              "LLL, h:mm:ss a z",
-              "MMM d, h:mm:ss a z",
-              "E, MMM d, h:mm:ss a z",
-              "MMMM d 'at' h:mm:ss a z",
-              "'week' W 'of' MMMM 'at' h:mm:ss a z",
-              "'week' W 'of' MMMM 'at' h:mm:ss a z",
-              "y, h:mm:ss a z",
-              "M/y, h:mm:ss a z",
-              "M/d/y, h:mm:ss a z",
-              "E, M/d/y, h:mm:ss a z",
-              "MMM y, h:mm:ss a z",
-              "MMM d, y, h:mm:ss a z",
-              "E, MMM d, y, h:mm:ss a z",
-              "MMMM y 'at' h:mm:ss a z",
-              "QQQ y, h:mm:ss a z",
-              "QQQQ y, h:mm:ss a z",
-              "'week' w 'of' Y, h:mm:ss a z",
-              "'week' w 'of' Y, h:mm:ss a z",
-              "EEEE, MMMM d, y 'at' h:mm:ss a",
-              "MMMM d, y 'at' h:mm:ss a",
-              "MMM d, y, h:mm:ss a",
-              "M/d/yy, h:mm:ss a",
-              "d, h:mm:ss a",
-              "ccc, h:mm:ss a",
-              "d E, h:mm:ss a",
-              "y G, h:mm:ss a",
-              "MMM y G, h:mm:ss a",
-              "MMM d, y G, h:mm:ss a",
-              "E, MMM d, y G, h:mm:ss a",
-              "L, h:mm:ss a",
-              "M/d, h:mm:ss a",
-              "E, M/d, h:mm:ss a",
-              "LLL, h:mm:ss a",
-              "MMM d, h:mm:ss a",
-              "E, MMM d, h:mm:ss a",
-              "MMMM d 'at' h:mm:ss a",
-              "'week' W 'of' MMMM 'at' h:mm:ss a",
-              "'week' W 'of' MMMM 'at' h:mm:ss a",
-              "y, h:mm:ss a",
-              "M/y, h:mm:ss a",
-              "M/d/y, h:mm:ss a",
-              "E, M/d/y, h:mm:ss a",
-              "MMM y, h:mm:ss a",
-              "MMM d, y, h:mm:ss a",
-              "E, MMM d, y, h:mm:ss a",
-              "MMMM y 'at' h:mm:ss a",
-              "QQQ y, h:mm:ss a",
-              "QQQQ y, h:mm:ss a",
-              "'week' w 'of' Y, h:mm:ss a",
-              "'week' w 'of' Y, h:mm:ss a",
-              "EEEE, MMMM d, y 'at' h:mm a",
-              "MMMM d, y 'at' h:mm a",
-              "MMM d, y, h:mm a",
-              "M/d/yy, h:mm a",
-              "d, h:mm a",
-              "ccc, h:mm a",
-              "d E, h:mm a",
-              "y G, h:mm a",
-              "MMM y G, h:mm a",
-              "MMM d, y G, h:mm a",
-              "E, MMM d, y G, h:mm a",
-              "L, h:mm a",
-              "M/d, h:mm a",
-              "E, M/d, h:mm a",
-              "LLL, h:mm a",
-              "MMM d, h:mm a",
-              "E, MMM d, h:mm a",
-              "MMMM d 'at' h:mm a",
-              "'week' W 'of' MMMM 'at' h:mm a",
-              "'week' W 'of' MMMM 'at' h:mm a",
-              "y, h:mm a",
-              "M/y, h:mm a",
-              "M/d/y, h:mm a",
-              "E, M/d/y, h:mm a",
-              "MMM y, h:mm a",
-              "MMM d, y, h:mm a",
-              "E, MMM d, y, h:mm a",
-              "MMMM y 'at' h:mm a",
-              "QQQ y, h:mm a",
-              "QQQQ y, h:mm a",
-              "'week' w 'of' Y, h:mm a",
-              "'week' w 'of' Y, h:mm a",
-              "EEEE, MMMM d, y 'at' h B",
-              "MMMM d, y 'at' h B",
-              "MMM d, y, h B",
-              "M/d/yy, h B",
-              "d, h B",
-              "ccc, h B",
-              "d E, h B",
-              "y G, h B",
-              "MMM y G, h B",
-              "MMM d, y G, h B",
-              "E, MMM d, y G, h B",
-              "L, h B",
-              "M/d, h B",
-              "E, M/d, h B",
-              "LLL, h B",
-              "MMM d, h B",
-              "E, MMM d, h B",
-              "MMMM d 'at' h B",
-              "'week' W 'of' MMMM 'at' h B",
-              "'week' W 'of' MMMM 'at' h B",
-              "y, h B",
-              "M/y, h B",
-              "M/d/y, h B",
-              "E, M/d/y, h B",
-              "MMM y, h B",
-              "MMM d, y, h B",
-              "E, MMM d, y, h B",
-              "MMMM y 'at' h B",
-              "QQQ y, h B",
-              "QQQQ y, h B",
-              "'week' w 'of' Y, h B",
-              "'week' w 'of' Y, h B",
-              "EEEE, MMMM d, y 'at' h:mm B",
-              "MMMM d, y 'at' h:mm B",
-              "MMM d, y, h:mm B",
-              "M/d/yy, h:mm B",
-              "d, h:mm B",
-              "ccc, h:mm B",
-              "d E, h:mm B",
-              "y G, h:mm B",
-              "MMM y G, h:mm B",
-              "MMM d, y G, h:mm B",
-              "E, MMM d, y G, h:mm B",
-              "L, h:mm B",
-              "M/d, h:mm B",
-              "E, M/d, h:mm B",
-              "LLL, h:mm B",
-              "MMM d, h:mm B",
-              "E, MMM d, h:mm B",
-              "MMMM d 'at' h:mm B",
-              "'week' W 'of' MMMM 'at' h:mm B",
-              "'week' W 'of' MMMM 'at' h:mm B",
-              "y, h:mm B",
-              "M/y, h:mm B",
-              "M/d/y, h:mm B",
-              "E, M/d/y, h:mm B",
-              "MMM y, h:mm B",
-              "MMM d, y, h:mm B",
-              "E, MMM d, y, h:mm B",
-              "MMMM y 'at' h:mm B",
-              "QQQ y, h:mm B",
-              "QQQQ y, h:mm B",
-              "'week' w 'of' Y, h:mm B",
-              "'week' w 'of' Y, h:mm B",
-              "EEEE, MMMM d, y 'at' h:mm:ss B",
-              "MMMM d, y 'at' h:mm:ss B",
-              "MMM d, y, h:mm:ss B",
-              "M/d/yy, h:mm:ss B",
-              "d, h:mm:ss B",
-              "ccc, h:mm:ss B",
-              "d E, h:mm:ss B",
-              "y G, h:mm:ss B",
-              "MMM y G, h:mm:ss B",
-              "MMM d, y G, h:mm:ss B",
-              "E, MMM d, y G, h:mm:ss B",
-              "L, h:mm:ss B",
-              "M/d, h:mm:ss B",
-              "E, M/d, h:mm:ss B",
-              "LLL, h:mm:ss B",
-              "MMM d, h:mm:ss B",
-              "E, MMM d, h:mm:ss B",
-              "MMMM d 'at' h:mm:ss B",
-              "'week' W 'of' MMMM 'at' h:mm:ss B",
-              "'week' W 'of' MMMM 'at' h:mm:ss B",
-              "y, h:mm:ss B",
-              "M/y, h:mm:ss B",
-              "M/d/y, h:mm:ss B",
-              "E, M/d/y, h:mm:ss B",
-              "MMM y, h:mm:ss B",
-              "MMM d, y, h:mm:ss B",
-              "E, MMM d, y, h:mm:ss B",
-              "MMMM y 'at' h:mm:ss B",
-              "QQQ y, h:mm:ss B",
-              "QQQQ y, h:mm:ss B",
-              "'week' w 'of' Y, h:mm:ss B",
-              "'week' w 'of' Y, h:mm:ss B",
-              "EEEE, MMMM d, y 'at' h a",
-              "MMMM d, y 'at' h a",
-              "MMM d, y, h a",
-              "M/d/yy, h a",
-              "d, h a",
-              "ccc, h a",
-              "d E, h a",
-              "y G, h a",
-              "MMM y G, h a",
-              "MMM d, y G, h a",
-              "E, MMM d, y G, h a",
-              "L, h a",
-              "M/d, h a",
-              "E, M/d, h a",
-              "LLL, h a",
-              "MMM d, h a",
-              "E, MMM d, h a",
-              "MMMM d 'at' h a",
-              "'week' W 'of' MMMM 'at' h a",
-              "'week' W 'of' MMMM 'at' h a",
-              "y, h a",
-              "M/y, h a",
-              "M/d/y, h a",
-              "E, M/d/y, h a",
-              "MMM y, h a",
-              "MMM d, y, h a",
-              "E, MMM d, y, h a",
-              "MMMM y 'at' h a",
-              "QQQ y, h a",
-              "QQQQ y, h a",
-              "'week' w 'of' Y, h a",
-              "'week' w 'of' Y, h a",
-              "EEEE, MMMM d, y 'at' HH",
-              "MMMM d, y 'at' HH",
-              "MMM d, y, HH",
-              "M/d/yy, HH",
-              "d, HH",
-              "ccc, HH",
-              "d E, HH",
-              "y G, HH",
-              "MMM y G, HH",
-              "MMM d, y G, HH",
-              "E, MMM d, y G, HH",
-              "L, HH",
-              "M/d, HH",
-              "E, M/d, HH",
-              "LLL, HH",
-              "MMM d, HH",
-              "E, MMM d, HH",
-              "MMMM d 'at' HH",
-              "'week' W 'of' MMMM 'at' HH",
-              "'week' W 'of' MMMM 'at' HH",
-              "y, HH",
-              "M/y, HH",
-              "M/d/y, HH",
-              "E, M/d/y, HH",
-              "MMM y, HH",
-              "MMM d, y, HH",
-              "E, MMM d, y, HH",
-              "MMMM y 'at' HH",
-              "QQQ y, HH",
-              "QQQQ y, HH",
-              "'week' w 'of' Y, HH",
-              "'week' w 'of' Y, HH",
-              "EEEE, MMMM d, y 'at' h:mm a",
-              "MMMM d, y 'at' h:mm a",
-              "MMM d, y, h:mm a",
-              "M/d/yy, h:mm a",
-              "d, h:mm a",
-              "ccc, h:mm a",
-              "d E, h:mm a",
-              "y G, h:mm a",
-              "MMM y G, h:mm a",
-              "MMM d, y G, h:mm a",
-              "E, MMM d, y G, h:mm a",
-              "L, h:mm a",
-              "M/d, h:mm a",
-              "E, M/d, h:mm a",
-              "LLL, h:mm a",
-              "MMM d, h:mm a",
-              "E, MMM d, h:mm a",
-              "MMMM d 'at' h:mm a",
-              "'week' W 'of' MMMM 'at' h:mm a",
-              "'week' W 'of' MMMM 'at' h:mm a",
-              "y, h:mm a",
-              "M/y, h:mm a",
-              "M/d/y, h:mm a",
-              "E, M/d/y, h:mm a",
-              "MMM y, h:mm a",
-              "MMM d, y, h:mm a",
-              "E, MMM d, y, h:mm a",
-              "MMMM y 'at' h:mm a",
-              "QQQ y, h:mm a",
-              "QQQQ y, h:mm a",
-              "'week' w 'of' Y, h:mm a",
-              "'week' w 'of' Y, h:mm a",
-              "EEEE, MMMM d, y 'at' HH:mm",
-              "MMMM d, y 'at' HH:mm",
-              "MMM d, y, HH:mm",
-              "M/d/yy, HH:mm",
-              "d, HH:mm",
-              "ccc, HH:mm",
-              "d E, HH:mm",
-              "y G, HH:mm",
-              "MMM y G, HH:mm",
-              "MMM d, y G, HH:mm",
-              "E, MMM d, y G, HH:mm",
-              "L, HH:mm",
-              "M/d, HH:mm",
-              "E, M/d, HH:mm",
-              "LLL, HH:mm",
-              "MMM d, HH:mm",
-              "E, MMM d, HH:mm",
-              "MMMM d 'at' HH:mm",
-              "'week' W 'of' MMMM 'at' HH:mm",
-              "'week' W 'of' MMMM 'at' HH:mm",
-              "y, HH:mm",
-              "M/y, HH:mm",
-              "M/d/y, HH:mm",
-              "E, M/d/y, HH:mm",
-              "MMM y, HH:mm",
-              "MMM d, y, HH:mm",
-              "E, MMM d, y, HH:mm",
-              "MMMM y 'at' HH:mm",
-              "QQQ y, HH:mm",
-              "QQQQ y, HH:mm",
-              "'week' w 'of' Y, HH:mm",
-              "'week' w 'of' Y, HH:mm",
-              "EEEE, MMMM d, y 'at' h:mm:ss a",
-              "MMMM d, y 'at' h:mm:ss a",
-              "MMM d, y, h:mm:ss a",
-              "M/d/yy, h:mm:ss a",
-              "d, h:mm:ss a",
-              "ccc, h:mm:ss a",
-              "d E, h:mm:ss a",
-              "y G, h:mm:ss a",
-              "MMM y G, h:mm:ss a",
-              "MMM d, y G, h:mm:ss a",
-              "E, MMM d, y G, h:mm:ss a",
-              "L, h:mm:ss a",
-              "M/d, h:mm:ss a",
-              "E, M/d, h:mm:ss a",
-              "LLL, h:mm:ss a",
-              "MMM d, h:mm:ss a",
-              "E, MMM d, h:mm:ss a",
-              "MMMM d 'at' h:mm:ss a",
-              "'week' W 'of' MMMM 'at' h:mm:ss a",
-              "'week' W 'of' MMMM 'at' h:mm:ss a",
-              "y, h:mm:ss a",
-              "M/y, h:mm:ss a",
-              "M/d/y, h:mm:ss a",
-              "E, M/d/y, h:mm:ss a",
-              "MMM y, h:mm:ss a",
-              "MMM d, y, h:mm:ss a",
-              "E, MMM d, y, h:mm:ss a",
-              "MMMM y 'at' h:mm:ss a",
-              "QQQ y, h:mm:ss a",
-              "QQQQ y, h:mm:ss a",
-              "'week' w 'of' Y, h:mm:ss a",
-              "'week' w 'of' Y, h:mm:ss a",
-              "EEEE, MMMM d, y 'at' HH:mm:ss",
-              "MMMM d, y 'at' HH:mm:ss",
-              "MMM d, y, HH:mm:ss",
-              "M/d/yy, HH:mm:ss",
-              "d, HH:mm:ss",
-              "ccc, HH:mm:ss",
-              "d E, HH:mm:ss",
-              "y G, HH:mm:ss",
-              "MMM y G, HH:mm:ss",
-              "MMM d, y G, HH:mm:ss",
-              "E, MMM d, y G, HH:mm:ss",
-              "L, HH:mm:ss",
-              "M/d, HH:mm:ss",
-              "E, M/d, HH:mm:ss",
-              "LLL, HH:mm:ss",
-              "MMM d, HH:mm:ss",
-              "E, MMM d, HH:mm:ss",
-              "MMMM d 'at' HH:mm:ss",
-              "'week' W 'of' MMMM 'at' HH:mm:ss",
-              "'week' W 'of' MMMM 'at' HH:mm:ss",
-              "y, HH:mm:ss",
-              "M/y, HH:mm:ss",
-              "M/d/y, HH:mm:ss",
-              "E, M/d/y, HH:mm:ss",
-              "MMM y, HH:mm:ss",
-              "MMM d, y, HH:mm:ss",
-              "E, MMM d, y, HH:mm:ss",
-              "MMMM y 'at' HH:mm:ss",
-              "QQQ y, HH:mm:ss",
-              "QQQQ y, HH:mm:ss",
-              "'week' w 'of' Y, HH:mm:ss",
-              "'week' w 'of' Y, HH:mm:ss",
-              "EEEE, MMMM d, y 'at' h:mm:ss a v",
-              "MMMM d, y 'at' h:mm:ss a v",
-              "MMM d, y, h:mm:ss a v",
-              "M/d/yy, h:mm:ss a v",
-              "d, h:mm:ss a v",
-              "ccc, h:mm:ss a v",
-              "d E, h:mm:ss a v",
-              "y G, h:mm:ss a v",
-              "MMM y G, h:mm:ss a v",
-              "MMM d, y G, h:mm:ss a v",
-              "E, MMM d, y G, h:mm:ss a v",
-              "L, h:mm:ss a v",
-              "M/d, h:mm:ss a v",
-              "E, M/d, h:mm:ss a v",
-              "LLL, h:mm:ss a v",
-              "MMM d, h:mm:ss a v",
-              "E, MMM d, h:mm:ss a v",
-              "MMMM d 'at' h:mm:ss a v",
-              "'week' W 'of' MMMM 'at' h:mm:ss a v",
-              "'week' W 'of' MMMM 'at' h:mm:ss a v",
-              "y, h:mm:ss a v",
-              "M/y, h:mm:ss a v",
-              "M/d/y, h:mm:ss a v",
-              "E, M/d/y, h:mm:ss a v",
-              "MMM y, h:mm:ss a v",
-              "MMM d, y, h:mm:ss a v",
-              "E, MMM d, y, h:mm:ss a v",
-              "MMMM y 'at' h:mm:ss a v",
-              "QQQ y, h:mm:ss a v",
-              "QQQQ y, h:mm:ss a v",
-              "'week' w 'of' Y, h:mm:ss a v",
-              "'week' w 'of' Y, h:mm:ss a v",
-              "EEEE, MMMM d, y 'at' HH:mm:ss v",
-              "MMMM d, y 'at' HH:mm:ss v",
-              "MMM d, y, HH:mm:ss v",
-              "M/d/yy, HH:mm:ss v",
-              "d, HH:mm:ss v",
-              "ccc, HH:mm:ss v",
-              "d E, HH:mm:ss v",
-              "y G, HH:mm:ss v",
-              "MMM y G, HH:mm:ss v",
-              "MMM d, y G, HH:mm:ss v",
-              "E, MMM d, y G, HH:mm:ss v",
-              "L, HH:mm:ss v",
-              "M/d, HH:mm:ss v",
-              "E, M/d, HH:mm:ss v",
-              "LLL, HH:mm:ss v",
-              "MMM d, HH:mm:ss v",
-              "E, MMM d, HH:mm:ss v",
-              "MMMM d 'at' HH:mm:ss v",
-              "'week' W 'of' MMMM 'at' HH:mm:ss v",
-              "'week' W 'of' MMMM 'at' HH:mm:ss v",
-              "y, HH:mm:ss v",
-              "M/y, HH:mm:ss v",
-              "M/d/y, HH:mm:ss v",
-              "E, M/d/y, HH:mm:ss v",
-              "MMM y, HH:mm:ss v",
-              "MMM d, y, HH:mm:ss v",
-              "E, MMM d, y, HH:mm:ss v",
-              "MMMM y 'at' HH:mm:ss v",
-              "QQQ y, HH:mm:ss v",
-              "QQQQ y, HH:mm:ss v",
-              "'week' w 'of' Y, HH:mm:ss v",
-              "'week' w 'of' Y, HH:mm:ss v",
-              "EEEE, MMMM d, y 'at' h:mm a v",
-              "MMMM d, y 'at' h:mm a v",
-              "MMM d, y, h:mm a v",
-              "M/d/yy, h:mm a v",
-              "d, h:mm a v",
-              "ccc, h:mm a v",
-              "d E, h:mm a v",
-              "y G, h:mm a v",
-              "MMM y G, h:mm a v",
-              "MMM d, y G, h:mm a v",
-              "E, MMM d, y G, h:mm a v",
-              "L, h:mm a v",
-              "M/d, h:mm a v",
-              "E, M/d, h:mm a v",
-              "LLL, h:mm a v",
-              "MMM d, h:mm a v",
-              "E, MMM d, h:mm a v",
-              "MMMM d 'at' h:mm a v",
-              "'week' W 'of' MMMM 'at' h:mm a v",
-              "'week' W 'of' MMMM 'at' h:mm a v",
-              "y, h:mm a v",
-              "M/y, h:mm a v",
-              "M/d/y, h:mm a v",
-              "E, M/d/y, h:mm a v",
-              "MMM y, h:mm a v",
-              "MMM d, y, h:mm a v",
-              "E, MMM d, y, h:mm a v",
-              "MMMM y 'at' h:mm a v",
-              "QQQ y, h:mm a v",
-              "QQQQ y, h:mm a v",
-              "'week' w 'of' Y, h:mm a v",
-              "'week' w 'of' Y, h:mm a v",
-              "EEEE, MMMM d, y 'at' HH:mm v",
-              "MMMM d, y 'at' HH:mm v",
-              "MMM d, y, HH:mm v",
-              "M/d/yy, HH:mm v",
-              "d, HH:mm v",
-              "ccc, HH:mm v",
-              "d E, HH:mm v",
-              "y G, HH:mm v",
-              "MMM y G, HH:mm v",
-              "MMM d, y G, HH:mm v",
-              "E, MMM d, y G, HH:mm v",
-              "L, HH:mm v",
-              "M/d, HH:mm v",
-              "E, M/d, HH:mm v",
-              "LLL, HH:mm v",
-              "MMM d, HH:mm v",
-              "E, MMM d, HH:mm v",
-              "MMMM d 'at' HH:mm v",
-              "'week' W 'of' MMMM 'at' HH:mm v",
-              "'week' W 'of' MMMM 'at' HH:mm v",
-              "y, HH:mm v",
-              "M/y, HH:mm v",
-              "M/d/y, HH:mm v",
-              "E, M/d/y, HH:mm v",
-              "MMM y, HH:mm v",
-              "MMM d, y, HH:mm v",
-              "E, MMM d, y, HH:mm v",
-              "MMMM y 'at' HH:mm v",
-              "QQQ y, HH:mm v",
-              "QQQQ y, HH:mm v",
-              "'week' w 'of' Y, HH:mm v",
-              "'week' w 'of' Y, HH:mm v",
-              "EEEE, MMMM d, y 'at' mm:ss",
-              "MMMM d, y 'at' mm:ss",
-              "MMM d, y, mm:ss",
-              "M/d/yy, mm:ss",
-              "d, mm:ss",
-              "ccc, mm:ss",
-              "d E, mm:ss",
-              "y G, mm:ss",
-              "MMM y G, mm:ss",
-              "MMM d, y G, mm:ss",
-              "E, MMM d, y G, mm:ss",
-              "L, mm:ss",
-              "M/d, mm:ss",
-              "E, M/d, mm:ss",
-              "LLL, mm:ss",
-              "MMM d, mm:ss",
-              "E, MMM d, mm:ss",
-              "MMMM d 'at' mm:ss",
-              "'week' W 'of' MMMM 'at' mm:ss",
-              "'week' W 'of' MMMM 'at' mm:ss",
-              "y, mm:ss",
-              "M/y, mm:ss",
-              "M/d/y, mm:ss",
-              "E, M/d/y, mm:ss",
-              "MMM y, mm:ss",
-              "MMM d, y, mm:ss",
-              "E, MMM d, y, mm:ss",
-              "MMMM y 'at' mm:ss",
-              "QQQ y, mm:ss",
-              "QQQQ y, mm:ss",
-              "'week' w 'of' Y, mm:ss",
-              "'week' w 'of' Y, mm:ss"
-            ]
+            gregory: {
+              Bh: "h B",
+              Bhm: "h:mm B",
+              Bhms: "h:mm:ss B",
+              d: "d",
+              E: "ccc",
+              EBhm: "E, h:mm B",
+              EBhms: "E, h:mm:ss B",
+              Ed: "E d",
+              Ehm: "E h:mm a",
+              EHm: "E HH:mm",
+              Ehms: "E h:mm:ss a",
+              EHms: "E HH:mm:ss",
+              Gy: "y G",
+              GyMMM: "MMM y G",
+              GyMMMd: "d MMM y G",
+              GyMMMEd: "E, d MMM y G",
+              h: "h a",
+              H: "HH",
+              hm: "h:mm a",
+              Hm: "HH:mm",
+              hms: "h:mm:ss a",
+              Hms: "HH:mm:ss",
+              hmsv: "h:mm:ss a v",
+              Hmsv: "HH:mm:ss v",
+              hmv: "h:mm a v",
+              Hmv: "HH:mm v",
+              M: "L",
+              Md: "dd/MM",
+              MEd: "E, dd/MM",
+              MMdd: "dd/MM",
+              MMM: "LLL",
+              MMMd: "d MMM",
+              MMMEd: "E, d MMM",
+              MMMMd: "d MMMM",
+              ms: "mm:ss",
+              y: "y",
+              yM: "MM/y",
+              yMd: "dd/MM/y",
+              yMEd: "E, dd/MM/y",
+              yMMM: "MMM y",
+              yMMMd: "d MMM y",
+              yMMMEd: "E, d MMM y",
+              yMMMM: "MMMM y",
+              "EEEE, d MMMM y": "EEEE, d MMMM y",
+              "d MMMM y": "d MMMM y",
+              "d MMM y": "d MMM y",
+              "dd/MM/y": "dd/MM/y",
+              "h:mm:ss a zzzz": "h:mm:ss a zzzz",
+              "h:mm:ss a z": "h:mm:ss a z",
+              "h:mm:ss a": "h:mm:ss a",
+              "h:mm a": "h:mm a",
+              "EEEE, d MMMM y 'at' h:mm:ss a zzzz":
+                "EEEE, d MMMM y 'at' h:mm:ss a zzzz",
+              "d MMMM y 'at' h:mm:ss a zzzz": "d MMMM y 'at' h:mm:ss a zzzz",
+              "d MMM y, h:mm:ss a zzzz": "d MMM y, h:mm:ss a zzzz",
+              "dd/MM/y, h:mm:ss a zzzz": "dd/MM/y, h:mm:ss a zzzz",
+              "d, h:mm:ss a zzzz": "d, h:mm:ss a zzzz",
+              "E, h:mm:ss a zzzz": "ccc, h:mm:ss a zzzz",
+              "Ed, h:mm:ss a zzzz": "E d, h:mm:ss a zzzz",
+              "Gy, h:mm:ss a zzzz": "y G, h:mm:ss a zzzz",
+              "GyMMM, h:mm:ss a zzzz": "MMM y G, h:mm:ss a zzzz",
+              "GyMMMd, h:mm:ss a zzzz": "d MMM y G, h:mm:ss a zzzz",
+              "GyMMMEd, h:mm:ss a zzzz": "E, d MMM y G, h:mm:ss a zzzz",
+              "M, h:mm:ss a zzzz": "L, h:mm:ss a zzzz",
+              "Md, h:mm:ss a zzzz": "dd/MM, h:mm:ss a zzzz",
+              "MEd, h:mm:ss a zzzz": "E, dd/MM, h:mm:ss a zzzz",
+              "MMdd, h:mm:ss a zzzz": "dd/MM, h:mm:ss a zzzz",
+              "MMM, h:mm:ss a zzzz": "LLL, h:mm:ss a zzzz",
+              "MMMd, h:mm:ss a zzzz": "d MMM, h:mm:ss a zzzz",
+              "MMMEd, h:mm:ss a zzzz": "E, d MMM, h:mm:ss a zzzz",
+              "MMMMd 'at' h:mm:ss a zzzz": "d MMMM 'at' h:mm:ss a zzzz",
+              "y, h:mm:ss a zzzz": "y, h:mm:ss a zzzz",
+              "yM, h:mm:ss a zzzz": "MM/y, h:mm:ss a zzzz",
+              "yMd, h:mm:ss a zzzz": "dd/MM/y, h:mm:ss a zzzz",
+              "yMEd, h:mm:ss a zzzz": "E, dd/MM/y, h:mm:ss a zzzz",
+              "yMMM, h:mm:ss a zzzz": "MMM y, h:mm:ss a zzzz",
+              "yMMMd, h:mm:ss a zzzz": "d MMM y, h:mm:ss a zzzz",
+              "yMMMEd, h:mm:ss a zzzz": "E, d MMM y, h:mm:ss a zzzz",
+              "yMMMM 'at' h:mm:ss a zzzz": "MMMM y 'at' h:mm:ss a zzzz",
+              "EEEE, d MMMM y 'at' h:mm:ss a z":
+                "EEEE, d MMMM y 'at' h:mm:ss a z",
+              "d MMMM y 'at' h:mm:ss a z": "d MMMM y 'at' h:mm:ss a z",
+              "d MMM y, h:mm:ss a z": "d MMM y, h:mm:ss a z",
+              "dd/MM/y, h:mm:ss a z": "dd/MM/y, h:mm:ss a z",
+              "d, h:mm:ss a z": "d, h:mm:ss a z",
+              "E, h:mm:ss a z": "ccc, h:mm:ss a z",
+              "Ed, h:mm:ss a z": "E d, h:mm:ss a z",
+              "Gy, h:mm:ss a z": "y G, h:mm:ss a z",
+              "GyMMM, h:mm:ss a z": "MMM y G, h:mm:ss a z",
+              "GyMMMd, h:mm:ss a z": "d MMM y G, h:mm:ss a z",
+              "GyMMMEd, h:mm:ss a z": "E, d MMM y G, h:mm:ss a z",
+              "M, h:mm:ss a z": "L, h:mm:ss a z",
+              "Md, h:mm:ss a z": "dd/MM, h:mm:ss a z",
+              "MEd, h:mm:ss a z": "E, dd/MM, h:mm:ss a z",
+              "MMdd, h:mm:ss a z": "dd/MM, h:mm:ss a z",
+              "MMM, h:mm:ss a z": "LLL, h:mm:ss a z",
+              "MMMd, h:mm:ss a z": "d MMM, h:mm:ss a z",
+              "MMMEd, h:mm:ss a z": "E, d MMM, h:mm:ss a z",
+              "MMMMd 'at' h:mm:ss a z": "d MMMM 'at' h:mm:ss a z",
+              "y, h:mm:ss a z": "y, h:mm:ss a z",
+              "yM, h:mm:ss a z": "MM/y, h:mm:ss a z",
+              "yMd, h:mm:ss a z": "dd/MM/y, h:mm:ss a z",
+              "yMEd, h:mm:ss a z": "E, dd/MM/y, h:mm:ss a z",
+              "yMMM, h:mm:ss a z": "MMM y, h:mm:ss a z",
+              "yMMMd, h:mm:ss a z": "d MMM y, h:mm:ss a z",
+              "yMMMEd, h:mm:ss a z": "E, d MMM y, h:mm:ss a z",
+              "yMMMM 'at' h:mm:ss a z": "MMMM y 'at' h:mm:ss a z",
+              "EEEE, d MMMM y 'at' h:mm:ss a": "EEEE, d MMMM y 'at' h:mm:ss a",
+              "d MMMM y 'at' h:mm:ss a": "d MMMM y 'at' h:mm:ss a",
+              "d MMM y, h:mm:ss a": "d MMM y, h:mm:ss a",
+              "dd/MM/y, h:mm:ss a": "dd/MM/y, h:mm:ss a",
+              "d, h:mm:ss a": "d, h:mm:ss a",
+              "E, h:mm:ss a": "ccc, h:mm:ss a",
+              "Ed, h:mm:ss a": "E d, h:mm:ss a",
+              "Gy, h:mm:ss a": "y G, h:mm:ss a",
+              "GyMMM, h:mm:ss a": "MMM y G, h:mm:ss a",
+              "GyMMMd, h:mm:ss a": "d MMM y G, h:mm:ss a",
+              "GyMMMEd, h:mm:ss a": "E, d MMM y G, h:mm:ss a",
+              "M, h:mm:ss a": "L, h:mm:ss a",
+              "Md, h:mm:ss a": "dd/MM, h:mm:ss a",
+              "MEd, h:mm:ss a": "E, dd/MM, h:mm:ss a",
+              "MMdd, h:mm:ss a": "dd/MM, h:mm:ss a",
+              "MMM, h:mm:ss a": "LLL, h:mm:ss a",
+              "MMMd, h:mm:ss a": "d MMM, h:mm:ss a",
+              "MMMEd, h:mm:ss a": "E, d MMM, h:mm:ss a",
+              "MMMMd 'at' h:mm:ss a": "d MMMM 'at' h:mm:ss a",
+              "y, h:mm:ss a": "y, h:mm:ss a",
+              "yM, h:mm:ss a": "MM/y, h:mm:ss a",
+              "yMd, h:mm:ss a": "dd/MM/y, h:mm:ss a",
+              "yMEd, h:mm:ss a": "E, dd/MM/y, h:mm:ss a",
+              "yMMM, h:mm:ss a": "MMM y, h:mm:ss a",
+              "yMMMd, h:mm:ss a": "d MMM y, h:mm:ss a",
+              "yMMMEd, h:mm:ss a": "E, d MMM y, h:mm:ss a",
+              "yMMMM 'at' h:mm:ss a": "MMMM y 'at' h:mm:ss a",
+              "EEEE, d MMMM y 'at' h:mm a": "EEEE, d MMMM y 'at' h:mm a",
+              "d MMMM y 'at' h:mm a": "d MMMM y 'at' h:mm a",
+              "d MMM y, h:mm a": "d MMM y, h:mm a",
+              "dd/MM/y, h:mm a": "dd/MM/y, h:mm a",
+              "d, h:mm a": "d, h:mm a",
+              "E, h:mm a": "ccc, h:mm a",
+              "Ed, h:mm a": "E d, h:mm a",
+              "Gy, h:mm a": "y G, h:mm a",
+              "GyMMM, h:mm a": "MMM y G, h:mm a",
+              "GyMMMd, h:mm a": "d MMM y G, h:mm a",
+              "GyMMMEd, h:mm a": "E, d MMM y G, h:mm a",
+              "M, h:mm a": "L, h:mm a",
+              "Md, h:mm a": "dd/MM, h:mm a",
+              "MEd, h:mm a": "E, dd/MM, h:mm a",
+              "MMdd, h:mm a": "dd/MM, h:mm a",
+              "MMM, h:mm a": "LLL, h:mm a",
+              "MMMd, h:mm a": "d MMM, h:mm a",
+              "MMMEd, h:mm a": "E, d MMM, h:mm a",
+              "MMMMd 'at' h:mm a": "d MMMM 'at' h:mm a",
+              "y, h:mm a": "y, h:mm a",
+              "yM, h:mm a": "MM/y, h:mm a",
+              "yMd, h:mm a": "dd/MM/y, h:mm a",
+              "yMEd, h:mm a": "E, dd/MM/y, h:mm a",
+              "yMMM, h:mm a": "MMM y, h:mm a",
+              "yMMMd, h:mm a": "d MMM y, h:mm a",
+              "yMMMEd, h:mm a": "E, d MMM y, h:mm a",
+              "yMMMM 'at' h:mm a": "MMMM y 'at' h:mm a",
+              "EEEE, d MMMM y 'at' Bh": "EEEE, d MMMM y 'at' h B",
+              "d MMMM y 'at' Bh": "d MMMM y 'at' h B",
+              "d MMM y, Bh": "d MMM y, h B",
+              "dd/MM/y, Bh": "dd/MM/y, h B",
+              "d, Bh": "d, h B",
+              "E, Bh": "ccc, h B",
+              "Ed, Bh": "E d, h B",
+              "Gy, Bh": "y G, h B",
+              "GyMMM, Bh": "MMM y G, h B",
+              "GyMMMd, Bh": "d MMM y G, h B",
+              "GyMMMEd, Bh": "E, d MMM y G, h B",
+              "M, Bh": "L, h B",
+              "Md, Bh": "dd/MM, h B",
+              "MEd, Bh": "E, dd/MM, h B",
+              "MMdd, Bh": "dd/MM, h B",
+              "MMM, Bh": "LLL, h B",
+              "MMMd, Bh": "d MMM, h B",
+              "MMMEd, Bh": "E, d MMM, h B",
+              "MMMMd 'at' Bh": "d MMMM 'at' h B",
+              "y, Bh": "y, h B",
+              "yM, Bh": "MM/y, h B",
+              "yMd, Bh": "dd/MM/y, h B",
+              "yMEd, Bh": "E, dd/MM/y, h B",
+              "yMMM, Bh": "MMM y, h B",
+              "yMMMd, Bh": "d MMM y, h B",
+              "yMMMEd, Bh": "E, d MMM y, h B",
+              "yMMMM 'at' Bh": "MMMM y 'at' h B",
+              "EEEE, d MMMM y 'at' Bhm": "EEEE, d MMMM y 'at' h:mm B",
+              "d MMMM y 'at' Bhm": "d MMMM y 'at' h:mm B",
+              "d MMM y, Bhm": "d MMM y, h:mm B",
+              "dd/MM/y, Bhm": "dd/MM/y, h:mm B",
+              "d, Bhm": "d, h:mm B",
+              "E, Bhm": "ccc, h:mm B",
+              "Ed, Bhm": "E d, h:mm B",
+              "Gy, Bhm": "y G, h:mm B",
+              "GyMMM, Bhm": "MMM y G, h:mm B",
+              "GyMMMd, Bhm": "d MMM y G, h:mm B",
+              "GyMMMEd, Bhm": "E, d MMM y G, h:mm B",
+              "M, Bhm": "L, h:mm B",
+              "Md, Bhm": "dd/MM, h:mm B",
+              "MEd, Bhm": "E, dd/MM, h:mm B",
+              "MMdd, Bhm": "dd/MM, h:mm B",
+              "MMM, Bhm": "LLL, h:mm B",
+              "MMMd, Bhm": "d MMM, h:mm B",
+              "MMMEd, Bhm": "E, d MMM, h:mm B",
+              "MMMMd 'at' Bhm": "d MMMM 'at' h:mm B",
+              "y, Bhm": "y, h:mm B",
+              "yM, Bhm": "MM/y, h:mm B",
+              "yMd, Bhm": "dd/MM/y, h:mm B",
+              "yMEd, Bhm": "E, dd/MM/y, h:mm B",
+              "yMMM, Bhm": "MMM y, h:mm B",
+              "yMMMd, Bhm": "d MMM y, h:mm B",
+              "yMMMEd, Bhm": "E, d MMM y, h:mm B",
+              "yMMMM 'at' Bhm": "MMMM y 'at' h:mm B",
+              "EEEE, d MMMM y 'at' Bhms": "EEEE, d MMMM y 'at' h:mm:ss B",
+              "d MMMM y 'at' Bhms": "d MMMM y 'at' h:mm:ss B",
+              "d MMM y, Bhms": "d MMM y, h:mm:ss B",
+              "dd/MM/y, Bhms": "dd/MM/y, h:mm:ss B",
+              "d, Bhms": "d, h:mm:ss B",
+              "E, Bhms": "ccc, h:mm:ss B",
+              "Ed, Bhms": "E d, h:mm:ss B",
+              "Gy, Bhms": "y G, h:mm:ss B",
+              "GyMMM, Bhms": "MMM y G, h:mm:ss B",
+              "GyMMMd, Bhms": "d MMM y G, h:mm:ss B",
+              "GyMMMEd, Bhms": "E, d MMM y G, h:mm:ss B",
+              "M, Bhms": "L, h:mm:ss B",
+              "Md, Bhms": "dd/MM, h:mm:ss B",
+              "MEd, Bhms": "E, dd/MM, h:mm:ss B",
+              "MMdd, Bhms": "dd/MM, h:mm:ss B",
+              "MMM, Bhms": "LLL, h:mm:ss B",
+              "MMMd, Bhms": "d MMM, h:mm:ss B",
+              "MMMEd, Bhms": "E, d MMM, h:mm:ss B",
+              "MMMMd 'at' Bhms": "d MMMM 'at' h:mm:ss B",
+              "y, Bhms": "y, h:mm:ss B",
+              "yM, Bhms": "MM/y, h:mm:ss B",
+              "yMd, Bhms": "dd/MM/y, h:mm:ss B",
+              "yMEd, Bhms": "E, dd/MM/y, h:mm:ss B",
+              "yMMM, Bhms": "MMM y, h:mm:ss B",
+              "yMMMd, Bhms": "d MMM y, h:mm:ss B",
+              "yMMMEd, Bhms": "E, d MMM y, h:mm:ss B",
+              "yMMMM 'at' Bhms": "MMMM y 'at' h:mm:ss B",
+              "EEEE, d MMMM y 'at' h": "EEEE, d MMMM y 'at' h a",
+              "d MMMM y 'at' h": "d MMMM y 'at' h a",
+              "d MMM y, h": "d MMM y, h a",
+              "dd/MM/y, h": "dd/MM/y, h a",
+              "d, h": "d, h a",
+              "E, h": "ccc, h a",
+              "Ed, h": "E d, h a",
+              "Gy, h": "y G, h a",
+              "GyMMM, h": "MMM y G, h a",
+              "GyMMMd, h": "d MMM y G, h a",
+              "GyMMMEd, h": "E, d MMM y G, h a",
+              "M, h": "L, h a",
+              "Md, h": "dd/MM, h a",
+              "MEd, h": "E, dd/MM, h a",
+              "MMdd, h": "dd/MM, h a",
+              "MMM, h": "LLL, h a",
+              "MMMd, h": "d MMM, h a",
+              "MMMEd, h": "E, d MMM, h a",
+              "MMMMd 'at' h": "d MMMM 'at' h a",
+              "y, h": "y, h a",
+              "yM, h": "MM/y, h a",
+              "yMd, h": "dd/MM/y, h a",
+              "yMEd, h": "E, dd/MM/y, h a",
+              "yMMM, h": "MMM y, h a",
+              "yMMMd, h": "d MMM y, h a",
+              "yMMMEd, h": "E, d MMM y, h a",
+              "yMMMM 'at' h": "MMMM y 'at' h a",
+              "EEEE, d MMMM y 'at' H": "EEEE, d MMMM y 'at' HH",
+              "d MMMM y 'at' H": "d MMMM y 'at' HH",
+              "d MMM y, H": "d MMM y, HH",
+              "dd/MM/y, H": "dd/MM/y, HH",
+              "d, H": "d, HH",
+              "E, H": "ccc, HH",
+              "Ed, H": "E d, HH",
+              "Gy, H": "y G, HH",
+              "GyMMM, H": "MMM y G, HH",
+              "GyMMMd, H": "d MMM y G, HH",
+              "GyMMMEd, H": "E, d MMM y G, HH",
+              "M, H": "L, HH",
+              "Md, H": "dd/MM, HH",
+              "MEd, H": "E, dd/MM, HH",
+              "MMdd, H": "dd/MM, HH",
+              "MMM, H": "LLL, HH",
+              "MMMd, H": "d MMM, HH",
+              "MMMEd, H": "E, d MMM, HH",
+              "MMMMd 'at' H": "d MMMM 'at' HH",
+              "y, H": "y, HH",
+              "yM, H": "MM/y, HH",
+              "yMd, H": "dd/MM/y, HH",
+              "yMEd, H": "E, dd/MM/y, HH",
+              "yMMM, H": "MMM y, HH",
+              "yMMMd, H": "d MMM y, HH",
+              "yMMMEd, H": "E, d MMM y, HH",
+              "yMMMM 'at' H": "MMMM y 'at' HH",
+              "EEEE, d MMMM y 'at' hm": "EEEE, d MMMM y 'at' h:mm a",
+              "d MMMM y 'at' hm": "d MMMM y 'at' h:mm a",
+              "d MMM y, hm": "d MMM y, h:mm a",
+              "dd/MM/y, hm": "dd/MM/y, h:mm a",
+              "d, hm": "d, h:mm a",
+              "E, hm": "ccc, h:mm a",
+              "Ed, hm": "E d, h:mm a",
+              "Gy, hm": "y G, h:mm a",
+              "GyMMM, hm": "MMM y G, h:mm a",
+              "GyMMMd, hm": "d MMM y G, h:mm a",
+              "GyMMMEd, hm": "E, d MMM y G, h:mm a",
+              "M, hm": "L, h:mm a",
+              "Md, hm": "dd/MM, h:mm a",
+              "MEd, hm": "E, dd/MM, h:mm a",
+              "MMdd, hm": "dd/MM, h:mm a",
+              "MMM, hm": "LLL, h:mm a",
+              "MMMd, hm": "d MMM, h:mm a",
+              "MMMEd, hm": "E, d MMM, h:mm a",
+              "MMMMd 'at' hm": "d MMMM 'at' h:mm a",
+              "y, hm": "y, h:mm a",
+              "yM, hm": "MM/y, h:mm a",
+              "yMd, hm": "dd/MM/y, h:mm a",
+              "yMEd, hm": "E, dd/MM/y, h:mm a",
+              "yMMM, hm": "MMM y, h:mm a",
+              "yMMMd, hm": "d MMM y, h:mm a",
+              "yMMMEd, hm": "E, d MMM y, h:mm a",
+              "yMMMM 'at' hm": "MMMM y 'at' h:mm a",
+              "EEEE, d MMMM y 'at' Hm": "EEEE, d MMMM y 'at' HH:mm",
+              "d MMMM y 'at' Hm": "d MMMM y 'at' HH:mm",
+              "d MMM y, Hm": "d MMM y, HH:mm",
+              "dd/MM/y, Hm": "dd/MM/y, HH:mm",
+              "d, Hm": "d, HH:mm",
+              "E, Hm": "ccc, HH:mm",
+              "Ed, Hm": "E d, HH:mm",
+              "Gy, Hm": "y G, HH:mm",
+              "GyMMM, Hm": "MMM y G, HH:mm",
+              "GyMMMd, Hm": "d MMM y G, HH:mm",
+              "GyMMMEd, Hm": "E, d MMM y G, HH:mm",
+              "M, Hm": "L, HH:mm",
+              "Md, Hm": "dd/MM, HH:mm",
+              "MEd, Hm": "E, dd/MM, HH:mm",
+              "MMdd, Hm": "dd/MM, HH:mm",
+              "MMM, Hm": "LLL, HH:mm",
+              "MMMd, Hm": "d MMM, HH:mm",
+              "MMMEd, Hm": "E, d MMM, HH:mm",
+              "MMMMd 'at' Hm": "d MMMM 'at' HH:mm",
+              "y, Hm": "y, HH:mm",
+              "yM, Hm": "MM/y, HH:mm",
+              "yMd, Hm": "dd/MM/y, HH:mm",
+              "yMEd, Hm": "E, dd/MM/y, HH:mm",
+              "yMMM, Hm": "MMM y, HH:mm",
+              "yMMMd, Hm": "d MMM y, HH:mm",
+              "yMMMEd, Hm": "E, d MMM y, HH:mm",
+              "yMMMM 'at' Hm": "MMMM y 'at' HH:mm",
+              "EEEE, d MMMM y 'at' hms": "EEEE, d MMMM y 'at' h:mm:ss a",
+              "d MMMM y 'at' hms": "d MMMM y 'at' h:mm:ss a",
+              "d MMM y, hms": "d MMM y, h:mm:ss a",
+              "dd/MM/y, hms": "dd/MM/y, h:mm:ss a",
+              "d, hms": "d, h:mm:ss a",
+              "E, hms": "ccc, h:mm:ss a",
+              "Ed, hms": "E d, h:mm:ss a",
+              "Gy, hms": "y G, h:mm:ss a",
+              "GyMMM, hms": "MMM y G, h:mm:ss a",
+              "GyMMMd, hms": "d MMM y G, h:mm:ss a",
+              "GyMMMEd, hms": "E, d MMM y G, h:mm:ss a",
+              "M, hms": "L, h:mm:ss a",
+              "Md, hms": "dd/MM, h:mm:ss a",
+              "MEd, hms": "E, dd/MM, h:mm:ss a",
+              "MMdd, hms": "dd/MM, h:mm:ss a",
+              "MMM, hms": "LLL, h:mm:ss a",
+              "MMMd, hms": "d MMM, h:mm:ss a",
+              "MMMEd, hms": "E, d MMM, h:mm:ss a",
+              "MMMMd 'at' hms": "d MMMM 'at' h:mm:ss a",
+              "y, hms": "y, h:mm:ss a",
+              "yM, hms": "MM/y, h:mm:ss a",
+              "yMd, hms": "dd/MM/y, h:mm:ss a",
+              "yMEd, hms": "E, dd/MM/y, h:mm:ss a",
+              "yMMM, hms": "MMM y, h:mm:ss a",
+              "yMMMd, hms": "d MMM y, h:mm:ss a",
+              "yMMMEd, hms": "E, d MMM y, h:mm:ss a",
+              "yMMMM 'at' hms": "MMMM y 'at' h:mm:ss a",
+              "EEEE, d MMMM y 'at' Hms": "EEEE, d MMMM y 'at' HH:mm:ss",
+              "d MMMM y 'at' Hms": "d MMMM y 'at' HH:mm:ss",
+              "d MMM y, Hms": "d MMM y, HH:mm:ss",
+              "dd/MM/y, Hms": "dd/MM/y, HH:mm:ss",
+              "d, Hms": "d, HH:mm:ss",
+              "E, Hms": "ccc, HH:mm:ss",
+              "Ed, Hms": "E d, HH:mm:ss",
+              "Gy, Hms": "y G, HH:mm:ss",
+              "GyMMM, Hms": "MMM y G, HH:mm:ss",
+              "GyMMMd, Hms": "d MMM y G, HH:mm:ss",
+              "GyMMMEd, Hms": "E, d MMM y G, HH:mm:ss",
+              "M, Hms": "L, HH:mm:ss",
+              "Md, Hms": "dd/MM, HH:mm:ss",
+              "MEd, Hms": "E, dd/MM, HH:mm:ss",
+              "MMdd, Hms": "dd/MM, HH:mm:ss",
+              "MMM, Hms": "LLL, HH:mm:ss",
+              "MMMd, Hms": "d MMM, HH:mm:ss",
+              "MMMEd, Hms": "E, d MMM, HH:mm:ss",
+              "MMMMd 'at' Hms": "d MMMM 'at' HH:mm:ss",
+              "y, Hms": "y, HH:mm:ss",
+              "yM, Hms": "MM/y, HH:mm:ss",
+              "yMd, Hms": "dd/MM/y, HH:mm:ss",
+              "yMEd, Hms": "E, dd/MM/y, HH:mm:ss",
+              "yMMM, Hms": "MMM y, HH:mm:ss",
+              "yMMMd, Hms": "d MMM y, HH:mm:ss",
+              "yMMMEd, Hms": "E, d MMM y, HH:mm:ss",
+              "yMMMM 'at' Hms": "MMMM y 'at' HH:mm:ss",
+              "EEEE, d MMMM y 'at' hmsv": "EEEE, d MMMM y 'at' h:mm:ss a v",
+              "d MMMM y 'at' hmsv": "d MMMM y 'at' h:mm:ss a v",
+              "d MMM y, hmsv": "d MMM y, h:mm:ss a v",
+              "dd/MM/y, hmsv": "dd/MM/y, h:mm:ss a v",
+              "d, hmsv": "d, h:mm:ss a v",
+              "E, hmsv": "ccc, h:mm:ss a v",
+              "Ed, hmsv": "E d, h:mm:ss a v",
+              "Gy, hmsv": "y G, h:mm:ss a v",
+              "GyMMM, hmsv": "MMM y G, h:mm:ss a v",
+              "GyMMMd, hmsv": "d MMM y G, h:mm:ss a v",
+              "GyMMMEd, hmsv": "E, d MMM y G, h:mm:ss a v",
+              "M, hmsv": "L, h:mm:ss a v",
+              "Md, hmsv": "dd/MM, h:mm:ss a v",
+              "MEd, hmsv": "E, dd/MM, h:mm:ss a v",
+              "MMdd, hmsv": "dd/MM, h:mm:ss a v",
+              "MMM, hmsv": "LLL, h:mm:ss a v",
+              "MMMd, hmsv": "d MMM, h:mm:ss a v",
+              "MMMEd, hmsv": "E, d MMM, h:mm:ss a v",
+              "MMMMd 'at' hmsv": "d MMMM 'at' h:mm:ss a v",
+              "y, hmsv": "y, h:mm:ss a v",
+              "yM, hmsv": "MM/y, h:mm:ss a v",
+              "yMd, hmsv": "dd/MM/y, h:mm:ss a v",
+              "yMEd, hmsv": "E, dd/MM/y, h:mm:ss a v",
+              "yMMM, hmsv": "MMM y, h:mm:ss a v",
+              "yMMMd, hmsv": "d MMM y, h:mm:ss a v",
+              "yMMMEd, hmsv": "E, d MMM y, h:mm:ss a v",
+              "yMMMM 'at' hmsv": "MMMM y 'at' h:mm:ss a v",
+              "EEEE, d MMMM y 'at' Hmsv": "EEEE, d MMMM y 'at' HH:mm:ss v",
+              "d MMMM y 'at' Hmsv": "d MMMM y 'at' HH:mm:ss v",
+              "d MMM y, Hmsv": "d MMM y, HH:mm:ss v",
+              "dd/MM/y, Hmsv": "dd/MM/y, HH:mm:ss v",
+              "d, Hmsv": "d, HH:mm:ss v",
+              "E, Hmsv": "ccc, HH:mm:ss v",
+              "Ed, Hmsv": "E d, HH:mm:ss v",
+              "Gy, Hmsv": "y G, HH:mm:ss v",
+              "GyMMM, Hmsv": "MMM y G, HH:mm:ss v",
+              "GyMMMd, Hmsv": "d MMM y G, HH:mm:ss v",
+              "GyMMMEd, Hmsv": "E, d MMM y G, HH:mm:ss v",
+              "M, Hmsv": "L, HH:mm:ss v",
+              "Md, Hmsv": "dd/MM, HH:mm:ss v",
+              "MEd, Hmsv": "E, dd/MM, HH:mm:ss v",
+              "MMdd, Hmsv": "dd/MM, HH:mm:ss v",
+              "MMM, Hmsv": "LLL, HH:mm:ss v",
+              "MMMd, Hmsv": "d MMM, HH:mm:ss v",
+              "MMMEd, Hmsv": "E, d MMM, HH:mm:ss v",
+              "MMMMd 'at' Hmsv": "d MMMM 'at' HH:mm:ss v",
+              "y, Hmsv": "y, HH:mm:ss v",
+              "yM, Hmsv": "MM/y, HH:mm:ss v",
+              "yMd, Hmsv": "dd/MM/y, HH:mm:ss v",
+              "yMEd, Hmsv": "E, dd/MM/y, HH:mm:ss v",
+              "yMMM, Hmsv": "MMM y, HH:mm:ss v",
+              "yMMMd, Hmsv": "d MMM y, HH:mm:ss v",
+              "yMMMEd, Hmsv": "E, d MMM y, HH:mm:ss v",
+              "yMMMM 'at' Hmsv": "MMMM y 'at' HH:mm:ss v",
+              "EEEE, d MMMM y 'at' hmv": "EEEE, d MMMM y 'at' h:mm a v",
+              "d MMMM y 'at' hmv": "d MMMM y 'at' h:mm a v",
+              "d MMM y, hmv": "d MMM y, h:mm a v",
+              "dd/MM/y, hmv": "dd/MM/y, h:mm a v",
+              "d, hmv": "d, h:mm a v",
+              "E, hmv": "ccc, h:mm a v",
+              "Ed, hmv": "E d, h:mm a v",
+              "Gy, hmv": "y G, h:mm a v",
+              "GyMMM, hmv": "MMM y G, h:mm a v",
+              "GyMMMd, hmv": "d MMM y G, h:mm a v",
+              "GyMMMEd, hmv": "E, d MMM y G, h:mm a v",
+              "M, hmv": "L, h:mm a v",
+              "Md, hmv": "dd/MM, h:mm a v",
+              "MEd, hmv": "E, dd/MM, h:mm a v",
+              "MMdd, hmv": "dd/MM, h:mm a v",
+              "MMM, hmv": "LLL, h:mm a v",
+              "MMMd, hmv": "d MMM, h:mm a v",
+              "MMMEd, hmv": "E, d MMM, h:mm a v",
+              "MMMMd 'at' hmv": "d MMMM 'at' h:mm a v",
+              "y, hmv": "y, h:mm a v",
+              "yM, hmv": "MM/y, h:mm a v",
+              "yMd, hmv": "dd/MM/y, h:mm a v",
+              "yMEd, hmv": "E, dd/MM/y, h:mm a v",
+              "yMMM, hmv": "MMM y, h:mm a v",
+              "yMMMd, hmv": "d MMM y, h:mm a v",
+              "yMMMEd, hmv": "E, d MMM y, h:mm a v",
+              "yMMMM 'at' hmv": "MMMM y 'at' h:mm a v",
+              "EEEE, d MMMM y 'at' Hmv": "EEEE, d MMMM y 'at' HH:mm v",
+              "d MMMM y 'at' Hmv": "d MMMM y 'at' HH:mm v",
+              "d MMM y, Hmv": "d MMM y, HH:mm v",
+              "dd/MM/y, Hmv": "dd/MM/y, HH:mm v",
+              "d, Hmv": "d, HH:mm v",
+              "E, Hmv": "ccc, HH:mm v",
+              "Ed, Hmv": "E d, HH:mm v",
+              "Gy, Hmv": "y G, HH:mm v",
+              "GyMMM, Hmv": "MMM y G, HH:mm v",
+              "GyMMMd, Hmv": "d MMM y G, HH:mm v",
+              "GyMMMEd, Hmv": "E, d MMM y G, HH:mm v",
+              "M, Hmv": "L, HH:mm v",
+              "Md, Hmv": "dd/MM, HH:mm v",
+              "MEd, Hmv": "E, dd/MM, HH:mm v",
+              "MMdd, Hmv": "dd/MM, HH:mm v",
+              "MMM, Hmv": "LLL, HH:mm v",
+              "MMMd, Hmv": "d MMM, HH:mm v",
+              "MMMEd, Hmv": "E, d MMM, HH:mm v",
+              "MMMMd 'at' Hmv": "d MMMM 'at' HH:mm v",
+              "y, Hmv": "y, HH:mm v",
+              "yM, Hmv": "MM/y, HH:mm v",
+              "yMd, Hmv": "dd/MM/y, HH:mm v",
+              "yMEd, Hmv": "E, dd/MM/y, HH:mm v",
+              "yMMM, Hmv": "MMM y, HH:mm v",
+              "yMMMd, Hmv": "d MMM y, HH:mm v",
+              "yMMMEd, Hmv": "E, d MMM y, HH:mm v",
+              "yMMMM 'at' Hmv": "MMMM y 'at' HH:mm v",
+              "EEEE, d MMMM y 'at' ms": "EEEE, d MMMM y 'at' mm:ss",
+              "d MMMM y 'at' ms": "d MMMM y 'at' mm:ss",
+              "d MMM y, ms": "d MMM y, mm:ss",
+              "dd/MM/y, ms": "dd/MM/y, mm:ss",
+              "d, ms": "d, mm:ss",
+              "E, ms": "ccc, mm:ss",
+              "Ed, ms": "E d, mm:ss",
+              "Gy, ms": "y G, mm:ss",
+              "GyMMM, ms": "MMM y G, mm:ss",
+              "GyMMMd, ms": "d MMM y G, mm:ss",
+              "GyMMMEd, ms": "E, d MMM y G, mm:ss",
+              "M, ms": "L, mm:ss",
+              "Md, ms": "dd/MM, mm:ss",
+              "MEd, ms": "E, dd/MM, mm:ss",
+              "MMdd, ms": "dd/MM, mm:ss",
+              "MMM, ms": "LLL, mm:ss",
+              "MMMd, ms": "d MMM, mm:ss",
+              "MMMEd, ms": "E, d MMM, mm:ss",
+              "MMMMd 'at' ms": "d MMMM 'at' mm:ss",
+              "y, ms": "y, mm:ss",
+              "yM, ms": "MM/y, mm:ss",
+              "yMd, ms": "dd/MM/y, mm:ss",
+              "yMEd, ms": "E, dd/MM/y, mm:ss",
+              "yMMM, ms": "MMM y, mm:ss",
+              "yMMMd, ms": "d MMM y, mm:ss",
+              "yMMMEd, ms": "E, d MMM y, mm:ss",
+              "yMMMM 'at' ms": "MMMM y 'at' mm:ss"
+            }
           },
           hourCycle: "h12",
           nu: ["latn"],
@@ -4402,7 +4202,7 @@ before(function() {
   }
 });
 
-it("formatToParts should work", function() {
+it("formatToParts should work", function () {
   var parts = new Intl.DateTimeFormat("en", {
     weekday: "long",
     era: "long",
@@ -4417,7 +4217,7 @@ it("formatToParts should work", function() {
   proclaim.equal(parts.length, 17);
 });
 
-it("should fix dayperiod bug in chrome", function() {
+it("should fix dayperiod bug in chrome", function () {
   var parts = new Intl.DateTimeFormat("en", {
     weekday: "long",
     era: "long",
