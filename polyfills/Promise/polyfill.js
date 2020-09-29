@@ -1,877 +1,832 @@
-/*
- Yaku v0.19.3
- (c) 2015 Yad Smood. http://ysmood.org
- License MIT
-*/
-/*
- Yaku v0.17.9
- (c) 2015 Yad Smood. http://ysmood.org
- License MIT
-*/
-(function () {
-  'use strict';
-
-  var $undefined
-      , $null = null
-      , isBrowser = typeof self === 'object'
-      , root = self
-      , nativePromise = root.Promise
-      , process = root.process
-      , console = root.console
-      , isLongStackTrace = true
-      , Arr = Array
-      , Err = Error
-
-      , $rejected = 1
-      , $resolved = 2
-      , $pending = 3
-
-      , $Symbol = 'Symbol'
-      , $iterator = 'iterator'
-      , $species = 'species'
-      , $speciesKey = $Symbol + '(' + $species + ')'
-      , $return = 'return'
-
-      , $unhandled = '_uh'
-      , $promiseTrace = '_pt'
-      , $settlerTrace = '_st'
-
-      , $invalidThis = 'Invalid this'
-      , $invalidArgument = 'Invalid argument'
-      , $fromPrevious = '\nFrom previous '
-      , $promiseCircularChain = 'Chaining cycle detected for promise'
-      , $unhandledRejectionMsg = 'Uncaught (in promise)'
-      , $rejectionHandled = 'rejectionHandled'
-      , $unhandledRejection = 'unhandledRejection'
-
-      , $tryCatchFn
-      , $tryCatchThis
-      , $tryErr = { e: $null }
-      , $noop = function () {}
-      , $cleanStackReg = /^.+\/node_modules\/yaku\/.+\n?/mg
-  ;
-
-  /**
-   * This class follows the [Promises/A+](https://promisesaplus.com) and
-   * [ES6](http://people.mozilla.org/~jorendorff/es6-draft.html#sec-promise-objects) spec
-   * with some extra helpers.
-   * @param  {Function} executor Function object with two arguments resolve, reject.
-   * The first argument fulfills the promise, the second argument rejects it.
-   * We can call these functions, once our operation is completed.
-   */
-  var Yaku = function (executor) {
-      var self = this,
-          err;
-
-      // "this._s" is the internao state of: pending, resolved or rejected
-      // "this._v" is the internal value
-
-      if (!isObject(self) || self._s !== $undefined)
-          throw genTypeError($invalidThis);
-
-      self._s = $pending;
-
-      if (isLongStackTrace) self[$promiseTrace] = genTraceInfo();
-
-      if (executor !== $noop) {
-          if (!isFunction(executor))
-              throw genTypeError($invalidArgument);
-
-          err = genTryCatcher(executor)(
-              genSettler(self, $resolved),
-              genSettler(self, $rejected)
-          );
-
-          if (err === $tryErr)
-              settlePromise(self, $rejected, err.e);
-      }
-  };
-
-  Yaku['default'] = Yaku;
-
-  extend(Yaku.prototype, {
-      /**
-       * Appends fulfillment and rejection handlers to the promise,
-       * and returns a new promise resolving to the return value of the called handler.
-       * @param  {Function} onFulfilled Optional. Called when the Promise is resolved.
-       * @param  {Function} onRejected  Optional. Called when the Promise is rejected.
-       * @return {Yaku} It will return a new Yaku which will resolve or reject after
-       * @example
-       * the current Promise.
-       * ```js
-       * var Promise = require('yaku');
-       * var p = Promise.resolve(10);
-       *
-       * p.then((v) => {
-       *     console.log(v);
-       * });
-       * ```
-       */
-      then: function (onFulfilled, onRejected) {
-          if (this._s === undefined) throw genTypeError();
-
-          return addHandler(
-              this,
-              newCapablePromise(Yaku.speciesConstructor(this, Yaku)),
-              onFulfilled,
-              onRejected
-          );
-      },
-
-      /**
-       * The `catch()` method returns a Promise and deals with rejected cases only.
-       * It behaves the same as calling `Promise.prototype.then(undefined, onRejected)`.
-       * @param  {Function} onRejected A Function called when the Promise is rejected.
-       * This function has one argument, the rejection reason.
-       * @return {Yaku} A Promise that deals with rejected cases only.
-       * @example
-       * ```js
-       * var Promise = require('yaku');
-       * var p = Promise.reject(new Error("ERR"));
-       *
-       * p['catch']((v) => {
-       *     console.log(v);
-       * });
-       * ```
-       */
-      'catch': function (onRejected) {
-          return this.then($undefined, onRejected);
-      },
-
-      /**
-       * Register a callback to be invoked when a promise is settled (either fulfilled or rejected).
-       * Similar with the try-catch-finally, it's often used for cleanup.
-       * @param  {Function} onFinally A Function called when the Promise is settled.
-       * It will not receive any argument.
-       * @return {Yaku} A Promise that will reject if onFinally throws an error or returns a rejected promise.
-       * Else it will resolve previous promise's final state (either fulfilled or rejected).
-       * @example
-       * ```js
-       * var Promise = require('yaku');
-       * var p = Math.random() > 0.5 ? Promise.resolve() : Promise.reject();
-       * p.finally(() => {
-       *     console.log('finally');
-       * });
-       * ```
-       */
-      'finally': function (onFinally) {
-          return this.then(function (val) {
-              return Yaku.resolve(onFinally()).then(function () {
-                  return val;
-              });
-          }, function (err) {
-              return Yaku.resolve(onFinally()).then(function () {
-                  throw err;
-              });
-          });
-      },
-
-      // The number of current promises that attach to this Yaku instance.
-      _c: 0,
-
-      // The parent Yaku.
-      _p: $null
-  });
-
-  /**
-   * The `Promise.resolve(value)` method returns a Promise object that is resolved with the given value.
-   * If the value is a thenable (i.e. has a then method), the returned promise will "follow" that thenable,
-   * adopting its eventual state; otherwise the returned promise will be fulfilled with the value.
-   * @param  {Any} value Argument to be resolved by this Promise.
-   * Can also be a Promise or a thenable to resolve.
-   * @return {Yaku}
-   * @example
-   * ```js
-   * var Promise = require('yaku');
-   * var p = Promise.resolve(10);
-   * ```
-   */
-  Yaku.resolve = function (val) {
-      return isYaku(val) ? val : settleWithX(newCapablePromise(this), val);
-  };
-
-  /**
-   * The `Promise.reject(reason)` method returns a Promise object that is rejected with the given reason.
-   * @param  {Any} reason Reason why this Promise rejected.
-   * @return {Yaku}
-   * @example
-   * ```js
-   * var Promise = require('yaku');
-   * var p = Promise.reject(new Error("ERR"));
-   * ```
-   */
-  Yaku.reject = function (reason) {
-      return settlePromise(newCapablePromise(this), $rejected, reason);
-  };
-
-  /**
-   * The `Promise.race(iterable)` method returns a promise that resolves or rejects
-   * as soon as one of the promises in the iterable resolves or rejects,
-   * with the value or reason from that promise.
-   * @param  {iterable} iterable An iterable object, such as an Array.
-   * @return {Yaku} The race function returns a Promise that is settled
-   * the same way as the first passed promise to settle.
-   * It resolves or rejects, whichever happens first.
-   * @example
-   * ```js
-   * var Promise = require('yaku');
-   * Promise.race([
-   *     123,
-   *     Promise.resolve(0)
-   * ])
-   * .then((value) => {
-   *     console.log(value); // => 123
-   * });
-   * ```
-   */
-  Yaku.race = function (iterable) {
-      var self = this
-          , p = newCapablePromise(self)
-
-          , resolve = function (val) {
-              settlePromise(p, $resolved, val);
-          }
-
-          , reject = function (val) {
-              settlePromise(p, $rejected, val);
-          }
-
-          , ret = genTryCatcher(each)(iterable, function (v) {
-              self.resolve(v).then(resolve, reject);
-          });
-
-      if (ret === $tryErr) return self.reject(ret.e);
-
-      return p;
-  };
-
-  /**
-   * The `Promise.all(iterable)` method returns a promise that resolves when
-   * all of the promises in the iterable argument have resolved.
-   *
-   * The result is passed as an array of values from all the promises.
-   * If something passed in the iterable array is not a promise,
-   * it's converted to one by Promise.resolve. If any of the passed in promises rejects,
-   * the all Promise immediately rejects with the value of the promise that rejected,
-   * discarding all the other promises whether or not they have resolved.
-   * @param  {iterable} iterable An iterable object, such as an Array.
-   * @return {Yaku}
-   * @example
-   * ```js
-   * var Promise = require('yaku');
-   * Promise.all([
-   *     123,
-   *     Promise.resolve(0)
-   * ])
-   * .then((values) => {
-   *     console.log(values); // => [123, 0]
-   * });
-   * ```
-   * @example
-   * Use with iterable.
-   * ```js
-   * var Promise = require('yaku');
-   * Promise.all((function * () {
-   *     yield 10;
-   *     yield new Promise(function (r) { setTimeout(r, 1000, "OK") });
-   * })())
-   * .then((values) => {
-   *     console.log(values); // => [123, 0]
-   * });
-   * ```
-   */
-  Yaku.all = function (iterable) {
-      var self = this
-          , p1 = newCapablePromise(self)
-          , res = []
-          , ret
-      ;
-
-      function reject (reason) {
-          settlePromise(p1, $rejected, reason);
-      }
-
-      ret = genTryCatcher(each)(iterable, function (item, i) {
-          self.resolve(item).then(function (value) {
-              res[i] = value;
-              if (!--ret) settlePromise(p1, $resolved, res);
-          }, reject);
-      });
-
-      if (ret === $tryErr) return self.reject(ret.e);
-
-      if (!ret) settlePromise(p1, $resolved, []);
-
-      return p1;
-  };
-
-  /**
-   * The ES6 Symbol object that Yaku should use, by default it will use the
-   * global one.
-   * @type {Object}
-   * @example
-   * ```js
-   * var core = require("core-js/library");
-   * var Promise = require("yaku");
-   * Promise.Symbol = core.Symbol;
-   * ```
-   */
-  Yaku.Symbol = root[$Symbol] || {};
-
-  // To support browsers that don't support `Object.defineProperty`.
-  genTryCatcher(function () {
-      Object.defineProperty(Yaku, getSpecies(), {
-          get: function () { return this; }
-      });
-  })();
-
-  /**
-   * Use this api to custom the species behavior.
-   * https://tc39.github.io/ecma262/#sec-speciesconstructor
-   * @param {Any} O The current this object.
-   * @param {Function} defaultConstructor
-   */
-  Yaku.speciesConstructor = function (O, D) {
-      var C = O.constructor;
-
-      return C ? (C[getSpecies()] || D) : D;
-  };
-
-  /**
-   * Catch all possibly unhandled rejections. If you want to use specific
-   * format to display the error stack, overwrite it.
-   * If it is set, auto `console.error` unhandled rejection will be disabled.
-   * @param {Any} reason The rejection reason.
-   * @param {Yaku} p The promise that was rejected.
-   * @example
-   * ```js
-   * var Promise = require('yaku');
-   * Promise.unhandledRejection = (reason) => {
-   *     console.error(reason);
-   * };
-   *
-   * // The console will log an unhandled rejection error message.
-   * Promise.reject('my reason');
-   *
-   * // The below won't log the unhandled rejection error message.
-   * Promise.reject('v')["catch"](() => {});
-   * ```
-   */
-  Yaku.unhandledRejection = function (reason, p) {
-      console && console.error(
-          $unhandledRejectionMsg,
-          isLongStackTrace ? p.longStack : genStackInfo(reason, p)
-      );
-  };
-
-  /**
-   * Emitted whenever a Promise was rejected and an error handler was
-   * attached to it (for example with `["catch"]()`) later than after an event loop turn.
-   * @param {Any} reason The rejection reason.
-   * @param {Yaku} p The promise that was rejected.
-   */
-  Yaku.rejectionHandled = $noop;
-
-  /**
-   * It is used to enable the long stack trace.
-   * Once it is enabled, it can't be reverted.
-   * While it is very helpful in development and testing environments,
-   * it is not recommended to use it in production. It will slow down
-   * application and eat up memory.
-   * It will add an extra property `longStack` to the Error object.
-   * @example
-   * ```js
-   * var Promise = require('yaku');
-   * Promise.enableLongStackTrace();
-   * Promise.reject(new Error("err"))["catch"]((err) => {
-   *     console.log(err.longStack);
-   * });
-   * ```
-   */
-  Yaku.enableLongStackTrace = function () {
-      isLongStackTrace = true;
-  };
-
-  /**
-   * Only Node has `process.nextTick` function. For browser there are
-   * so many ways to polyfill it. Yaku won't do it for you, instead you
-   * can choose what you prefer. For example, this project
-   * [next-tick](https://github.com/medikoo/next-tick).
-   * By default, Yaku will use `process.nextTick` on Node, `setTimeout` on browser.
-   * @type {Function}
-   * @example
-   * ```js
-   * var Promise = require('yaku');
-   * Promise.nextTick = require('next-tick');
-   * ```
-   * @example
-   * You can even use sync resolution if you really know what you are doing.
-   * ```js
-   * var Promise = require('yaku');
-   * Promise.nextTick = fn => fn();
-   * ```
-   */
-  Yaku.nextTick = isBrowser ?
-      function (fn) {
-          nativePromise ?
-              new nativePromise(function (resolve) { resolve(); }).then(fn) :
-              setTimeout(fn);
-      } :
-      process.nextTick;
-
-  // ********************** Private **********************
-
-  Yaku._s = 1;
-
-  /**
-   * All static variable name will begin with `$`. Such as `$rejected`.
-   * @private
-   */
-
-  // ******************************* Utils ********************************
-
-  function getSpecies () {
-      return Yaku[$Symbol][$species] || $speciesKey;
-  }
-
-  function extend (src, target) {
-      for (var k in target) {
-          src[k] = target[k];
-      }
-  }
-
-  function isObject (obj) {
-      return obj && typeof obj === 'object';
-  }
-
-  function isFunction (obj) {
-      return typeof obj === 'function';
-  }
-
-  function isInstanceOf (a, b) {
-      return a instanceof b;
-  }
-
-  function isError (obj) {
-      return isInstanceOf(obj, Err);
-  }
-
-  function ensureType (obj, fn, msg) {
-      if (!fn(obj)) throw genTypeError(msg);
-  }
-
-  /**
-   * Wrap a function into a try-catch.
-   * @private
-   * @return {Any | $tryErr}
-   */
-  function tryCatcher () {
-      try {
-          return $tryCatchFn.apply($tryCatchThis, arguments);
-      } catch (e) {
-          $tryErr.e = e;
-          return $tryErr;
-      }
-  }
-
-  /**
-   * Generate a try-catch wrapped function.
-   * @private
-   * @param  {Function} fn
-   * @return {Function}
-   */
-  function genTryCatcher (fn, self) {
-      $tryCatchFn = fn;
-      $tryCatchThis = self;
-      return tryCatcher;
-  }
-
-  /**
-   * Generate a scheduler.
-   * @private
-   * @param  {Integer}  initQueueSize
-   * @param  {Function} fn `(Yaku, Value) ->` The schedule handler.
-   * @return {Function} `(Yaku, Value) ->` The scheduler.
-   */
-  function genScheduler (initQueueSize, fn) {
-      /**
-       * All async promise will be scheduled in
-       * here, so that they can be execute on the next tick.
-       * @private
-       */
-      var fnQueue = Arr(initQueueSize)
-          , fnQueueLen = 0;
-
-      /**
-       * Run all queued functions.
-       * @private
-       */
-      function flush () {
-          var i = 0;
-          while (i < fnQueueLen) {
-              fn(fnQueue[i], fnQueue[i + 1]);
-              fnQueue[i++] = $undefined;
-              fnQueue[i++] = $undefined;
-          }
-
-          fnQueueLen = 0;
-          if (fnQueue.length > initQueueSize) fnQueue.length = initQueueSize;
-      }
-
-      return function (v, arg) {
-          fnQueue[fnQueueLen++] = v;
-          fnQueue[fnQueueLen++] = arg;
-
-          if (fnQueueLen === 2) Yaku.nextTick(flush);
-      };
-  }
-
-  /**
-   * Generate a iterator
-   * @param  {Any} obj
-   * @private
-   * @return {Object || TypeError}
-   */
-  function each (iterable, fn) {
-      var len
-          , i = 0
-          , iter
-          , item
-          , ret
-      ;
-
-      if (!iterable) throw genTypeError($invalidArgument);
-
-      var gen = iterable[Yaku[$Symbol][$iterator]];
-      if (isFunction(gen))
-          iter = gen.call(iterable);
-      else if (isFunction(iterable.next)) {
-          iter = iterable;
-      }
-      else if (isInstanceOf(iterable, Arr)) {
-          len = iterable.length;
-          while (i < len) {
-              fn(iterable[i], i++);
-          }
-          return i;
-      } else
-          throw genTypeError($invalidArgument);
-
-      while (!(item = iter.next()).done) {
-          ret = genTryCatcher(fn)(item.value, i++);
-          if (ret === $tryErr) {
-              isFunction(iter[$return]) && iter[$return]();
-              throw ret.e;
-          }
-      }
-
-      return i;
-  }
-
-  /**
-   * Generate type error object.
-   * @private
-   * @param  {String} msg
-   * @return {TypeError}
-   */
-  function genTypeError (msg) {
-      return new TypeError(msg);
-  }
-
-  function genTraceInfo (noTitle) {
-      return (noTitle ? '' : $fromPrevious) + new Err().stack;
-  }
-
-
-  // *************************** Promise Helpers ****************************
-
-  /**
-   * Resolve the value returned by onFulfilled or onRejected.
-   * @private
-   * @param {Yaku} p1
-   * @param {Yaku} p2
-   */
-  var scheduleHandler = genScheduler(999, function (p1, p2) {
-      var x, handler;
-
-      // 2.2.2
-      // 2.2.3
-      handler = p1._s !== $rejected ? p2._onFulfilled : p2._onRejected;
-
-      // 2.2.7.3
-      // 2.2.7.4
-      if (handler === $undefined) {
-          settlePromise(p2, p1._s, p1._v);
-          return;
-      }
-
-      // 2.2.7.1
-      x = genTryCatcher(callHanler)(handler, p1._v);
-      if (x === $tryErr) {
-          // 2.2.7.2
-          settlePromise(p2, $rejected, x.e);
-          return;
-      }
-
-      settleWithX(p2, x);
-  });
-
-  var scheduleUnhandledRejection = genScheduler(9, function (p) {
-      if (!hashOnRejected(p)) {
-          p[$unhandled] = 1;
-          emitEvent($unhandledRejection, p);
-      }
-  });
-
-  function emitEvent (name, p) {
-      var browserEventName = 'on' + name.toLowerCase()
-          , browserHandler = root[browserEventName];
-
-      if (process && process.listeners(name).length)
-          name === $unhandledRejection ?
-              process.emit(name, p._v, p) : process.emit(name, p);
-      else if (browserHandler)
-          browserHandler({ reason: p._v, promise: p });
-      else
-          Yaku[name](p._v, p);
-  }
-
-  function isYaku (val) { return val && val._s; }
-
-  function newCapablePromise (Constructor) {
-      if (isYaku(Constructor)) return new Constructor($noop);
-
-      var p, r, j;
-      p = new Constructor(function (resolve, reject) {
-          if (p) throw genTypeError();
-
-          r = resolve;
-          j = reject;
-      });
-
-      ensureType(r, isFunction);
-      ensureType(j, isFunction);
-
-      return p;
-  }
-
-  /**
-   * It will produce a settlePromise function to user.
-   * Such as the resolve and reject in this `new Yaku (resolve, reject) ->`.
-   * @private
-   * @param  {Yaku} self
-   * @param  {Integer} state The value is one of `$pending`, `$resolved` or `$rejected`.
-   * @return {Function} `(value) -> undefined` A resolve or reject function.
-   */
-  function genSettler (self, state) {
-      var isCalled = false;
-      return function (value) {
-          if (isCalled) return;
-          isCalled = true;
-
-          if (isLongStackTrace)
-              self[$settlerTrace] = genTraceInfo(true);
-
-          if (state === $resolved)
-              settleWithX(self, value);
-          else
-              settlePromise(self, state, value);
-      };
-  }
-
-  /**
-   * Link the promise1 to the promise2.
-   * @private
-   * @param {Yaku} p1
-   * @param {Yaku} p2
-   * @param {Function} onFulfilled
-   * @param {Function} onRejected
-   */
-  function addHandler (p1, p2, onFulfilled, onRejected) {
-      // 2.2.1
-      if (isFunction(onFulfilled))
-          p2._onFulfilled = onFulfilled;
-      if (isFunction(onRejected)) {
-          if (p1[$unhandled]) emitEvent($rejectionHandled, p1);
-
-          p2._onRejected = onRejected;
-      }
-
-      if (isLongStackTrace) p2._p = p1;
-      p1[p1._c++] = p2;
-
-      // 2.2.6
-      if (p1._s !== $pending)
-          scheduleHandler(p1, p2);
-
-      // 2.2.7
-      return p2;
-  }
-
-  // iterate tree
-  function hashOnRejected (node) {
-      // A node shouldn't be checked twice.
-      if (node._umark)
-          return true;
-      else
-          node._umark = true;
-
-      var i = 0
-          , len = node._c
-          , child;
-
-      while (i < len) {
-          child = node[i++];
-          if (child._onRejected || hashOnRejected(child)) return true;
-      }
-  }
-
-  function genStackInfo (reason, p) {
-      var stackInfo = [];
-
-      function push (trace) {
-          return stackInfo.push(trace.replace(/^\s+|\s+$/g, ''));
-      }
-
-      if (isLongStackTrace) {
-          if (p[$settlerTrace])
-              push(p[$settlerTrace]);
-
-          // Hope you guys could understand how the back trace works.
-          // We only have to iterate through the tree from the bottom to root.
-          (function iter (node) {
-              if (node && $promiseTrace in node) {
-                  iter(node._next);
-                  push(node[$promiseTrace] + '');
-                  iter(node._p);
-              }
-          })(p);
-      }
-
-      return (reason && reason.stack ? reason.stack : reason) +
-          ('\n' + stackInfo.join('\n')).replace($cleanStackReg, '');
-  }
-
-  function callHanler (handler, value) {
-      // 2.2.5
-      return handler(value);
-  }
-
-  /**
-   * Resolve or reject a promise.
-   * @private
-   * @param  {Yaku} p
-   * @param  {Integer} state
-   * @param  {Any} value
-   */
-  function settlePromise (p, state, value) {
-      var i = 0
-          , len = p._c;
-
-      // 2.1.2
-      // 2.1.3
-      if (p._s === $pending) {
-          // 2.1.1.1
-          p._s = state;
-          p._v = value;
-
-          if (state === $rejected) {
-              if (isLongStackTrace && isError(value)) {
-                  value.longStack = genStackInfo(value, p);
-              }
-
-              scheduleUnhandledRejection(p);
-          }
-
-          // 2.2.4
-          while (i < len) {
-              scheduleHandler(p, p[i++]);
-          }
-      }
-
-      return p;
-  }
-
-  /**
-   * Resolve or reject promise with value x. The x can also be a thenable.
-   * @private
-   * @param {Yaku} p
-   * @param {Any | Thenable} x A normal value or a thenable.
-   */
-  function settleWithX (p, x) {
-      // 2.3.1
-      if (x === p && x) {
-          settlePromise(p, $rejected, genTypeError($promiseCircularChain));
-          return p;
-      }
-
-      // 2.3.2
-      // 2.3.3
-      if (x !== $null && (isFunction(x) || isObject(x))) {
-          // 2.3.2.1
-          var xthen = genTryCatcher(getThen)(x);
-
-          if (xthen === $tryErr) {
-              // 2.3.3.2
-              settlePromise(p, $rejected, xthen.e);
-              return p;
-          }
-
-          if (isFunction(xthen)) {
-              if (isLongStackTrace && isYaku(x))
-                  p._next = x;
-
-              // Fix https://bugs.chromium.org/p/v8/issues/detail?id=4162
-              if (isYaku(x))
-                  settleXthen(p, x, xthen);
-              else
-                  Yaku.nextTick(function () {
-                      settleXthen(p, x, xthen);
-                  });
-          } else
-              // 2.3.3.4
-              settlePromise(p, $resolved, x);
-      } else
-          // 2.3.4
-          settlePromise(p, $resolved, x);
-
-      return p;
-  }
-
-  /**
-   * Try to get a promise's then method.
-   * @private
-   * @param  {Thenable} x
-   * @return {Function}
-   */
-  function getThen (x) { return x.then; }
-
-  /**
-   * Resolve then with its promise.
-   * @private
-   * @param  {Yaku} p
-   * @param  {Thenable} x
-   * @param  {Function} xthen
-   */
-  function settleXthen (p, x, xthen) {
-      // 2.3.3.3
-      var err = genTryCatcher(xthen, x)(function (y) {
-          // 2.3.3.3.3
-          // 2.3.3.3.1
-          x && (x = $null, settleWithX(p, y));
-      }, function (r) {
-          // 2.3.3.3.3
-          // 2.3.3.3.2
-          x && (x = $null, settlePromise(p, $rejected, r));
-      });
-
-      // 2.3.3.3.4.1
-      if (err === $tryErr && x) {
-          // 2.3.3.3.4.2
-          settlePromise(p, $rejected, err.e);
-          x = $null;
-      }
-  }
-
-  root.Promise = Yaku;
-})();
+/* global AggregateError, CreateDataProperty, OrdinaryObjectCreate, CreateMethodProperty, PromiseResolve, Type, IteratorClose, NewPromiseCapability, Invoke, GetIterator, CreateBuiltinFunction, IsCallable, OrdinaryCreateFromConstructor, CreateResolvingFunctions, Call, Get, IteratorStep, IteratorValue, PerformPromiseThen SpeciesConstructor IsPromise*/
+// @ts-nocheck
+(function (global) {
+	// 26.6.3.1 Promise ( executor )
+	function Promise(executor) {
+		// 1. If NewTarget is undefined, throw a TypeError exception.
+		if (this instanceof Promise === false) {
+			throw TypeError('Constructor Promise requires "new"');
+		} else if (this && this.PromiseState) {
+			throw new TypeError('Bad construction');
+		}
+		// 2. If IsCallable(executor) is false, throw a TypeError exception.
+		if (IsCallable(executor) === false) {
+			throw TypeError(executor + ' is not a function');
+		}
+		// 3. Let promise be ? OrdinaryCreateFromConstructor(NewTarget, "%Promise.prototype%", « [[PromiseState]], [[PromiseResult]], [[PromiseFulfillReactions]], [[PromiseRejectReactions]], [[PromiseIsHandled]] »).
+		var promise = OrdinaryCreateFromConstructor(this, Promise.prototype, ['PromiseState', 'PromiseResult', 'PromiseFulfillReactions', 'PromiseRejectReactions', 'PromiseIsHandled']);
+		// 4. Set promise.[[PromiseState]] to pending.
+		promise.PromiseState = 'pending';
+		// 5. Set promise.[[PromiseFulfillReactions]] to a new empty List.
+		promise.PromiseFulfillReactions = [];
+		// 6. Set promise.[[PromiseFulfillReactions]] to a new empty List.
+		promise.PromiseRejectReactions = [];
+		// 7. Set promise.[[PromiseIsHandled]] to false.
+		promise.PromiseIsHandled = false;
+		// 8. Let resolvingFunctions be CreateResolvingFunctions(promise).
+		var resolvingFunctions = CreateResolvingFunctions(promise);
+		// 9. Let completion be Call(executor, undefined, « resolvingFunctions.[[Resolve]], resolvingFunctions.[[Reject]] »).
+		try {
+			Call(executor, undefined, [resolvingFunctions.Resolve, resolvingFunctions.Reject]);
+			// 10. If completion is an abrupt completion, then
+		} catch (error) {
+			// a. Perform ? Call(resolvingFunctions.[[Reject]], undefined, « completion.[[Value]] »).
+			Call(resolvingFunctions.Reject, undefined, [error]);
+		}
+		// 11. Return promise.
+		return promise;
+	}
+
+	// 26.6.4.1.1 Runtime Semantics: GetPromiseResolve ( promiseConstructor )
+	function GetPromiseResolve(promiseConstructor) {
+		// 1. Assert: IsConstructor(promiseConstructor) is true.
+		// Assert(IsConstructor(promiseConstructor) === true);
+		// 2. Let promiseResolve be ? Get(promiseConstructor, "resolve").
+		var promiseResolve = Get(promiseConstructor, 'resolve');
+		// 3. If IsCallable(promiseResolve) is false, throw a TypeError exception.
+		if (IsCallable(promiseResolve) === false) {
+			throw TypeError(promiseResolve + ' is not a function');
+		}
+		// 4. Return promiseResolve.
+		return promiseResolve;
+	}
+
+	// 26.6.4.1.2 Runtime Semantics: PerformPromiseAll ( iteratorRecord, constructor, resultCapability, promiseResolve )
+	function PerformPromiseAll(iteratorRecord, constructor, resultCapability, promiseResolve) {
+		// 1. Assert: IsConstructor(constructor) is true.
+		// Assert(IsConstructor(constructor) === true);
+		// 2. Assert: resultCapability is a PromiseCapability Record.
+		// Assert(resultCapability instanceof PromiseCapabilityRecord);
+		// 3. Assert: IsCallable(promiseResolve) is true.
+		// Assert(IsCallable(promiseResolve) === true);
+		// 4. Let values be a new empty List.
+		var values = [];
+		// 5. Let remainingElementsCount be the Record { [[Value]]: 1 }.
+		var remainingElementsCount = {count: 1};
+		// 6. Let index be 0.
+		var index = 0;
+		// 7. Repeat,
+		// eslint-disable-next-line no-constant-condition
+		while (true) {
+			// 7.a. Let next be IteratorStep(iteratorRecord).
+			try {
+				var next = IteratorStep(iteratorRecord);
+				// 7.b. If next is an abrupt completion, set iteratorRecord.[[Done]] to true.
+			} catch (error) {
+				if (iteratorRecord) iteratorRecord.Done = true;
+				// 7.c. ReturnIfAbrupt(next).
+				throw error;
+			}
+			// 7.d. If next is false, then
+			if (next === false) {
+				// 7.d.i. Set iteratorRecord.[[Done]] to true.
+				iteratorRecord.Done = true;
+				// 7.d.ii. Set remainingElementsCount.[[Value]] to remainingElementsCount.[[Value]] - 1.
+				remainingElementsCount.count -= 1;
+				// 7.d.iii. If remainingElementsCount.[[Value]] is 0, then
+				if (remainingElementsCount.count === 0) {
+					// 7.d.iii.1. Let valuesArray be ! CreateArrayFromList(values).
+					var valuesArray = values;
+					// 7.d.iii.2. Perform ? Call(resultCapability.[[Resolve]], undefined, « valuesArray »).
+					Call(resultCapability.Resolve, undefined, [valuesArray]);
+				}
+				// 7.d.iv. Return resultCapability.[[Promise]].
+				return resultCapability.Promise;
+			}
+			// 7.e. Let nextValue be IteratorValue(next).
+			try {
+				var nextValue = IteratorValue(next);
+				// 7.f. If nextValue is an abrupt completion, set iteratorRecord.[[Done]] to true.
+			} catch (error) {
+				if (iteratorRecord) iteratorRecord.Done = true;
+				// 7.g. ReturnIfAbrupt(nextValue).
+				throw error;
+			}
+			// 7.h. Append undefined to values.
+			values.push(undefined);
+			// 7.i. Let nextPromise be ? Call(promiseResolve, constructor, « nextValue »).
+			var nextPromise = Call(promiseResolve, constructor, [nextValue]);
+			// 7.j. Let steps be the algorithm steps defined in Promise.all Resolve Element Functions.
+			// var steps = PromiseAllResolveElementFunctions;
+			// 7.k. Let resolveElement be ! CreateBuiltinFunction(steps, « [[AlreadyCalled]], [[Index]], [[Values]], [[Capability]], [[RemainingElements]] »).
+			// var resolveElement = CreateBuiltinFunction(steps, [
+			// 	"AlreadyCalled",
+			// 	"Index",
+			// 	"Values",
+			// 	"Capability",
+			// 	"RemainingElements"
+			// ]);
+			// 26.6.4.1.3 Promise.all Resolve Element Functions
+			var resolveElement = (function(){
+				// 7.l. Set resolveElement.[[AlreadyCalled]] to the Record { [[Value]]: false }.
+				var AlreadyCalled = {called: false};
+				// 7.m. Set resolveElement.[[Index]] to index.
+				var Index = index;
+				// 7.n. Set resolveElement.[[Values]] to values.
+				var Values = values;
+				// 7.o. Set resolveElement.[[Capability]] to resultCapability.
+				var Capability = resultCapability;
+				// 7.p. Set resolveElement.[[RemainingElements]] to remainingElementsCount.
+				var RemainingElements = remainingElementsCount;
+				// 7.q. Set remainingElementsCount.[[Value]] to remainingElementsCount.[[Value]] + 1.
+				remainingElementsCount.count += 1;
+				return function PromiseAllResolveElementFunctions(x) {
+				// 1. Let F be the active function object.
+				// var F = resolveElement;
+				// 2. Let alreadyCalled be F.[[AlreadyCalled]].
+				var alreadyCalled = AlreadyCalled;
+				// 3. If alreadyCalled.[[Value]] is true, return undefined.
+				if (alreadyCalled.called === true) {
+					return undefined;
+				}
+				// 4. Set alreadyCalled.[[Value]] to true.
+				alreadyCalled.called = true;
+				// 5. Let index be F.[[Index]].
+				var index = Index;
+				// 6. Let values be F.[[Values]].
+				var values = Values;
+				// 7. Let promiseCapability be F.[[Capability]].
+				var promiseCapability = Capability;
+				// 8. Let remainingElementsCount be F.[[RemainingElements]].
+				var remainingElementsCount = RemainingElements;
+				// 9. Set values[index] to x.
+				values[index] = x;
+				// 10. Set remainingElementsCount.[[Value]] to remainingElementsCount.[[Value]] - 1.
+				remainingElementsCount.count -= 1;
+				// 11. If remainingElementsCount.[[Value]] is 0, then
+				if (remainingElementsCount.count === 0) {
+					// 11.a. Let valuesArray be ! CreateArrayFromList(values).
+					var valuesArray = values;
+					// 11.b. Return ? Call(promiseCapability.[[Resolve]], undefined, « valuesArray »).
+					return Call(promiseCapability.Resolve, undefined, [valuesArray]);
+				}
+				// 12. Return undefined.
+				return undefined;
+			};
+		}());
+			// 7.r. Perform ? Invoke(nextPromise, "then", « resolveElement, resultCapability.[[Reject]] »).
+			Invoke(nextPromise, 'then', [resolveElement, resultCapability.Reject]);
+			// 7.s. Set index to index + 1.
+			index += 1;
+		}
+	}
+
+	// 26.6.4.1 Promise.all ( iterable )
+	CreateMethodProperty(Promise, 'all', function all(iterable) {
+		// 1. Let C be the this
+		var C = this;
+		// 2. Let promiseCapability be ? NewPromiseCapability(C).
+		var promiseCapability = NewPromiseCapability(C);
+		// 3. Let promiseResolve be GetPromiseResolve(C).
+		try {
+			var promiseResolve = GetPromiseResolve(C);
+			// 4. IfAbruptRejectPromise(promiseResolve, promiseCapability).
+		} catch (error) {
+			Call(promiseCapability.Reject, undefined, [error]);
+			return promiseCapability.Promise;
+		}
+		// 5. Let iteratorRecord be GetIterator(iterable).
+		try {
+			var iteratorRecord = GetIterator(iterable);
+			// 6. IfAbruptRejectPromise(iteratorRecord, promiseCapability).
+		} catch (error) {
+			Call(promiseCapability.Reject, undefined, [error]);
+			return promiseCapability.Promise;
+		}
+		// 7. Let result be PerformPromiseAll(iteratorRecord, C, promiseCapability, promiseResolve).
+		try {
+			var result = PerformPromiseAll(iteratorRecord, C, promiseCapability, promiseResolve);
+			// 8. If result is an abrupt completion, then
+		} catch (error) {
+			// 8.a. If iteratorRecord.[[Done]] is false, set result to IteratorClose(iteratorRecord, result).
+			if (iteratorRecord && iteratorRecord.Done === false) {
+				result = IteratorClose(iteratorRecord, error);
+			}
+			// 8.b. IfAbruptRejectPromise(result, promiseCapability).
+			Call(promiseCapability.Reject, undefined, [error]);
+			return promiseCapability.Promise;
+		}
+		// 9. Return Completion(result).
+		return result;
+	});
+
+	// 26.6.4.2.1 Runtime Semantics: PerformPromiseAllSettled ( iteratorRecord, constructor, resultCapability, promiseResolve )
+	function PerformPromiseAllSettled(iteratorRecord, constructor, resultCapability, promiseResolve) {
+		// 1. Assert: ! IsConstructor(constructor) is true.
+		// Assert(IsConstructor(constructor) === true);
+		// 2. Assert: resultCapability is a PromiseCapability Record.
+		// Assert(resultCapability instanceof PromiseCapabilityRecord);
+		// 3. Assert: IsCallable(promiseResolve) is true.
+		// Assert(IsCallable(promiseResolve) === true);
+		// 4. Let values be a new empty List.
+		var values = [];
+		// 5. Let remainingElementsCount be the Record { [[Value]]: 1 }.
+		var remainingElementsCount = {count:1};
+		// 6. Let index be 0.
+		var index = 0;
+		// 7. Repeat,
+		// eslint-disable-next-line no-constant-condition
+		while (true) {
+			// 7.a. Let next be IteratorStep(iteratorRecord).
+			try {
+				var next = IteratorStep(iteratorRecord);
+				// 7.b. Let next be IteratorStep(iteratorRecord).
+			} catch (error) {
+				if (iteratorRecord) iteratorRecord.Done = true;
+				// 7.c. ReturnIfAbrupt(next).
+				return next;
+			}
+			// 7.d. If next is false,
+			if (next === false) {
+				// 7.d.i. Set iteratorRecord.[[Done]] to true.
+				iteratorRecord.Done = true;
+				// 7.d.ii. Set remainingElementsCount.[[Value]] to remainingElementsCount.[[Value]] - 1.
+				remainingElementsCount.count -= 1;
+				// 7.d.iii. If remainingElementsCount.[[Value]] is 0, then
+				if (remainingElementsCount.count === 0) {
+					// 7.d.iii.1. Let valuesArray be ! CreateArrayFromList(values).
+					var valuesArray = values;
+					// 7.d.iii.2. Perform ? Call(resultCapability.[[Resolve]], undefined, « valuesArray »).
+					Call(resultCapability.Resolve, undefined, [valuesArray]);
+				}
+				// 7.d.iv. Return resultCapability.[[Promise]].
+				return resultCapability.Promise;
+			}
+			// 7.e. Let nextValue be IteratorValue(next).
+			try {
+				var nextValue = IteratorValue(next);
+				// 7.f. If nextValue is an abrupt completion, set iteratorRecord.[[Done]] to true.
+			} catch (error) {
+				if (iteratorRecord) iteratorRecord.Done = true;
+				// 7.g. ReturnIfAbrupt(nextValue).
+				return nextValue;
+			}
+			// 7.h. Append undefined to values.
+			values.push(undefined);
+			// 7.i. Let nextPromise be ? Call(promiseResolve, constructor, « nextValue »).
+			var nextPromise = Call(promiseResolve, constructor, [nextValue]);
+			// 7.j. Let steps be the algorithm steps defined in Promise.allSettled Resolve Element Functions.
+			// var steps = PromiseAllSettledResolveElementFunctions;
+			// 7.k. Let resolveElement be ! CreateBuiltinFunction(steps, « [[AlreadyCalled]], [[Index]], [[Values]], [[Capability]], [[RemainingElements]] »).
+			// var resolveElement = CreateBuiltinFunction(steps, ['AlreadyCalled', 'Index', 'Values', 'Capability', 'RemainingElements']);
+			// 7.l. Let alreadyCalled be the Record { [[Value]]: false }.
+			var alreadyCalled = {called:false};
+			var resolveElement = (function(){
+				// 26.6.4.2.2 Promise.allSettled Resolve Element Functions
+				function PromiseAllSettledResolveElementFunctions(x) {
+					// 1. Let F be the active function object.
+					var F = PromiseAllSettledResolveElementFunctions;
+					// 2. Let alreadyCalled be F.[[AlreadyCalled]].
+					var alreadyCalled = F.AlreadyCalled;
+					// 3. If alreadyCalled.[[Value]] is true, return undefined.
+					if (alreadyCalled.called === true) {
+						return undefined;
+					}
+					// 4. Set alreadyCalled.[[Value]] to true.
+					alreadyCalled.called = true;
+					// 5. Let index be F.[[Index]].
+					var index = F.Index;
+					// 6. Let values be F.[[Values]].
+					var values = F.Values;
+					// 7. Let promiseCapability be F.[[Capability]].
+					var promiseCapability = F.Capability;
+					// 8. Let remainingElementsCount be F.[[RemainingElements]].
+					var remainingElementsCount = F.RemainingElements;
+					// 9. Let obj be ! OrdinaryObjectCreate(%Object.prototype%).
+					var obj = OrdinaryObjectCreate(Object.prototype);
+					// 10. Perform ! CreateDataPropertyOrThrow(obj, "status", "fulfilled").
+					CreateDataProperty(obj, 'status', 'fulfilled');
+					// 11. Perform ! CreateDataPropertyOrThrow(obj, "value", x).
+					CreateDataProperty(obj, 'value', x);
+					// 12. Set values[index] to obj.
+					values[index] = obj;
+					// 13. Set remainingElementsCount.[[Value]] to remainingElementsCount.[[Value]] - 1.
+					remainingElementsCount.count -= 1;
+					// 14. If remainingElementsCount.[[Value]] is 0, then
+					if (remainingElementsCount.count === 0) {
+						// 14.a. Let valuesArray be ! CreateArrayFromList(values).
+						var valuesArray = values;
+						// 14.b. Return ? Call(promiseCapability.[[Resolve]], undefined, « valuesArray »).
+						return Call(promiseCapability.Resolve, undefined, [valuesArray]);
+					}
+					// 15. Return undefined.
+					return undefined;
+				}
+				// 7.m. Set resolveElement.[[AlreadyCalled]] to alreadyCalled.
+				PromiseAllSettledResolveElementFunctions.AlreadyCalled = alreadyCalled;
+				// 7.n. Set resolveElement.[[Index]] to index.
+				PromiseAllSettledResolveElementFunctions.Index = index;
+				// 7.o. Set resolveElement.[[Values]] to values.
+				PromiseAllSettledResolveElementFunctions.Values = values;
+				// 7.p. Set resolveElement.[[Capability]] to resultCapability.
+				PromiseAllSettledResolveElementFunctions.Capability = resultCapability;
+				// 7.q. Set resolveElement.[[RemainingElements]] to remainingElementsCount.
+				PromiseAllSettledResolveElementFunctions.RemainingElements = remainingElementsCount;
+				return PromiseAllSettledResolveElementFunctions;
+			});
+			// 7.r. Let rejectSteps be the algorithm steps defined in Promise.allSettled Reject Element Functions.
+			// var rejectSteps = PromiseAllSettledRejectElementFunctions;
+			// 7.s. Let rejectElement be ! CreateBuiltinFunction(rejectSteps, « [[AlreadyCalled]], [[Index]], [[Values]], [[Capability]], [[RemainingElements]] »).
+			// var rejectElement = CreateBuiltinFunction(rejectSteps, ['AlreadyCalled', 'Index', 'Values', 'Capability', 'RemainingElements']);
+			var rejectElement = (function(){
+				// 26.6.4.2.3 Promise.allSettled Reject Element Functions
+				function PromiseAllSettledRejectElementFunctions(x) {
+					// 1. Let F be the active function object.
+					var F = PromiseAllSettledRejectElementFunctions;
+					// 2. Let alreadyCalled be F.[[AlreadyCalled]].
+					var alreadyCalled = F.AlreadyCalled;
+					// 3. If alreadyCalled.[[Value]] is true, return undefined.
+					if (alreadyCalled.called === true) {
+						return undefined;
+					}
+					// 4. Set alreadyCalled.[[Value]] to true.
+					alreadyCalled.called = true;
+					// 5. Let index be F.[[Index]].
+					var index = F.Index;
+					// 6. Let values be F.[[Values]].
+					var values = F.Values;
+					// 7. Let promiseCapability be F.[[Capability]].
+					var promiseCapability = F.Capability;
+					// 8. Let remainingElementsCount be F.[[RemainingElements]].
+					var remainingElementsCount = F.RemainingElements;
+					// 9. Let obj be ! OrdinaryObjectCreate(%Object.prototype%).
+					var obj = OrdinaryObjectCreate(Object.prototype);
+					// 10. Perform ! CreateDataPropertyOrThrow(obj, "status", "rejected").
+					CreateDataProperty(obj, 'status', 'rejected');
+					// 11. Perform ! CreateDataPropertyOrThrow(obj, "reason", x).
+					CreateDataProperty(obj, 'reason', x);
+					// 12. Set values[index] to obj.
+					values[index] = obj;
+					// 13. Set remainingElementsCount.[[Value]] to remainingElementsCount.[[Value]] - 1.
+					remainingElementsCount.count -= 1;
+					// 14. If remainingElementsCount.[[Value]] is 0, then
+					if (remainingElementsCount.count === 0) {
+						// 14.a. Let valuesArray be ! CreateArrayFromList(values).
+						var valuesArray = values;
+						// 14.b. Return ? Call(promiseCapability.[[Resolve]], undefined, « valuesArray »).
+						return Call(promiseCapability.Resolve, undefined, [valuesArray]);
+					}
+					// 15. Return undefined.
+					return undefined;
+				}
+				// 7.t. Set rejectElement.[[AlreadyCalled]] to alreadyCalled.
+				PromiseAllSettledRejectElementFunctions.AlreadyCalled = alreadyCalled;
+				// 7.u. Set rejectElement.[[Index]] to index.
+				PromiseAllSettledRejectElementFunctions.Index = index;
+				// 7.v. Set rejectElement.[[Values]] to values.
+				PromiseAllSettledRejectElementFunctions.Values = values;
+				// 7.w. Set rejectElement.[[Capability]] to resultCapability.
+				PromiseAllSettledRejectElementFunctions.Capability = resultCapability;
+				// 7.x. Set rejectElement.[[RemainingElements]] to remainingElementsCount.
+				PromiseAllSettledRejectElementFunctions.RemainingElements = remainingElementsCount;
+				return PromiseAllSettledRejectElementFunctions;
+			});
+			// 7.y. Set remainingElementsCount.[[Value]] to remainingElementsCount.[[Value]] + 1.
+			remainingElementsCount.count += 1;
+			// 7.z. Perform ? Invoke(nextPromise, "then", « resolveElement, rejectElement »).
+			Invoke(nextPromise, 'then', [resolveElement, rejectElement]);
+			// 7.aa. Set index to index + 1.
+			index += 1;
+		}
+	}
+
+	// 26.6.4.2 Promise.allSettled ( iterable )
+	CreateMethodProperty(Promise, 'allSettled', function allSettled(iterable) {
+		// 1. Let C be the this
+		var C = this;
+		// 2. Let promiseCapability be ? NewPromiseCapability(C).
+		var promiseCapability = NewPromiseCapability(C);
+		// 3. Let promiseResolve be GetPromiseResolve(C).
+		try {
+			var promiseResolve = GetPromiseResolve(C);
+			// 4. IfAbruptRejectPromise(promiseResolve, promiseCapability).
+		} catch (error) {
+			Call(promiseCapability.Reject, undefined, [error]);
+			return promiseCapability.Promise;
+		}
+		// 5. Let iteratorRecord be GetIterator(iterable).
+		try {
+			var iteratorRecord = GetIterator(iterable);
+			// 6. IfAbruptRejectPromise(iteratorRecord, promiseCapability).
+		} catch (error) {
+			Call(promiseCapability.Reject, undefined, [error]);
+			return promiseCapability.Promise;
+		}
+		// 7. Let result be PerformPromiseAllSettled(iteratorRecord, C, promiseCapability, promiseResolve).
+		try {
+			var result = PerformPromiseAllSettled(iteratorRecord, C, promiseCapability, promiseResolve);
+			// 8. If result is an abrupt completion, then
+		} catch (error) {
+			// 8.a. If iteratorRecord.[[Done]] is false, set result to IteratorClose(iteratorRecord, result).
+			if (iteratorRecord && iteratorRecord.Done === false) {
+				result = IteratorClose(iteratorRecord, error);
+			}
+			// 8.b. IfAbruptRejectPromise(result, promiseCapability).
+			Call(promiseCapability.Reject, undefined, [error]);
+			return promiseCapability.Promise;
+		}
+		// 9. Return Completion(result).
+		return result;
+	});
+
+	// 26.6.4.3.1 Runtime Semantics: PerformPromiseAny ( iteratorRecord, constructor, resultCapability, promiseResolve )
+	function PerformPromiseAny(iteratorRecord, constructor, resultCapability, promiseResolve) {
+		// 1. Assert: ! IsConstructor(constructor) is true.
+		// Assert(IsConstructor(constructor) === true);
+		// 2. Assert: resultCapability is a PromiseCapability Record.
+		// Assert(resultCapability instanceof PromiseCapabilityRecord);
+		// 3. Assert: ! IsCallable(promiseResolve) is true.
+		// Assert(IsCallable(promiseResolve) === true);
+		// 4. Let errors be a new empty List.
+		var errors = [];
+		// 5. Let remainingElementsCount be a new Record { [[Value]]: 1 }.
+		var remainingElementsCount = {count:1};
+		// 6. Let index be 0.
+		var index = 0;
+		// 7. Repeat,
+		// eslint-disable-next-line no-constant-condition
+		while (true) {
+			// 7.a. Let next be IteratorStep(iteratorRecord).
+			try {
+				var next = IteratorStep(iteratorRecord);
+				// 7.b. If next is an abrupt completion, set iteratorRecord.[[Done]] to true.
+			} catch (error_) {
+				if (iteratorRecord) iteratorRecord.Done = true;
+				// 7.c. ReturnIfAbrupt(next).
+				throw error_;
+			}
+			// 7.d. If next is false, then
+			if (next === false) {
+				// 7.d.i. Set iteratorRecord.[[Done]] to true.
+				iteratorRecord.Done = true;
+				// 7.d.ii. Set remainingElementsCount.[[Value]] to remainingElementsCount.[[Value]] - 1.
+				remainingElementsCount.count -= 1;
+				// 7.d.iii. If remainingElementsCount.[[Value]] is 0, then
+				if (remainingElementsCount.count === 0) {
+					// 7.d.iii.1. Let error be a newly created AggregateError object.
+					var error = new AggregateError('PromiseAnyRejected');
+					// 7.d.iii.2. Perform ! DefinePropertyOrThrow(error, "errors", Property Descriptor { [[Configurable]]: true, [[Enumerable]]: false, [[Writable]]: true, [[Value]]: errors }).
+					Object.defineProperty(error, 'errors', {
+						configurable: true,
+						enmerable: false,
+						writable: true,
+						value: errors
+					});
+					// 7.d.iii.3. Return ThrowCompletion(error).
+					throw error;
+				}
+				// 7.d.iii.iv. Return resultCapability.[[Promise]].
+				return resultCapability.Promise;
+			}
+			// 7.e. Let nextValue be IteratorValue(next).
+			try {
+				var nextValue = IteratorValue(next);
+				// 7.f. If nextValue is an abrupt completion, set iteratorRecord.[[Done]] to true.
+			} catch (error_) {
+				if (iteratorRecord) iteratorRecord.Done = true;
+				// 7.g. ReturnIfAbrupt(nextValue).
+				throw error_;
+			}
+			// 7.h. Append undefined to errors.
+			errors.push(undefined);
+			// 7.i. Let nextPromise be ? Call(promiseResolve, constructor, « nextValue »).
+			var nextPromise = Call(promiseResolve, constructor, [nextValue]);
+			// 7.j. Let steps be the algorithm steps defined in Promise.any Reject Element Functions.
+			// var steps = PromiseAnyRejectElementFunctions;
+			// 7.k. Let rejectElement be ! CreateBuiltinFunction(steps, « [[AlreadyCalled]], [[Index]], [[Errors]], [[Capability]], [[RemainingElements]] »).
+			// var rejectElement = CreateBuiltinFunction(steps, ['AlreadyCalled', 'Index', 'Errors', 'Capability', 'RemainingElements']);
+			var rejectElement = (function(){
+				// 26.6.4.3.2 Promise.any Reject Element Functions
+				function PromiseAnyRejectElementFunctions(x) {
+					// 1. Let F be the active function object.
+					var F = PromiseAnyRejectElementFunctions;
+					// 2. Let alreadyCalled be F.[[AlreadyCalled]].
+					var alreadyCalled = F.AlreadyCalled;
+					// 3. If alreadyCalled.[[Value]] is true, return undefined.
+					if (alreadyCalled.called) {
+						return undefined;
+					}
+					// 4. Set alreadyCalled.[[Value]] to true.
+					alreadyCalled.called = true;
+					// 5. Let index be F.[[Index]].
+					var index = F.Index;
+					// 6. Let errors be F.[[Errors]].
+					var errors = F.Errors;
+					// 7. Let promiseCapability be F.[[Capability]].
+					var promiseCapability = F.Capability;
+					// 8. Let remainingElementsCount be F.[[RemainingElements]].
+					var remainingElementsCount = F.RemainingElements;
+					// 9. Set errors[index] to x.
+					errors[index] = x;
+					// 10. Set remainingElementsCount.[[Value]] to remainingElementsCount.[[Value]] - 1.
+					remainingElementsCount.count -= 1;
+					// 11. If remainingElementsCount.[[Value]] is 0, then
+					if (remainingElementsCount.count === 0) {
+						// 11.a. Let error be a newly created AggregateError object.
+						var error = AggregateError('PromiseAnyRejected');
+						// 11.b. Perform ! DefinePropertyOrThrow(error, "errors", Property Descriptor { [[Configurable]]: true, [[Enumerable]]: false, [[Writable]]: true, [[Value]]: errors }).
+						Object.defineProperty(error, 'errors', {
+							configurable: true,
+							enmerable: false,
+							writable: true,
+							value: errors
+						});
+						// 11.c. Return ? Call(promiseCapability.[[Reject]], undefined, « error »).
+						return Call(promiseCapability.Reject, undefined, [error]);
+					}
+					// 12. Return undefined.
+					return undefined;
+				}
+				// 7.l. Set rejectElement.[[AlreadyCalled]] to a new Record { [[Value]]: false }.
+				PromiseAnyRejectElementFunctions.AlreadyCalled = {called:false};
+				// 7.m. Set rejectElement.[[Index]] to index.
+				PromiseAnyRejectElementFunctions.Index = index;
+				// 7.n. Set rejectElement.[[Errors]] to errors.
+				PromiseAnyRejectElementFunctions.Errors = errors;
+				// 7.o. Set rejectElement.[[Capability]] to resultCapability.
+				PromiseAnyRejectElementFunctions.Capability = resultCapability;
+				// 7.p. Set rejectElement.[[RemainingElements]] to remainingElementsCount.
+				PromiseAnyRejectElementFunctions.RemainingElements = remainingElementsCount;
+				// 7.q. Set remainingElementsCount.[[Value]] to remainingElementsCount.[[Value]] + 1.
+				remainingElementsCount.count += 1;
+				return PromiseAnyRejectElementFunctions;
+			});
+			// 7.r. Perform ? Invoke(nextPromise, "then", « resultCapability.[[Resolve]], rejectElement »).
+			Invoke(nextPromise, 'then', [resultCapability.Resolve, rejectElement]);
+			// 7.s. Increase index by 1.
+			index += 1;
+		}
+	}
+
+	// 26.6.4.3 Promise.any ( iterable )
+	CreateMethodProperty(Promise, 'any', function any(iterable) {
+		// 1. Let C be the this
+		var C = this;
+		// 2. Let promiseCapability be ? NewPromiseCapability(C).
+		var promiseCapability = NewPromiseCapability(C);
+		// 3. Let promiseResolve be GetPromiseResolve(C).
+		try {
+			var promiseResolve = GetPromiseResolve(C);
+			// 4. IfAbruptRejectPromise(promiseResolve, promiseCapability).
+		} catch (error) {
+			Call(promiseCapability.Reject, undefined, [error]);
+			return promiseCapability.Promise;
+		}
+		// 5. Let iteratorRecord be GetIterator(iterable).
+		try {
+			var iteratorRecord = GetIterator(iterable);
+			// 6. IfAbruptRejectPromise(iteratorRecord, promiseCapability).
+		} catch (error) {
+			Call(promiseCapability.Reject, undefined, [error]);
+			return promiseCapability.Promise;
+		}
+		// 7. Let result be PerformPromiseAny(iteratorRecord, C, promiseCapability).
+		try {
+			var result = PerformPromiseAny(iteratorRecord, C, promiseCapability, promiseResolve);
+			// 8. If result is an abrupt completion, then
+		} catch (error) {
+			// 8.a. If iteratorRecord.[[Done]] is false, set result to IteratorClose(iteratorRecord, result).
+			if (iteratorRecord && iteratorRecord.Done === false) {
+				result = IteratorClose(iteratorRecord, error);
+			}
+			// 8.b. IfAbruptRejectPromise(result, promiseCapability).
+			Call(promiseCapability.Reject, undefined, [error]);
+			return promiseCapability.Promise;
+		}
+		// 9. Return Completion(result).
+		return result;
+	});
+
+	// 26.6.4.5.1 Runtime Semantics: PerformPromiseRace ( iteratorRecord, constructor, resultCapability, promiseResolve )
+	function PerformPromiseRace(iteratorRecord, constructor, resultCapability, promiseResolve) {
+		// 1. Assert: IsConstructor(constructor) is true.
+		// Assert(IsConstructor(constructor) === true);
+		// 2. Assert: IsCallable(promiseResolve) is true.
+		// Assert(IsCallable(promiseResolve) === true);
+		// 3. Repeat,
+		// eslint-disable-next-line no-constant-condition
+		while (true) {
+			// 3.a. Let next be IteratorStep(iteratorRecord).
+			try {
+				var next = IteratorStep(iteratorRecord);
+				// 3.b. If next is an abrupt completion, set iteratorRecord.[[Done]] to true.
+			} catch (error) {
+				if (iteratorRecord) iteratorRecord.Done = true;
+				// 3.c. ReturnIfAbrupt(next).
+				throw error;
+			}
+			// 3.d. If next is false, then
+			if (next === false) {
+				// 3.d.i. Set iteratorRecord.[[Done]] to true.
+				iteratorRecord.Done = true;
+				// 3.d.ii. Return resultCapability.[[Promise]].
+				return resultCapability.Promise;
+			}
+			// 3.e. Let nextValue be IteratorValue(next).
+			try {
+				var nextValue = IteratorValue(next);
+				// 3.f. If nextValue is an abrupt completion, set iteratorRecord.[[Done]] to true.
+			} catch (error) {
+				if (iteratorRecord) iteratorRecord.Done = true;
+				// 3.g. ReturnIfAbrupt(nextValue).
+				throw error;
+			}
+			// 3.h. Let nextPromise be ? Call(promiseResolve, constructor, « nextValue »).
+			var nextPromise = Call(promiseResolve, constructor, [nextValue]);
+			// 3.i. Perform ? Invoke(nextPromise, "then", « resultCapability.[[Resolve]], resultCapability.[[Reject]] »).
+			Invoke(nextPromise, 'then', [resultCapability.Resolve, resultCapability.Reject]);
+		}
+	}
+
+	// 26.6.4.5 Promise.race ( iterable )
+	CreateMethodProperty(Promise, 'race', function race(iterable) {
+		// 1. Let C be the this
+		var C = this;
+		// 2. Let promiseCapability be ? NewPromiseCapability(C).
+		var promiseCapability = NewPromiseCapability(C);
+		// 3. Let promiseResolve be GetPromiseResolve(C).
+		try {
+			var promiseResolve = GetPromiseResolve(C);
+			// 4. IfAbruptRejectPromise(promiseResolve, promiseCapability).
+		} catch (error) {
+			Call(promiseCapability.Reject, undefined, [error]);
+			return promiseCapability.Promise;
+		}
+		// 5. Let iteratorRecord be GetIterator(iterable).
+		try {
+			var iteratorRecord = GetIterator(iterable);
+			// 6. IfAbruptRejectPromise(iteratorRecord, promiseCapability).
+		} catch (error) {
+			Call(promiseCapability.Reject, undefined, [error]);
+			return promiseCapability.Promise;
+		}
+		// 7. Let result be PerformPromiseRace(iteratorRecord, C, promiseCapability, promiseResolve).
+		try {
+			var result = PerformPromiseRace(iteratorRecord, C, promiseCapability, promiseResolve);
+			// 8. If result is an abrupt completion, then
+		} catch (error) {
+			// 8.a. If iteratorRecord.[[Done]] is false, set result to IteratorClose(iteratorRecord, result).
+			if (iteratorRecord && iteratorRecord.Done === false) {
+				result = IteratorClose(iteratorRecord, error);
+			}
+			// 8.b. IfAbruptRejectPromise(result, promiseCapability).
+			Call(promiseCapability.Reject, undefined, [error]);
+			return promiseCapability.Promise;
+		}
+		// 9. Return Completion(result).
+		return result;
+	});
+
+	// 26.6.4.6 Promise.reject ( r )
+	CreateMethodProperty(Promise, 'reject', function reject(r) {
+		// 1. Let C be this
+		var C = this;
+		// 2. Let promiseCapability be ? NewPromiseCapability(C).
+		var promiseCapability = NewPromiseCapability(C);
+		// 3. Perform ? Call(promiseCapability.[[Reject]], undefined, « r »).
+		Call(promiseCapability.Reject, undefined, [r]);
+		// 4. Return promiseCapability.[[Promise]].
+		return promiseCapability.Promise;
+	});
+
+	// 26.6.4.7 Promise.resolve ( x )
+	CreateMethodProperty(Promise, 'resolve', function resolve(x) {
+		// 1. Let C be the this
+		var C = this;
+		// 2. If Type(C) is not Object, throw a TypeError exception.
+		if (Type(C) !== 'object') {
+			throw TypeError('InvalidReceiver', 'Promise.resolve', C);
+		}
+		// 3. Return ? PromiseResolve(C, x).
+		return PromiseResolve(C, x);
+	});
+
+	// 26.6.5.4 Promise.prototype.then ( onFulfilled, onRejected )
+	CreateMethodProperty(Promise.prototype, 'then', function then(onFulfilled, onRejected) {
+		// 1. Let promise be the this value.
+		var promise = this;
+		// 2. If IsPromise(promise) is false, throw a TypeError exception.
+		if (!IsPromise(promise)) {
+			throw new TypeError('not a promise');
+		}
+		// 3. Let C be ? SpeciesConstructor(promise, %Promise%).
+		var C = SpeciesConstructor(promise, Promise);
+		// 4. Let resultCapability be ? NewPromiseCapability(C).
+		var resultCapability = NewPromiseCapability(C);
+		// 5. Return PerformPromiseThen(promise, onFulfilled, onRejected, resultCapability).
+		return PerformPromiseThen(promise, onFulfilled, onRejected, resultCapability);
+	});
+
+	// 26.6.5.1 Promise.prototype.catch ( onRejected )
+	CreateMethodProperty(Promise.prototype, 'catch', function (onRejected) {
+		// 1. Let promise be the this value.
+		var promise = this;
+		// 2. Return ? Invoke(promise, "then", « undefined, onRejected »).
+		return Invoke(promise, 'then', [undefined, onRejected]);
+	});
+
+	// 26.6.5.3 Promise.prototype.finally ( onFinally )
+	CreateMethodProperty(Promise.prototype, 'finally', function (onFinally) {
+		// 1. Let promise be the this value.
+		var promise = this;
+		// 2. If Type(promise) is not Object, throw a TypeError exception.
+		if (Type(promise) !== 'Object') {
+			throw TypeError(promise + ' is not an Object');
+		}
+		// 3. Let C be ? SpeciesConstructor(promise, %Promise%).
+		var C = SpeciesConstructor(promise, Promise);
+		// 4. Assert: IsConstructor(C) is true.
+		// Assert(IsConstructor(C) === true);
+		var thenFinally;
+		var catchFinally;
+		// 5. If IsCallable(onFinally) is false, then
+		if (IsCallable(onFinally) === false) {
+			// a. Let thenFinally be onFinally.
+			thenFinally = onFinally;
+			// b. Let catchFinally be onFinally.
+			catchFinally = onFinally;
+		} else { // 6. Else,
+			// a. Let stepsThenFinally be the algorithm steps defined in Then Finally Functions.
+			// var stepsThenFinally = ThenFinallyFunctions;
+			// b. .Let thenFinally be ! CreateBuiltinFunction(stepsThenFinally, « [[Constructor]], [[OnFinally]] »).
+			// thenFinally = CreateBuiltinFunction(stepsThenFinally, ['Constructor', 'OnFinally']);
+			thenFinally = (function() {
+				// 26.6.5.3.1 Then Finally Functions
+				function ThenFinallyFunctions(value) {
+					// 1. Let F be the active function object.
+					var F = ThenFinallyFunctions;
+					// 2. Let onFinally be F.[[OnFinally]].
+					var onFinally = F.OnFinally;
+					// 3. Assert: IsCallable(onFinally) is true.
+					// Assert(IsCallable(onFinally));
+					// 4. Let result be ? Call(onFinally, undefined).
+					var result = Call(onFinally, undefined);
+					// 5. Let C be F.[[Constructor]].
+					var C = F.Constructor;
+					// 6. Assert: IsConstructor(C) is true.
+					// Assert(IsConstructor(C));
+					// 7. Let promise be ? PromiseResolve(C, result).
+					var promise = PromiseResolve(C, result);
+					// 8. Let valueThunk be equivalent to a function that returns value.
+					var valueThunk = function valueThunk (){
+						return value;
+					};
+					// 9. Return ? Invoke(promise, "then", « valueThunk »).
+					return Invoke(promise, 'then', [valueThunk]);
+				}
+				// c. Set thenFinally.[[Constructor]] to C.
+				ThenFinallyFunctions.Constructor = C;
+				// d. Set thenFinally.[[OnFinally]] to onFinally.
+				ThenFinallyFunctions.OnFinally = onFinally;
+
+				return ThenFinallyFunctions;
+			}());
+			// e. Let stepsCatchFinally be the algorithm steps defined in Catch Finally Functions.
+			// var stepsCatchFinally = CatchFinallyFunctions;
+			// f. Let catchFinally be ! CreateBuiltinFunction(stepsCatchFinally, « [[Constructor]], [[OnFinally]] »).
+			// catchFinally = CreateBuiltinFunction(stepsCatchFinally, ['Constructor', 'OnFinally']);
+			catchFinally = (function(){
+				// 26.6.5.3.2 Catch Finally Functions
+				function CatchFinallyFunctions(reason) {
+					// 1. Let F be the active function object.
+					var F = CatchFinallyFunctions;
+					// 2. Let onFinally be F.[[OnFinally]].
+					var onFinally = F.OnFinally;
+					// 3. Assert: IsCallable(onFinally) is true.
+					// Assert(IsCallable(onFinally));
+					// 4. Let result be ? Call(onFinally, undefined).
+					var result = Call(onFinally, undefined);
+					// 5. Let C be F.[[Constructor]].
+					var C = F.Constructor;
+					// 6. Assert: IsConstructor(C) is true.
+					// Assert(IsConstructor(C));
+					// 7. Let promise be ? PromiseResolve(C, result).
+					var promise = PromiseResolve(C, result);
+					// 8. Let thrower be equivalent to a function that throws reason.
+					var thrower = function thrower () {
+						throw reason;
+					};
+					// 9. Return ? Invoke(promise, "then", « thrower »).
+					return Invoke(promise, 'then', [thrower]);
+				}
+
+				// g. Set catchFinally.[[Constructor]] to C.
+				CatchFinallyFunctions.Constructor = C;
+				// h. Set catchFinally.[[OnFinally]] to onFinally.
+				CatchFinallyFunctions.OnFinally = onFinally;
+
+				return CatchFinallyFunctions;
+			}());
+		}
+		// 7. Return ? Invoke(promise, "then", « thenFinally, catchFinally »).
+		return Invoke(promise, 'then', [thenFinally, catchFinally]);
+	});
+
+	global.Promise = Promise;
+
+	// #sec-get-promise-@@species
+	// Promise[Symbol.species] = function (args) {
+	// 	// 1. Return the this
+	// 	return this;
+	// }
+})(self);

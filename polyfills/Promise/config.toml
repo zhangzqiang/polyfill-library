@@ -10,28 +10,50 @@ aliases = [
   "es2015"
 ]
 dependencies = [
-  "Symbol.toStringTag",
+  "AggregateError",
+  "_ESAbstract.CreateDataProperty",
+  "_ESAbstract.SpeciesConstructor",
+  "_ESAbstract.OrdinaryObjectCreate",
+  "_ESAbstract.CreateMethodProperty",
+  "_ESAbstract.PromiseResolve",
+  "_ESAbstract.Type",
+  "_ESAbstract.IteratorClose",
+  "_ESAbstract.NewPromiseCapability",
+  "_ESAbstract.Invoke",
+  "_ESAbstract.GetIterator",
+  "_ESAbstract.CreateBuiltinFunction",
+  "_ESAbstract.IsCallable",
+  "_ESAbstract.OrdinaryCreateFromConstructor",
+  "_ESAbstract.CreateResolvingFunctions",
+  "_ESAbstract.Call",
+  "_ESAbstract.IsConstructor",
+  "_ESAbstract.Assert",
+  "_ESAbstract.Get",
+  "_ESAbstract.PromiseCapabilityRecord",
+  "_ESAbstract.IteratorStep",
+  "_ESAbstract.IteratorValue",
+  "_ESAbstract.PerformPromiseThen",
 ]
 notes = [
   "In IE8, the `catch` & `finally` method cannot be invoked directly since they are reserved words.  Instead, use `[\"catch\"]` and `[\"finally\"]` if intend to run your code in IE8"
 ]
 license = "MIT"
 docs = "https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise"
-repo = "https://github.com/ysmood/yaku"
 
 [browsers]
-android = "* - 4.4"
-bb = "* - 10"
-chrome = "* - 31"
-edge = "<13"
-edge_mob = "<13"
-firefox = "6 - 28"
+android = "*"
+bb = "*"
+chrome = "*"
+edge = "*"
+edge_mob = "*"
+firefox = "*"
+firefox_mob = "*"
 ie = "*"
 ie_mob = "*"
-ios_saf = "* - 7.1"
-op_mob = "*"
+ios_chr = "*"
+ios_saf = "*"
 op_mini = "*"
-opera = "* - 19"
-safari = "* - 7"
-firefox_mob = "6 - 28"
-
+op_mob = "*"
+opera = "*"
+safari = "*"
+samsung_mob = "*"
