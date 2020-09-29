@@ -1,5 +1,5 @@
 /* eslint-env mocha browser */
-/* globals proclaim, Promise */
+/* globals proclaim, Promise sinon */
 
 // browser compatibility: old browsers don't have strict mode, so skip
 // a few tests which rely on strict mode behavior for `this`.
