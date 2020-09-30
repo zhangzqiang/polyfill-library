@@ -1,5 +1,6 @@
-/* global CreateMethodProperty Type IteratorClose NewPromiseCapability GetIterator IsCallable Call IteratorStep SpeciesConstructor IsPromise*/
-/* 
+// @ts-nocheck
+/* global CreateMethodProperty Type IteratorClose NewPromiseCapability GetIterator IsCallable Call IteratorStep SpeciesConstructor IsPromise */
+/*
 	This is a modification of the es6-shim Promise polyfill to make it use the ECMAScript Abstract methods provided within polyfill-library.
 */
 /*!

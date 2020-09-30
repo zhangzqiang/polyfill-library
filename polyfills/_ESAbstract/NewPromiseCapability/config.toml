@@ -2,7 +2,6 @@ dependencies = [
     "_ESAbstract.IsCallable",
     "_ESAbstract.IsConstructor",
     "_ESAbstract.PromiseCapabilityRecord",
-    "_ESAbstract.CreateBuiltinFunction",
     "_ESAbstract.Construct",
     "_ESAbstract.Type",
 ]

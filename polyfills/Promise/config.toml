@@ -10,30 +10,17 @@ aliases = [
   "es2015"
 ]
 dependencies = [
-  "AggregateError",
   "Array.prototype.@@iterator",
-  "_ESAbstract.CreateDataProperty",
-  "_ESAbstract.SpeciesConstructor",
-  "_ESAbstract.OrdinaryObjectCreate",
   "_ESAbstract.CreateMethodProperty",
-  "_ESAbstract.PromiseResolve",
   "_ESAbstract.Type",
   "_ESAbstract.IteratorClose",
   "_ESAbstract.NewPromiseCapability",
-  "_ESAbstract.Invoke",
   "_ESAbstract.GetIterator",
-  "_ESAbstract.CreateBuiltinFunction",
   "_ESAbstract.IsCallable",
-  "_ESAbstract.OrdinaryCreateFromConstructor",
-  "_ESAbstract.CreateResolvingFunctions",
   "_ESAbstract.Call",
-  "_ESAbstract.IsConstructor",
-  "_ESAbstract.Assert",
-  "_ESAbstract.Get",
-  "_ESAbstract.PromiseCapabilityRecord",
   "_ESAbstract.IteratorStep",
-  "_ESAbstract.IteratorValue",
-  "_ESAbstract.PerformPromiseThen",
+  "_ESAbstract.SpeciesConstructor",
+  "_ESAbstract.IsPromise",
 ]
 notes = [
   "In IE8, the `catch` & `finally` method cannot be invoked directly since they are reserved words.  Instead, use `[\"catch\"]` and `[\"finally\"]` if intend to run your code in IE8"

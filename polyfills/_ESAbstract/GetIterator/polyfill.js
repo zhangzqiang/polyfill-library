@@ -1,6 +1,7 @@
 /* global GetMethod, Symbol, Call, Type, GetV, ArrayIterator */
 // 7.4.1. GetIterator ( obj [ , method ] )
 // The abstract operation GetIterator with argument obj and optional argument method performs the following steps:
+// eslint-disable-next-line no-unused-vars
 var GetIterator = (function () {
 	function isArgumentsObject(value) {
 		var str = Object.prototype.toString.call(value);
