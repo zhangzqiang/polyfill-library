@@ -8,6 +8,8 @@ var hasStrictMode = function () {
 	return this === null;
 }.call(null);
 
+var hasNativeSetPrototypeOf = Object.setPrototypeOf && Object.setPrototypeOf.toString().indexOf('native code') !== -1;
+
 describe('25.4.3 The Promise Constructor', function () {
 	'use strict';
 	it('is the initial value of the Promise property of the global object', function () {
@@ -1382,36 +1384,58 @@ describe('Promises/A+ Tests', function () {
 		describe('2.2.5 `onFulfilled` and `onRejected` must be called as functions (i.e. with no `this` value).', function () {
 			describe('strict mode', function () {
 				specify('fulfilled', function (done) {
-					resolved(dummy).then(function onFulfilled() {
-						'use strict';
-
-						assert.strictEqual(this, undefined);
+					if (hasStrictMode) {
+						resolved(dummy).then(function onFulfilled() {
+							try {
+								assert.strictEqual(this, undefined);
+								done();
+							} catch (error){
+								done(error);
+							}
+						});
+					} else {
 						done();
-					});
+					}
 				});
 
 				specify('rejected', function (done) {
-					rejected(dummy).then(null, function onRejected() {
-						'use strict';
+					if (hasStrictMode) {
+						rejected(dummy).then(null, function onRejected() {
+							'use strict';
 
-						assert.strictEqual(this, undefined);
+							try {
+								assert.strictEqual(this, undefined);
+								done();
+							} catch (error){
+								done(error);
+							}
+						});
+					} else {
 						done();
-					});
+					}
 				});
 			});
 
 			describe('sloppy mode', function () {
 				specify('fulfilled', function (done) {
 					resolved(dummy).then(function onFulfilled() {
-						assert.strictEqual(this, window);
-						done();
+						try {
+							assert.strictEqual(this, window);
+							done();
+						} catch (error){
+							done(error);
+						}
 					});
 				});
 
 				specify('rejected', function (done) {
 					rejected(dummy).then(null, function onRejected() {
-						assert.strictEqual(this, window);
-						done();
+						try {
+							assert.strictEqual(this, window);
+							done();
+						} catch (error){
+							done(error);
+						}
 					});
 				});
 			});
@@ -3005,7 +3029,7 @@ describe('Evil promises should not be able to break invariants', function () {
 			Object.setPrototypeOf(self, EvilPromise.prototype);
 			return self;
 		};
-		if (!Object.setPrototypeOf) {
+		if (!hasNativeSetPrototypeOf) {
 			return done();
 		} // skip test if on IE < 11
 		Object.setPrototypeOf(EvilPromise, Promise);
@@ -3224,7 +3248,7 @@ describe('Promise.all', function () {
 			Object.setPrototypeOf(self, P.prototype);
 			return self;
 		};
-		if (!Object.setPrototypeOf) {
+		if (!hasNativeSetPrototypeOf) {
 			return done();
 		} // skip test if on IE < 11
 		Object.setPrototypeOf(P, Promise);
@@ -3258,7 +3282,7 @@ describe('Support user subclassing of Promise', function () {
 			self.mine = 'yeah';
 			return self;
 		};
-		if (!Object.setPrototypeOf) {
+		if (!hasNativeSetPrototypeOf) {
 			return done();
 		} // skip test if on IE < 11
 		Object.setPrototypeOf(MyPromise, Promise);

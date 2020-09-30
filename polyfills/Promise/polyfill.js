@@ -1,6 +1,7 @@
-/* global Construct, AggregateError, IsConstructor, CreateDataProperty, OrdinaryObjectCreate, CreateMethodProperty, PromiseResolve, Type, IteratorClose, NewPromiseCapability, Invoke, GetIterator, CreateBuiltinFunction, IsCallable, OrdinaryCreateFromConstructor, CreateResolvingFunctions, Call, Get, IteratorStep, IteratorValue, PerformPromiseThen SpeciesConstructor IsPromise*/
+/* global CreateMethodProperty Type IteratorClose NewPromiseCapability GetIterator IsCallable Call IteratorStep SpeciesConstructor IsPromise*/
 // @ts-nocheck
 (function (global) {
+	'use strict';
 
 	var emulateES6construct = function (o, defaultNewTarget, defaultProto, slots) {
 		// This is an es5 approximation to es6 construct semantics.  in es6,
@@ -107,6 +108,7 @@
 	};
 
 	var promiseReactionJob = function (handler, promiseCapability, argument) {
+		'use strict';
 		var handlerResult, f;
 		if (promiseCapability === PROMISE_FAKE_CAPABILITY) {
 			// Fast case, when we don't actually need to chain through to a
