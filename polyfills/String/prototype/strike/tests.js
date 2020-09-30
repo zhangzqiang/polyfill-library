@@ -2,6 +2,7 @@
 /* globals proclaim */
 
 var hasStrictMode = (function () {
+	'use strict';
 	return this === null;
 }).call(null);
 
