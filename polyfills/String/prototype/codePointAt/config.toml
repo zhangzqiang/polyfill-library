@@ -4,7 +4,7 @@ dependencies = [
   "_ESAbstract.RequireObjectCoercible",
   "_ESAbstract.ToString",
   "_ESAbstract.ToInteger",
-  "_ESAbstract.UTF16Decode"
+  "_ESAbstract.CodePointAt",
 ]
 license = "MIT"
 spec = "https://tc39.github.io/ecma262/#sec-string.prototype.codepointat"
@@ -16,4 +16,3 @@ firefox = "<29"
 ie = "*"
 opera = "<28"
 safari = "<10"
-
