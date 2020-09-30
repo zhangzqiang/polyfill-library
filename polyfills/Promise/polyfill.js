@@ -1,5 +1,16 @@
 /* global CreateMethodProperty Type IteratorClose NewPromiseCapability GetIterator IsCallable Call IteratorStep SpeciesConstructor IsPromise*/
-// @ts-nocheck
+/* 
+	This is a modification of the es6-shim Promise polyfill to make it use the ECMAScript Abstract methods provided within polyfill-library.
+*/
+/*!
+ * https://github.com/paulmillr/es6-shim
+ * @license es6-shim Copyright 2013-2016 by Paul Miller (http://paulmillr.com)
+ *   and contributors,  MIT License
+ * es6-shim: v0.35.4
+ * see https://github.com/paulmillr/es6-shim/blob/0.35.3/LICENSE
+ * Details and documentation:
+ * https://github.com/paulmillr/es6-shim/
+ */
 (function (global) {
 	'use strict';
 
