@@ -14,7 +14,8 @@ dependencies = [
   "_ESAbstract.Type",
   "_ESAbstract.SameValue",
   "Symbol",
-  "Array.isArray"
+  "Array.isArray",
+  "Symbol.toStringTag",
 ]
 license = "MIT"
 docs = "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap"
