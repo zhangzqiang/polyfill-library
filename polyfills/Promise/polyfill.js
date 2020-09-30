@@ -475,6 +475,48 @@
 			return this.then(null, onRejected);
 		});
 
+		function PromiseResolve(C, value) {
+			return new C(function (resolve) {
+				resolve(value);
+			});
+		}
+		function CreateThenFinally(C, onFinally) {
+			return function (value) {
+				var result = onFinally();
+				var promise = PromiseResolve(C, result);
+				var valueThunk = function () {
+					return value;
+				};
+				return promise.then(valueThunk);
+			};
+		}
+
+		function CreateCatchFinally(C, onFinally) {
+			return function (reason) {
+				var result = onFinally();
+				var promise = PromiseResolve(C, result);
+				var thrower = function () {
+					throw reason;
+				};
+				return promise.then(thrower);
+			};
+		}
+		CreateMethodProperty(Promise$prototype, "finally", function (onFinally ) {
+			var promise = this;
+			if (!IsPromise(promise)) {
+				throw new TypeError('not a promise');
+			}
+			var C = SpeciesConstructor(promise, Promise);
+			if (IsCallable(onFinally) === false) {
+				var thenFinally = onFinally;
+				var catchFinally = onFinally;
+			} else {
+				thenFinally = CreateThenFinally(C, onFinally);
+				catchFinally = CreateCatchFinally(C, onFinally);
+			}
+			return promise.then(thenFinally, catchFinally);
+		});
+
 		CreateMethodProperty(Promise$prototype, 'then', function then(onFulfilled, onRejected) {
 			var promise = this;
 			if (!IsPromise(promise)) {
