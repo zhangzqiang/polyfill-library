@@ -11,6 +11,7 @@ aliases = [
 ]
 dependencies = [
   "AggregateError",
+  "Array.prototype.@@iterator",
   "_ESAbstract.CreateDataProperty",
   "_ESAbstract.SpeciesConstructor",
   "_ESAbstract.OrdinaryObjectCreate",
@@ -41,19 +42,17 @@ license = "MIT"
 docs = "https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise"
 
 [browsers]
-android = "*"
-bb = "*"
-chrome = "*"
-edge = "*"
-edge_mob = "*"
-firefox = "*"
-firefox_mob = "*"
+android = "* - 4.4"
+bb = "* - 10"
+chrome = "* - 31"
+edge = "<13"
+edge_mob = "<13"
+firefox = "6 - 28"
 ie = "*"
 ie_mob = "*"
-ios_chr = "*"
-ios_saf = "*"
-op_mini = "*"
+ios_saf = "* - 7.1"
 op_mob = "*"
-opera = "*"
-safari = "*"
-samsung_mob = "*"
+op_mini = "*"
+opera = "* - 19"
+safari = "* - 7"
+firefox_mob = "6 - 28"

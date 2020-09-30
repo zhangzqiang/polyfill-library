@@ -3,6 +3,7 @@ dependencies = [
   "_ESAbstract.GetMethod",
   "_ESAbstract.GetV",
   "_ESAbstract.Type",
+  "_ArrayIterator",
   "Object.create",
   "Symbol.iterator"
 ]
@@ -25,4 +26,3 @@ op_mob = "*"
 opera = "*"
 safari = "*"
 samsung_mob = "*"
-
