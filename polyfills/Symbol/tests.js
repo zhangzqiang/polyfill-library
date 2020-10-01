@@ -198,10 +198,8 @@ if (supportsDescriptors) {
 		var symbol1 = Symbol();
 
 		proclaim.equal(Object.getOwnPropertySymbols(Object.prototype).length, 0);
-		debugger;
 		Object.prototype[symbol0] = 'Symbol(0)';
 		proclaim.equal(Object.getOwnPropertySymbols(Object.prototype).length, 1);
-		debugger;
 		Object.defineProperty(Object.prototype, symbol1, { value: 'Symbol(1)' });
 		proclaim.equal(Object.getOwnPropertySymbols(Object.prototype).length, 2);
 	});
