@@ -1,3 +1,7 @@
+dependencies = [
+    "_ESAbstract.Type",
+    "_ESAbstract.ToPrimitive",
+]
 spec = "https://tc39.github.io/ecma262/#sec-tonumber"
 
 [browsers]
@@ -17,4 +21,3 @@ op_mob = "*"
 opera = "*"
 safari = "*"
 samsung_mob = "*"
-

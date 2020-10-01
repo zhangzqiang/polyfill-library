@@ -6,15 +6,14 @@ aliases = [
   "Symbol.keyFor"
 ]
 dependencies = [
-  "Array.prototype.forEach",
-  "Array.prototype.filter",
-  "Array.prototype.map",
+  "_ESAbstract.CreateMethodProperty",
+  "_ESAbstract.Type",
+  "_ESAbstract.SameValue",
+  "_ESAbstract.ToString",
   "Object.create",
   "Object.defineProperty",
-  "Object.getOwnPropertyNames",
-  "Object.getOwnPropertyDescriptor",
+  "Object.defineProperties",
   "Object.freeze",
-  "Object.keys"
 ]
 license = "MIT"
 spec = "http://www.ecma-international.org/ecma-262/6.0/index.html#sec-symbol-objects"
@@ -27,11 +26,10 @@ ie = "*"
 ie_mob = "*"
 safari = "<9"
 chrome = "<49"
-firefox = "<36"
+firefox = "*"
 ios_saf = "<9"
 opera = "< 37"
 op_mini = "*"
 samsung_mob = "<5"
 android = "<5.1"
 bb = "10 - *"
-

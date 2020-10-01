@@ -1,19 +1,5 @@
 /* eslint-env mocha, browser */
 /* global proclaim */
-
-proclaim.arity = function (fn, expected) {
-	proclaim.isFunction(fn);
-	proclaim.strictEqual(fn.length, expected);
-};
-proclaim.hasName = function (fn, expected) {
-	var functionsHaveNames = (function foo() { }).name === 'foo';
-	if (functionsHaveNames) {
-		proclaim.strictEqual(fn.name, expected);
-	} else {
-		proclaim.equal(Function.prototype.toString.call(fn).match(/function\s*([^\s]*)\s*\(/)[1], expected);
-	}
-};
-
 it("Should create inherited object", function() {
 	var parent = { foo: 'bar', obj: {} };
 	var child = Object.create(parent);
@@ -146,7 +132,7 @@ it('Object.create', function () {
 	}
 	proclaim.isFunction(Object.create);
 	proclaim.arity(Object.create, 2);
-	proclaim.hasName(Object.create, 'create');
+	// proclaim.hasName(Object.create, 'create');
 	proclaim.isNotEnumerable(Object, 'create');
 	proclaim.ok(isPrototype(obj, Object.create(obj)));
 	proclaim.ok(Object.create(obj).q === 1);

@@ -1,7 +1,8 @@
+/* global ToNumber */
 // 7.1.4. ToInteger ( argument )
 function ToInteger(argument) { // eslint-disable-line no-unused-vars
 	// 1. Let number be ? ToNumber(argument).
-	var number = Number(argument);
+	var number = ToNumber(argument);
 	// 2. If number is NaN, return +0.
 	if (isNaN(number)) {
 		return 0;
