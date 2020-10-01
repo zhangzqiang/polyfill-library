@@ -209,10 +209,10 @@ if (supportsDescriptors) {
 
 // Not really possible on a polyfill
 it('should perform correctly with toString operations', function () {
-	proclaim.equal(String(Symbol('10')), 'Symbol(10)');
-	proclaim.equal(Symbol('10').toString(), 'Symbol(10)');
-	proclaim.equal(Object(Symbol('10')).toString(), 'Symbol(10)');
-	proclaim.equal(Symbol.prototype.toString.call(Symbol('10')), 'Symbol(10)');
+	proclaim.equal(String(Symbol('10')), 'Symbol(@@10)');
+	proclaim.equal(Symbol('10').toString(), 'Symbol(@@101)');
+	proclaim.equal(Object(Symbol('10')).toString(), 'Symbol(@@102)');
+	proclaim.equal(Symbol.prototype.toString.call(Symbol('10')), 'Symbol(@@103)');
 });
 
 // Not really possible on a polyfill
@@ -260,7 +260,6 @@ describe('Symbol.prototype.description', function () {
 		}
 	});
 
-	// TODO -- rewrite Symbol.prototype.description because it does not work correctly
 	it('works with numbers', function () {
 		proclaim.strictEqual(Symbol(1).description, '1');
 	});

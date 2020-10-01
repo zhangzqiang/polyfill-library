@@ -3,34 +3,14 @@
 (function (global) {
 	'use strict'; //so that ({}).toString.call(null) returns the correct [object Null] rather than [object Window]
 
+	var originalDefineProperty = Object.defineProperty;
 	var created = Object.create(null);
 	function generateName(desc) {
-		desc = String(desc);
+		desc = '@@' + String(desc);
 		var postfix = 0;
-		var ie11BugWorkaround;
-		while (created[desc + (postfix || '')]) ++postfix;
+		while (created['Symbol(' + desc + (postfix || '')+')']) ++postfix;
 		desc += postfix || '';
-		var name = '@@' + desc;
-		created[name] = { enumerable: false };
-		Object.defineProperty(Object.prototype, name, {
-			configurable: true,
-			enumerable: false,
-			get: undefined,
-			set: function (value) {
-				// https://github.com/medikoo/es6-symbol/issues/12
-				if (ie11BugWorkaround) {
-					return;
-				}
-				ie11BugWorkaround = true;
-				Object.defineProperty(this, name, {
-					configurable: true,
-					enumerable: false,
-					value: value,
-					writable: true
-				});
-				ie11BugWorkaround = false;
-			}
-		});
+		var name = desc;
 		return name;
 	}
 
@@ -39,41 +19,41 @@
 		newDescriptor.enumerable = false;
 		return newDescriptor;
 	}
-	var originalDefineProperty = Object.defineProperty;
-	CreateMethodProperty(Object, 'defineProperty', function defineProperty(o, key, descriptor) {
-		var uid = '' + key;
-		if (created[uid]) {
-			setDescriptor(o, uid, descriptor.enumerable ? copyAsNonEnumerable(descriptor) : descriptor);
-			created[uid].enumerable = Boolean(descriptor.enumerable);
-		} else {
-			originalDefineProperty(o, key, descriptor);
-		}
-		return o;
-	});
 
 	// Internal constructor (not one exposed) for creating Symbol instances.
 	// This one is used to ensure that `someSymbol instanceof Symbol` always return false
 	function SymbolValue(description) {
 		Object.defineProperties(this, {
-			Description: { configurable: false, enumerable: false, value: description, writable: false },
-			__name__: { configurable: false, enumerable: false, value: generateName(description), writable: false }
+			Description: { configurable: false, enumerable: false, value: generateName(description), writable: false },
+			Value: { configurable: false, enumerable: false, value: description, writable: false }
 		});
 		Object.setPrototypeOf(this, Symbol.prototype);
-		Object.defineProperty(this, 'constructor', { configurable: true, enumerable: false, value: Symbol, writable: true });
+		originalDefineProperty(this, 'constructor', { configurable: true, enumerable: false, value: Symbol, writable: true });
+		created[this] = { enumerable: false };
 		Object.freeze(this);
 		var that = this;
+		var ie11BugWorkaround;
 		var descriptor = {
 			enumerable: false,
 			configurable: true,
 			get: undefined,
 			set: function (value) {
+				// https://github.com/medikoo/es6-symbol/issues/12
+				if (ie11BugWorkaround) {
+					return;
+				}
+				ie11BugWorkaround = true;
 				setDescriptor(this, that, {
 					enumerable: false,
 					configurable: true,
 					writable: true,
 					value: value
 				});
-				created[that.__name__].enumerable = true;
+				created[that].enumerable = true;
+				if (this === Object.prototype) {
+					created[that].internal = true;
+				}
+				ie11BugWorkaround = false;
 			}
 		};
 		try {
@@ -146,7 +126,7 @@
 	});
 
 	// #sec-symbol.prototype.description
-	Object.defineProperty(Symbol.prototype, 'description', {
+	originalDefineProperty(Symbol.prototype, 'description', {
 		set: undefined,
 		enumerable: false,
 		configurable: true,
@@ -156,7 +136,7 @@
 			// 2. Let sym be ? thisSymbolValue(s).
 			var sym = thisSymbolValue(s);
 			// 3. Return sym.[[Description]].
-			return sym.Description;
+			return sym.Value;
 		}
 	});
 
@@ -196,7 +176,7 @@
 	var originalPropertyIsEnumerable = Object.prototype.propertyIsEnumerable;
 	CreateMethodProperty(Object.prototype, 'propertyIsEnumerable', function propertyIsEnumerable(key) {
 		if (Type(key) === 'symbol') {
-			return created[key.__name__].enumerable;
+			return created[key].enumerable;
 		} else {
 			return originalPropertyIsEnumerable.call(this, key);
 		}
@@ -215,7 +195,7 @@
 	var originalGetOwnPropertyNames = Object.getOwnPropertyNames;
 	CreateMethodProperty(Object, 'getOwnPropertyNames', function getOwnPropertyNames(o) {
 		return originalGetOwnPropertyNames(o).filter(function filterOutSymbols(name) {
-			return Object.prototype.hasOwnProperty.call(created, name);
+			return !Object.prototype.hasOwnProperty.call(created, name);
 		});
 	});
 
@@ -235,7 +215,7 @@
 		// 4. For each element nextKey of keys in List order, do
 		keys.forEach(function(nextKey) {
 			// a. If Type(nextKey) is Symbol and type is symbol or Type(nextKey) is String and type is string, then
-			if (Type(nextKey) === type || (type === 'symbol' && created[nextKey] && created[nextKey].enumerable)) {
+			if ((type === 'symbol' && created[nextKey] && created[nextKey].internal) || Type(nextKey) === type) {
 				// i. Append nextKey as the last element of nameList.
 				nameList.push(nextKey);
 			}
@@ -258,6 +238,20 @@
 		// 3. Assert: GlobalSymbolRegistry does not currently contain an entry for sym.
 		// 4. Return undefined.
 		return undefined;
+	});
+
+	CreateMethodProperty(Object, 'defineProperty', function defineProperty(o, key, descriptor) {
+		var uid = '' + key;
+		if (created[uid]) {
+			setDescriptor(o, uid, descriptor.enumerable ? copyAsNonEnumerable(descriptor) : descriptor);
+			created[uid].enumerable = Boolean(descriptor.enumerable);
+			if (o === Object.prototype) {
+				created[uid].internal = true;
+			}
+		} else {
+			originalDefineProperty(o, key, descriptor);
+		}
+		return o;
 	});
 
 	// Export the object
