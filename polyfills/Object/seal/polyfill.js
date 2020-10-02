@@ -3,7 +3,7 @@
 (function(originalObjectSeal) {
     CreateMethodProperty(Object, 'seal', function seal(O) {
         // 1. If Type(O) is not Object, return O.
-        if (Type(O) === 'object') {
+        if (Type(O) !== 'object') {
             return O;
         }
         // 2. Let status be ? SetIntegrityLevel(O, "sealed").
@@ -12,4 +12,3 @@
         return originalObjectSeal ? originalObjectSeal(O) : O;
     });
 }(Object.seal));
-
