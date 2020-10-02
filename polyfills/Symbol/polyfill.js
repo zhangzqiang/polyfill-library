@@ -29,7 +29,7 @@
 		});
 		var that = Object.setPrototypeOf(this, Symbol.prototype);
 		originalDefineProperty(that, 'constructor', { configurable: true, enumerable: false, value: Symbol, writable: true });
-		created[that] = { enumerable: false };
+		created[that] = { enumerable: false, symbol: that };
 		Object.freeze(that);
 		var ie11BugWorkaround;
 		var descriptor = {
@@ -232,9 +232,18 @@
 		// 4. For each element nextKey of keys in List order, do
 		keys.forEach(function(nextKey) {
 			// a. If Type(nextKey) is Symbol and type is symbol or Type(nextKey) is String and type is string, then
-			if ((type === 'symbol' && created[nextKey] && created[nextKey].internal) || Type(nextKey) === type) {
-				// i. Append nextKey as the last element of nameList.
-				nameList.push(nextKey);
+			if ((type === 'symbol' && created[nextKey]) || Type(nextKey) === type) {
+				if (type === 'symbol') {
+					if (obj === Object.prototype) {
+						if (!created[nextKey].internal) {
+							return;
+						}
+					}
+					nameList.push(created[nextKey].symbol);
+				} else {
+					// i. Append nextKey as the last element of nameList.
+					nameList.push(nextKey);
+				}
 			}
 		});
 		return nameList;
