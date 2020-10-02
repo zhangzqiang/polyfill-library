@@ -31,10 +31,10 @@ docs = "https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Ob
 [browsers]
 android = "* - 4.4"
 bb = "* - 10"
-chrome = "*"
+chrome = "* - 31"
 edge = "<13"
 edge_mob = "<13"
-firefox = "*"
+firefox = "6 - 28"
 ie = "*"
 ie_mob = "*"
 ios_saf = "* - 7.1"
