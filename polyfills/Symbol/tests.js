@@ -48,11 +48,19 @@ it('should have Symbol as the constructor property', function () {
 	proclaim.equal(Symbol().constructor, Symbol);
 });
 
-it('should silently fail when assigning new properties', function () {
-	var a = Symbol('1');
-	a.b = '1';
-	proclaim.equal(a.b, undefined);
-});
+var hasObjectFreezeSupport = (function(){
+	var obj = {};
+	Object.freeze(obj);
+	obj.a = 1;
+	return obj.a === undefined;
+}());
+if (hasObjectFreezeSupport) {
+	it('should silently fail when assigning new properties', function () {
+		var a = Symbol('1');
+		a.b = '1';
+		proclaim.equal(a.b, undefined);
+	});
+}
 
 it('should have Symbol.prototype as the prototype of an instance', function () {
 	proclaim.equal(Object.getPrototypeOf(Symbol()), Symbol.prototype);
@@ -243,71 +251,86 @@ it('does not break when an iframe is added', function () {
 	proclaim.equal(Object.prototype.toString.call(Object.getOwnPropertyNames(window)) === '[object Array]', true);
 });
 
-describe('Symbol.prototype.description', function () {
-	it('is defined', function () {
-		proclaim.include(Symbol.prototype, 'description');
-	});
+var supportsGetters = (function () {
+	try {
+		var a = {};
+		Object.defineProperty(a, 't', {
+			configurable: true,
+			enumerable: false,
+			get: function () {
+				return true;
+			},
+			set: undefined
+		});
+		return !!a.t;
+	} catch (e) {
+		return false;
+	}
+}());
+if (supportsGetters) {
+	describe('Symbol.prototype.description', function () {
+		it('is defined', function () {
+			proclaim.include(Symbol.prototype, 'description');
+		});
 
-	it('is not enumerable', function () {
-		proclaim.isNotEnumerable(Symbol.prototype, 'description');
-	});
+		it('is not enumerable', function () {
+			proclaim.isNotEnumerable(Symbol.prototype, 'description');
+		});
 
-	it('is configurable', function () {
-		if (Object.getOwnPropertyDescriptor) {
-			proclaim.isTrue(Object.getOwnPropertyDescriptor(Symbol.prototype, 'description').configurable);
-		}
-	});
+		it('is configurable', function () {
+			if (Object.getOwnPropertyDescriptor) {
+				proclaim.isTrue(Object.getOwnPropertyDescriptor(Symbol.prototype, 'description').configurable);
+			}
+		});
 
-	it('works with numbers', function () {
-		proclaim.strictEqual(Symbol(1).description, '1');
-	});
+		it('works with numbers', function () {
+			proclaim.strictEqual(Symbol(1).description, '1');
+		});
 
-	it('works with booleans', function () {
-		proclaim.strictEqual(Symbol(true).description, 'true');
-	});
+		it('works with booleans', function () {
+			proclaim.strictEqual(Symbol(true).description, 'true');
+		});
 
-	it('works with null', function () {
-		proclaim.strictEqual(Symbol(null).description, 'null');
-	});
+		it('works with null', function () {
+			proclaim.strictEqual(Symbol(null).description, 'null');
+		});
 
-	it('works with undefined', function () {
-		proclaim.strictEqual(Symbol(undefined).description, undefined);
-	});
+		it('works with undefined', function () {
+			proclaim.strictEqual(Symbol(undefined).description, undefined);
+		});
 
-	it('works with arrays', function () {
-		proclaim.strictEqual(Symbol([]).description, '');
-	});
+		it('works with arrays', function () {
+			proclaim.strictEqual(Symbol([]).description, '');
+		});
 
-	it('works with objects', function () {
-		proclaim.strictEqual(Symbol({}).description, '[object Object]');
-	});
+		it('works with objects', function () {
+			proclaim.strictEqual(Symbol({}).description, '[object Object]');
+		});
 
-	it('works with regexes', function () {
-		proclaim.strictEqual(Symbol(/./).description, '/./');
-	});
+		it('works with regexes', function () {
+			proclaim.strictEqual(Symbol(/./).description, '/./');
+		});
 
-	it('works with NaNs', function () {
-		proclaim.strictEqual(Symbol(NaN).description, 'NaN');
-	});
+		it('works with NaNs', function () {
+			proclaim.strictEqual(Symbol(NaN).description, 'NaN');
+		});
 
-	it('works with functions', function () {
-		proclaim.strictEqual(
-			Symbol(function () {}).description,
-			String(function () {})
-		);
-	});
+		it('works with functions', function () {
+			proclaim.strictEqual(
+				Symbol(function () {}).description,
+				String(function () {})
+			);
+		});
 
-	it('works with no input', function () {
-		proclaim.strictEqual(Symbol().description, undefined);
-	});
+		it('works with no input', function () {
+			proclaim.strictEqual(Symbol().description, undefined);
+		});
 
-	it('works with an empty string', function () {
-		proclaim.strictEqual(Symbol('').description, '');
-	});
+		it('works with an empty string', function () {
+			proclaim.strictEqual(Symbol('').description, '');
+		});
 
-	// non symbols
-
-	if (Object.getOwnPropertyDescriptor) {
+		// non symbols
 		var getter = Object.getOwnPropertyDescriptor(Symbol.prototype, 'description').get;
 
 		it('does not throw an error if context is a symbol', function () {
@@ -369,5 +392,5 @@ describe('Symbol.prototype.description', function () {
 				getter.call('kate');
 			}, TypeError);
 		});
-	}
-});
+	});
+}

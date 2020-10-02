@@ -27,11 +27,10 @@
 			Description: { configurable: false, enumerable: false, value: generateName(description), writable: false },
 			Value: { configurable: false, enumerable: false, value: description, writable: false }
 		});
-		Object.setPrototypeOf(this, Symbol.prototype);
-		originalDefineProperty(this, 'constructor', { configurable: true, enumerable: false, value: Symbol, writable: true });
-		created[this] = { enumerable: false };
-		Object.freeze(this);
-		var that = this;
+		var that = Object.setPrototypeOf(this, Symbol.prototype);
+		originalDefineProperty(that, 'constructor', { configurable: true, enumerable: false, value: Symbol, writable: true });
+		created[that] = { enumerable: false };
+		Object.freeze(that);
 		var ie11BugWorkaround;
 		var descriptor = {
 			enumerable: false,
@@ -57,11 +56,11 @@
 			}
 		};
 		try {
-			originalDefineProperty(Object.prototype, this, descriptor);
+			originalDefineProperty(Object.prototype, that, descriptor);
 		} catch (e) {
-			Object.prototype[this] = descriptor.value;
+			Object.prototype[that] = descriptor.value;
 		}
-		return this;
+		return that;
 	}
 	function setDescriptor(o, key, descriptor) {
 		var protoDescriptor = Object.getOwnPropertyDescriptor(Object.prototype, key);
@@ -126,19 +125,23 @@
 	});
 
 	// #sec-symbol.prototype.description
-	originalDefineProperty(Symbol.prototype, 'description', {
-		set: undefined,
-		enumerable: false,
-		configurable: true,
-		get: function description() {
-			// 1. Let s be the this value.
-			var s = this;
-			// 2. Let sym be ? thisSymbolValue(s).
-			var sym = thisSymbolValue(s);
-			// 3. Return sym.[[Description]].
-			return sym.Value;
-		}
-	});
+	try {
+		originalDefineProperty(Symbol.prototype, 'description', {
+			set: undefined,
+			enumerable: false,
+			configurable: true,
+			get: function description() {
+				// 1. Let s be the this value.
+				var s = this;
+				// 2. Let sym be ? thisSymbolValue(s).
+				var sym = thisSymbolValue(s);
+				// 3. Return sym.[[Description]].
+				return sym.Value;
+			}
+		});
+	} catch (error) {
+		// we must be IE 8 which does not support getters
+	}
 
 	// #sec-symbol.prototype.valueof
 	CreateMethodProperty(Symbol.prototype, 'valueOf', function valueOf() {
@@ -182,8 +185,22 @@
 		}
 	});
 
+	var strictModeSupported = (function(){ 'use strict'; return this; }).call(null) === null;
 	var originalToString = Object.prototype.toString;
 	CreateMethodProperty(Object.prototype, 'toString', function toString() {
+		if (!strictModeSupported) {
+			// https://github.com/Financial-Times/polyfill-library/issues/164#issuecomment-486965300
+			// Polyfill.io this code is here for the situation where a browser does not
+			// support strict mode and is executing `Object.prototype.toString.call(null)`.
+			// This code ensures that we return the correct result in that situation however,
+			// this code also introduces a bug where it will return the incorrect result for
+			// `Object.prototype.toString.call(window)`. We can't have the correct result for
+			// both `window` and `null`, so we have opted for `null` as we believe this is the more
+			// common situation.
+			if (this === window) {
+				return '[object Null]';
+			}
+		}
 		var str = originalToString.call(this);
 		if (Type(this) === 'symbol') {
 			return '[object Symbol]';

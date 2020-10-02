@@ -13,6 +13,7 @@ dependencies = [
   "Object.create",
   "Object.defineProperty",
   "Object.defineProperties",
+  "Object.setPrototypeOf",
   "Object.freeze",
 ]
 license = "MIT"
