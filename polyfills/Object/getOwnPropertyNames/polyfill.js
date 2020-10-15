@@ -7,6 +7,7 @@
   var nativeGetOwnPropertyNames = Object.getOwnPropertyNames || Object.keys;
   var cachedWindowNames =
     typeof self === "object" ? nativeGetOwnPropertyNames(self) : [];
+  var window = self;
 
   // 19.1.2.10 Object.getOwnPropertyNames ( O )
   CreateMethodProperty(
@@ -15,7 +16,7 @@
     function getOwnPropertyNames(O) {
       var object = ToObject(O);
 
-      if (toString.call(object) === "[object Window]") {
+      if (toString.call(object) === "[object Window]" || object === window) {
         try {
           return nativeGetOwnPropertyNames(object);
         } catch (e) {
