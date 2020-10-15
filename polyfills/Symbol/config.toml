@@ -10,6 +10,7 @@ dependencies = [
   "_ESAbstract.Type",
   "_ESAbstract.SameValue",
   "_ESAbstract.ToString",
+  "Array.prototype.filter",
   "Object.create",
   "Object.defineProperty",
   "Object.defineProperties",
