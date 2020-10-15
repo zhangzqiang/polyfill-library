@@ -63,7 +63,7 @@
 		}
 
 		// 3. If Properties is not undefined, then
-		if (1 in arguments) {
+		if (1 in arguments && arguments[1]) {
 			// a. Return ? ObjectDefineProperties(obj, Properties).
 			return Object.defineProperties(obj, properties);
 		}
