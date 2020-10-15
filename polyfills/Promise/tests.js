@@ -249,32 +249,51 @@ describe('Promise', function () {
 		return Promise.all([a, b]);
 	});
 
-	specify('resolve with a thenable that throws on .then, rejects the promise synchronously', function () {
-		var resolve;
-		var p = new Promise(function (r) {
-			resolve = r;
-		});
-		var count = 0;
-		var thenable = Object.defineProperty({}, 'then', {
-			get: function () {
-				count += 1;
-				throw new RangeError('no then for you');
-			}
-		});
-		resolve(thenable);
-		proclaim.equal(count, 1);
-		var a = p
-			.then(function () {})['catch'](function (err) {
-				proclaim.equal(count, 1);
-				proclaim.ok(err instanceof RangeError);
+	var supportsGetters = (function () {
+		try {
+			var a = {};
+			Object.defineProperty(a, 't', {
+				configurable: true,
+				enumerable: false,
+				get: function () {
+					return true;
+				},
+				set: undefined
 			});
-		var b = p
-			.then(function () {})['catch'](function (err) {
-				proclaim.equal(count, 1);
-				proclaim.ok(err instanceof RangeError);
+			return !!a.t;
+		} catch (e) {
+			return false;
+		}
+	}());
+
+	if (supportsGetters) {
+		specify('resolve with a thenable that throws on .then, rejects the promise synchronously', function () {
+			var resolve;
+			var p = new Promise(function (r) {
+				resolve = r;
 			});
-		return Promise.all([a, b]);
-	});
+			var count = 0;
+			var thenable = Object.defineProperty({}, 'then', {
+				get: function () {
+					count += 1;
+					throw new RangeError('no then for you');
+				}
+			});
+			resolve(thenable);
+			proclaim.equal(count, 1);
+			var a = p
+				.then(function () {})['catch'](function (err) {
+					proclaim.equal(count, 1);
+					proclaim.ok(err instanceof RangeError);
+				});
+			var b = p
+				.then(function () {})['catch'](function (err) {
+					proclaim.equal(count, 1);
+					proclaim.ok(err instanceof RangeError);
+				});
+			return Promise.all([a, b]);
+		});
+	}
 });
 
 describe('Promise.resolve', function () {
