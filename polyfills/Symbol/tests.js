@@ -243,12 +243,13 @@ it('should create Object without symbols, second argument undefined', function (
 
 it('does not break when an iframe is added', function () {
 	var div = document.createElement('div');
-	div.innerHTML = '<iframe src="https://xkcd.com"></iframe>';
+	div.innerHTML = '<iframe src=""></iframe>';
 	document.body.appendChild(div);
 	setTimeout(function () {
 		document.body.removeChild(div);
 	}, 0);
-	proclaim.equal(Object.prototype.toString.call(Object.getOwnPropertyNames(window)) === '[object Array]', true);
+	var names = Object.getOwnPropertyNames(window);
+	proclaim.equal(Object.prototype.toString.call(names) === '[object Array]', true);
 });
 
 var supportsGetters = (function () {
