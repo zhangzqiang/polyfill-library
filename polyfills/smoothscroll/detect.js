@@ -1,26 +1,32 @@
 ('document' in self && 'documentElement' in self.document && 'style' in self.document.documentElement && 'scrollBehavior' in document.documentElement.style) || (function () {
-    try {
-        var supportsSmoothScroll = false;
+  try {
+    var supportsSmoothScroll = false;
 
-        var scrollOptions = {
-            top: 0,
-            left: 0
-        };
+    var scrollOptions = {
+      top: 1,
+      left: 0
+    };
 
-        Object.defineProperty(scrollOptions, 'behavior', {
-            get: function () {
-                supportsSmoothScroll = true;
-                return 'smooth';
-            },
+    Object.defineProperty(scrollOptions, 'behavior', {
+      get: function () {
+        supportsSmoothScroll = true;
+        return 'smooth';
+      },
 
-            // Ensure this property lasts through cloning / destructuring:
-            enumerable: true
-        });
+      // Ensure this property lasts through cloning / destructuring:
+      enumerable: true
+    });
 
-        document.body.scrollTo(scrollOptions);
+    var a = document.createElement('DIV');
+    var b = document.createElement('DIV');
+    a.setAttribute('style', 'height: 1px; overflow: scroll;');
+    b.setAttribute('style', 'height: 2px; overflow: scroll;');
 
-        return supportsSmoothScroll;
-    } catch (e) {
-        return false;
-    }
+    a.appendChild(b);
+    a.scrollTo(scrollOptions);
+
+    return supportsSmoothScroll;
+  } catch (e) {
+    return false;
+  }
 })();
