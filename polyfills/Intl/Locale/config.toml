@@ -4,11 +4,12 @@ dependencies = [
   "Array.prototype.indexOf",
   "Array.prototype.reduce",
   "Array.prototype.sort",
+  "Intl.getCanonicalLocales",
   "Object.assign",
   "Object.defineProperty",
   "Object.keys",
   "Set",
-  "Intl.getCanonicalLocales"
+  "WeakMap"
 ]
 docs = "https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Intl/Locale"
 license = "MIT"
