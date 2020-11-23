@@ -11,7 +11,7 @@ describe("Intl.DisplayNames", function () {
         data: {
           types: {
             language: {
-              long: {
+              "long": {
                 aa: "Afar",
                 ab: "Abkhazian",
                 ace: "Achinese",
@@ -399,7 +399,7 @@ describe("Intl.DisplayNames", function () {
                 nds: "Low German",
                 "nds-NL": "Low Saxon",
                 ne: "Nepali",
-                new: "Newari",
+                "new": "Newari",
                 ng: "Ndonga",
                 nia: "Nias",
                 niu: "Niuean",
@@ -633,7 +633,7 @@ describe("Intl.DisplayNames", function () {
                 zxx: "No linguistic content",
                 zza: "Zaza"
               },
-              short: {
+              "short": {
                 az: "Azeri",
                 "en-GB": "UK English",
                 "en-US": "US English"
@@ -641,7 +641,7 @@ describe("Intl.DisplayNames", function () {
               narrow: {}
             },
             region: {
-              long: {
+              "long": {
                 142: "Asia",
                 143: "Central Asia",
                 145: "Western Asia",
@@ -937,7 +937,7 @@ describe("Intl.DisplayNames", function () {
                 ZW: "Zimbabwe",
                 ZZ: "Unknown Region"
               },
-              short: {
+              "short": {
                 BA: "Bosnia",
                 GB: "UK",
                 HK: "Hong Kong",
@@ -950,7 +950,7 @@ describe("Intl.DisplayNames", function () {
               narrow: {}
             },
             script: {
-              long: {
+              "long": {
                 Adlm: "Adlam",
                 Afak: "Afaka",
                 Aghb: "Caucasian Albanian",
@@ -1147,11 +1147,11 @@ describe("Intl.DisplayNames", function () {
                 Zyyy: "Common",
                 Zzzz: "Unknown Script"
               },
-              short: { Cans: "UCAS", Xsux: "S-A Cuneiform" },
+              "short": { Cans: "UCAS", Xsux: "S-A Cuneiform" },
               narrow: {}
             },
             currency: {
-              long: {
+              "long": {
                 ADP: "Andorran Peseta",
                 AED: "United Arab Emirates Dirham",
                 AFA: "Afghan Afghani (1927–2002)",
@@ -1456,7 +1456,7 @@ describe("Intl.DisplayNames", function () {
                 ZWL: "Zimbabwean Dollar (2009)",
                 ZWR: "Zimbabwean Dollar (2008)"
               },
-              short: {},
+              "short": {},
               narrow: {}
             }
           },

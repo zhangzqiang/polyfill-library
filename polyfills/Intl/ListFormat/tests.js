@@ -10,13 +10,13 @@ describe("Intl.ListFormat", function () {
       Intl.ListFormat.__addLocaleData({
         data: {
           conjunction: {
-            long: {
+            "long": {
               start: "{0}, {1}",
               middle: "{0}, {1}",
               end: "{0}, and {1}",
               pair: "{0} and {1}"
             },
-            short: {
+            "short": {
               start: "{0}, {1}",
               middle: "{0}, {1}",
               end: "{0}, & {1}",
@@ -30,13 +30,13 @@ describe("Intl.ListFormat", function () {
             }
           },
           disjunction: {
-            long: {
+            "long": {
               start: "{0}, {1}",
               middle: "{0}, {1}",
               end: "{0}, or {1}",
               pair: "{0} or {1}"
             },
-            short: {
+            "short": {
               start: "{0}, {1}",
               middle: "{0}, {1}",
               end: "{0}, or {1}",
@@ -50,13 +50,13 @@ describe("Intl.ListFormat", function () {
             }
           },
           unit: {
-            long: {
+            "long": {
               start: "{0}, {1}",
               middle: "{0}, {1}",
               end: "{0}, {1}",
               pair: "{0}, {1}"
             },
-            short: {
+            "short": {
               start: "{0}, {1}",
               middle: "{0}, {1}",
               end: "{0}, {1}",

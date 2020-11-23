@@ -42,366 +42,366 @@ before(function () {
         units: {
           simple: {
             degree: {
-              long: { other: "{0} degrees", one: "{0} degree" },
-              short: { other: "{0} deg" },
+              "long": { other: "{0} degrees", one: "{0} degree" },
+              "short": { other: "{0} deg" },
               narrow: { other: "{0}°" },
               perUnit: {}
             },
             hectare: {
-              long: { other: "{0} hectares", one: "{0} hectare" },
-              short: { other: "{0} ha" },
+              "long": { other: "{0} hectares", one: "{0} hectare" },
+              "short": { other: "{0} ha" },
               narrow: { other: "{0}ha" },
               perUnit: {}
             },
             acre: {
-              long: { other: "{0} acres", one: "{0} acre" },
-              short: { other: "{0} ac" },
+              "long": { other: "{0} acres", one: "{0} acre" },
+              "short": { other: "{0} ac" },
               narrow: { other: "{0}ac" },
               perUnit: {}
             },
             percent: {
-              long: { other: "{0} percent" },
-              short: { other: "{0}%" },
+              "long": { other: "{0} percent" },
+              "short": { other: "{0}%" },
               narrow: { other: "{0}%" },
               perUnit: {}
             },
             "liter-per-kilometer": {
-              long: {
+              "long": {
                 other: "{0} liters per kilometer",
                 one: "{0} liter per kilometer"
               },
-              short: { other: "{0} L/km" },
+              "short": { other: "{0} L/km" },
               narrow: { other: "{0}L/km" },
               perUnit: {}
             },
             "mile-per-gallon": {
-              long: {
+              "long": {
                 other: "{0} miles per gallon",
                 one: "{0} mile per gallon"
               },
-              short: { other: "{0} mpg" },
+              "short": { other: "{0} mpg" },
               narrow: { other: "{0}mpg" },
               perUnit: {}
             },
             petabyte: {
-              long: { other: "{0} petabytes", one: "{0} petabyte" },
-              short: { other: "{0} PB" },
+              "long": { other: "{0} petabytes", one: "{0} petabyte" },
+              "short": { other: "{0} PB" },
               narrow: { other: "{0}PB" },
               perUnit: {}
             },
             terabyte: {
-              long: { other: "{0} terabytes", one: "{0} terabyte" },
-              short: { other: "{0} TB" },
+              "long": { other: "{0} terabytes", one: "{0} terabyte" },
+              "short": { other: "{0} TB" },
               narrow: { other: "{0}TB" },
               perUnit: {}
             },
             terabit: {
-              long: { other: "{0} terabits", one: "{0} terabit" },
-              short: { other: "{0} Tb" },
+              "long": { other: "{0} terabits", one: "{0} terabit" },
+              "short": { other: "{0} Tb" },
               narrow: { other: "{0}Tb" },
               perUnit: {}
             },
             gigabyte: {
-              long: { other: "{0} gigabytes", one: "{0} gigabyte" },
-              short: { other: "{0} GB" },
+              "long": { other: "{0} gigabytes", one: "{0} gigabyte" },
+              "short": { other: "{0} GB" },
               narrow: { other: "{0}GB" },
               perUnit: {}
             },
             gigabit: {
-              long: { other: "{0} gigabits", one: "{0} gigabit" },
-              short: { other: "{0} Gb" },
+              "long": { other: "{0} gigabits", one: "{0} gigabit" },
+              "short": { other: "{0} Gb" },
               narrow: { other: "{0}Gb" },
               perUnit: {}
             },
             megabyte: {
-              long: { other: "{0} megabytes", one: "{0} megabyte" },
-              short: { other: "{0} MB" },
+              "long": { other: "{0} megabytes", one: "{0} megabyte" },
+              "short": { other: "{0} MB" },
               narrow: { other: "{0}MB" },
               perUnit: {}
             },
             megabit: {
-              long: { other: "{0} megabits", one: "{0} megabit" },
-              short: { other: "{0} Mb" },
+              "long": { other: "{0} megabits", one: "{0} megabit" },
+              "short": { other: "{0} Mb" },
               narrow: { other: "{0}Mb" },
               perUnit: {}
             },
             kilobyte: {
-              long: { other: "{0} kilobytes", one: "{0} kilobyte" },
-              short: { other: "{0} kB" },
+              "long": { other: "{0} kilobytes", one: "{0} kilobyte" },
+              "short": { other: "{0} kB" },
               narrow: { other: "{0}kB" },
               perUnit: {}
             },
             kilobit: {
-              long: { other: "{0} kilobits", one: "{0} kilobit" },
-              short: { other: "{0} kb" },
+              "long": { other: "{0} kilobits", one: "{0} kilobit" },
+              "short": { other: "{0} kb" },
               narrow: { other: "{0}kb" },
               perUnit: {}
             },
-            byte: {
-              long: { other: "{0} bytes", one: "{0} byte" },
-              short: { other: "{0} byte" },
+            "byte": {
+              "long": { other: "{0} bytes", one: "{0} byte" },
+              "short": { other: "{0} byte" },
               narrow: { other: "{0}B" },
               perUnit: {}
             },
             bit: {
-              long: { other: "{0} bits", one: "{0} bit" },
-              short: { other: "{0} bit" },
+              "long": { other: "{0} bits", one: "{0} bit" },
+              "short": { other: "{0} bit" },
               narrow: { other: "{0}bit" },
               perUnit: {}
             },
             year: {
-              long: { other: "{0} years", one: "{0} year" },
-              short: { other: "{0} yrs", one: "{0} yr" },
+              "long": { other: "{0} years", one: "{0} year" },
+              "short": { other: "{0} yrs", one: "{0} yr" },
               narrow: { other: "{0}y" },
-              perUnit: { long: "{0} per year", short: "{0}/y", narrow: "{0}/y" }
+              perUnit: { "long": "{0} per year", "short": "{0}/y", narrow: "{0}/y" }
             },
             month: {
-              long: { other: "{0} months", one: "{0} month" },
-              short: { other: "{0} mths", one: "{0} mth" },
+              "long": { other: "{0} months", one: "{0} month" },
+              "short": { other: "{0} mths", one: "{0} mth" },
               narrow: { other: "{0}m" },
               perUnit: {
-                long: "{0} per month",
-                short: "{0}/m",
+                "long": "{0} per month",
+                "short": "{0}/m",
                 narrow: "{0}/m"
               }
             },
             week: {
-              long: { other: "{0} weeks", one: "{0} week" },
-              short: { other: "{0} wks", one: "{0} wk" },
+              "long": { other: "{0} weeks", one: "{0} week" },
+              "short": { other: "{0} wks", one: "{0} wk" },
               narrow: { other: "{0}w" },
-              perUnit: { long: "{0} per week", short: "{0}/w", narrow: "{0}/w" }
+              perUnit: { "long": "{0} per week", "short": "{0}/w", narrow: "{0}/w" }
             },
             day: {
-              long: { other: "{0} days", one: "{0} day" },
-              short: { other: "{0} days", one: "{0} day" },
+              "long": { other: "{0} days", one: "{0} day" },
+              "short": { other: "{0} days", one: "{0} day" },
               narrow: { other: "{0}d" },
-              perUnit: { long: "{0} per day", short: "{0}/d", narrow: "{0}/d" }
+              perUnit: { "long": "{0} per day", "short": "{0}/d", narrow: "{0}/d" }
             },
             hour: {
-              long: { other: "{0} hours", one: "{0} hour" },
-              short: { other: "{0} hr" },
+              "long": { other: "{0} hours", one: "{0} hour" },
+              "short": { other: "{0} hr" },
               narrow: { other: "{0}h" },
-              perUnit: { long: "{0} per hour", short: "{0}/h", narrow: "{0}/h" }
+              perUnit: { "long": "{0} per hour", "short": "{0}/h", narrow: "{0}/h" }
             },
             minute: {
-              long: { other: "{0} minutes", one: "{0} minute" },
-              short: { other: "{0} min" },
+              "long": { other: "{0} minutes", one: "{0} minute" },
+              "short": { other: "{0} min" },
               narrow: { other: "{0}m" },
               perUnit: {
-                long: "{0} per minute",
-                short: "{0}/min",
+                "long": "{0} per minute",
+                "short": "{0}/min",
                 narrow: "{0}/min"
               }
             },
             second: {
-              long: { other: "{0} seconds", one: "{0} second" },
-              short: { other: "{0} sec" },
+              "long": { other: "{0} seconds", one: "{0} second" },
+              "short": { other: "{0} sec" },
               narrow: { other: "{0}s" },
               perUnit: {
-                long: "{0} per second",
-                short: "{0}/s",
+                "long": "{0} per second",
+                "short": "{0}/s",
                 narrow: "{0}/s"
               }
             },
             millisecond: {
-              long: { other: "{0} milliseconds", one: "{0} millisecond" },
-              short: { other: "{0} ms" },
+              "long": { other: "{0} milliseconds", one: "{0} millisecond" },
+              "short": { other: "{0} ms" },
               narrow: { other: "{0}ms" },
               perUnit: {}
             },
             kilometer: {
-              long: { other: "{0} kilometers", one: "{0} kilometer" },
-              short: { other: "{0} km" },
+              "long": { other: "{0} kilometers", one: "{0} kilometer" },
+              "short": { other: "{0} km" },
               narrow: { other: "{0}km" },
               perUnit: {
-                long: "{0} per kilometer",
-                short: "{0}/km",
+                "long": "{0} per kilometer",
+                "short": "{0}/km",
                 narrow: "{0}/km"
               }
             },
             meter: {
-              long: { other: "{0} meters", one: "{0} meter" },
-              short: { other: "{0} m" },
+              "long": { other: "{0} meters", one: "{0} meter" },
+              "short": { other: "{0} m" },
               narrow: { other: "{0}m" },
               perUnit: {
-                long: "{0} per meter",
-                short: "{0}/m",
+                "long": "{0} per meter",
+                "short": "{0}/m",
                 narrow: "{0}/m"
               }
             },
             centimeter: {
-              long: { other: "{0} centimeters", one: "{0} centimeter" },
-              short: { other: "{0} cm" },
+              "long": { other: "{0} centimeters", one: "{0} centimeter" },
+              "short": { other: "{0} cm" },
               narrow: { other: "{0}cm" },
               perUnit: {
-                long: "{0} per centimeter",
-                short: "{0}/cm",
+                "long": "{0} per centimeter",
+                "short": "{0}/cm",
                 narrow: "{0}/cm"
               }
             },
             millimeter: {
-              long: { other: "{0} millimeters", one: "{0} millimeter" },
-              short: { other: "{0} mm" },
+              "long": { other: "{0} millimeters", one: "{0} millimeter" },
+              "short": { other: "{0} mm" },
               narrow: { other: "{0}mm" },
               perUnit: {}
             },
             mile: {
-              long: { other: "{0} miles", one: "{0} mile" },
-              short: { other: "{0} mi" },
+              "long": { other: "{0} miles", one: "{0} mile" },
+              "short": { other: "{0} mi" },
               narrow: { other: "{0}mi" },
               perUnit: {}
             },
             yard: {
-              long: { other: "{0} yards", one: "{0} yard" },
-              short: { other: "{0} yd" },
+              "long": { other: "{0} yards", one: "{0} yard" },
+              "short": { other: "{0} yd" },
               narrow: { other: "{0}yd" },
               perUnit: {}
             },
             foot: {
-              long: { other: "{0} feet", one: "{0} foot" },
-              short: { other: "{0} ft" },
+              "long": { other: "{0} feet", one: "{0} foot" },
+              "short": { other: "{0} ft" },
               narrow: { other: "{0}′" },
               perUnit: {
-                long: "{0} per foot",
-                short: "{0}/ft",
+                "long": "{0} per foot",
+                "short": "{0}/ft",
                 narrow: "{0}/ft"
               }
             },
             inch: {
-              long: { other: "{0} inches", one: "{0} inch" },
-              short: { other: "{0} in" },
+              "long": { other: "{0} inches", one: "{0} inch" },
+              "short": { other: "{0} in" },
               narrow: { other: "{0}″" },
               perUnit: {
-                long: "{0} per inch",
-                short: "{0}/in",
+                "long": "{0} per inch",
+                "short": "{0}/in",
                 narrow: "{0}/in"
               }
             },
             "mile-scandinavian": {
-              long: {
+              "long": {
                 other: "{0} miles-scandinavian",
                 one: "{0} mile-scandinavian"
               },
-              short: { other: "{0} smi" },
+              "short": { other: "{0} smi" },
               narrow: { other: "{0}smi" },
               perUnit: {}
             },
             kilogram: {
-              long: { other: "{0} kilograms", one: "{0} kilogram" },
-              short: { other: "{0} kg" },
+              "long": { other: "{0} kilograms", one: "{0} kilogram" },
+              "short": { other: "{0} kg" },
               narrow: { other: "{0}kg" },
               perUnit: {
-                long: "{0} per kilogram",
-                short: "{0}/kg",
+                "long": "{0} per kilogram",
+                "short": "{0}/kg",
                 narrow: "{0}/kg"
               }
             },
             gram: {
-              long: { other: "{0} grams", one: "{0} gram" },
-              short: { other: "{0} g" },
+              "long": { other: "{0} grams", one: "{0} gram" },
+              "short": { other: "{0} g" },
               narrow: { other: "{0}g" },
-              perUnit: { long: "{0} per gram", short: "{0}/g", narrow: "{0}/g" }
+              perUnit: { "long": "{0} per gram", "short": "{0}/g", narrow: "{0}/g" }
             },
             stone: {
-              long: { other: "{0} stones", one: "{0} stone" },
-              short: { other: "{0} st" },
+              "long": { other: "{0} stones", one: "{0} stone" },
+              "short": { other: "{0} st" },
               narrow: { other: "{0}st" },
               perUnit: {}
             },
             pound: {
-              long: { other: "{0} pounds", one: "{0} pound" },
-              short: { other: "{0} lb" },
+              "long": { other: "{0} pounds", one: "{0} pound" },
+              "short": { other: "{0} lb" },
               narrow: { other: "{0}#" },
               perUnit: {
-                long: "{0} per pound",
-                short: "{0}/lb",
+                "long": "{0} per pound",
+                "short": "{0}/lb",
                 narrow: "{0}/lb"
               }
             },
             ounce: {
-              long: { other: "{0} ounces", one: "{0} ounce" },
-              short: { other: "{0} oz" },
+              "long": { other: "{0} ounces", one: "{0} ounce" },
+              "short": { other: "{0} oz" },
               narrow: { other: "{0}oz" },
               perUnit: {
-                long: "{0} per ounce",
-                short: "{0}/oz",
+                "long": "{0} per ounce",
+                "short": "{0}/oz",
                 narrow: "{0}/oz"
               }
             },
             "kilometer-per-hour": {
-              long: {
+              "long": {
                 other: "{0} kilometers per hour",
                 one: "{0} kilometer per hour"
               },
-              short: { other: "{0} km/h" },
+              "short": { other: "{0} km/h" },
               narrow: { other: "{0}km/h" },
               perUnit: {}
             },
             "meter-per-second": {
-              long: {
+              "long": {
                 other: "{0} meters per second",
                 one: "{0} meter per second"
               },
-              short: { other: "{0} m/s" },
+              "short": { other: "{0} m/s" },
               narrow: { other: "{0}m/s" },
               perUnit: {}
             },
             "mile-per-hour": {
-              long: { other: "{0} miles per hour", one: "{0} mile per hour" },
-              short: { other: "{0} mph" },
+              "long": { other: "{0} miles per hour", one: "{0} mile per hour" },
+              "short": { other: "{0} mph" },
               narrow: { other: "{0}mph" },
               perUnit: {}
             },
             celsius: {
-              long: { other: "{0} degrees Celsius", one: "{0} degree Celsius" },
-              short: { other: "{0}°C" },
+              "long": { other: "{0} degrees Celsius", one: "{0} degree Celsius" },
+              "short": { other: "{0}°C" },
               narrow: { other: "{0}°C" },
               perUnit: {}
             },
             fahrenheit: {
-              long: {
+              "long": {
                 other: "{0} degrees Fahrenheit",
                 one: "{0} degree Fahrenheit"
               },
-              short: { other: "{0}°F" },
+              "short": { other: "{0}°F" },
               narrow: { other: "{0}°" },
               perUnit: {}
             },
             liter: {
-              long: { other: "{0} liters", one: "{0} liter" },
-              short: { other: "{0} L" },
+              "long": { other: "{0} liters", one: "{0} liter" },
+              "short": { other: "{0} L" },
               narrow: { other: "{0}L" },
               perUnit: {
-                long: "{0} per liter",
-                short: "{0}/L",
+                "long": "{0} per liter",
+                "short": "{0}/L",
                 narrow: "{0}/L"
               }
             },
             milliliter: {
-              long: { other: "{0} milliliters", one: "{0} milliliter" },
-              short: { other: "{0} mL" },
+              "long": { other: "{0} milliliters", one: "{0} milliliter" },
+              "short": { other: "{0} mL" },
               narrow: { other: "{0}mL" },
               perUnit: {}
             },
             gallon: {
-              long: { other: "{0} gallons", one: "{0} gallon" },
-              short: { other: "{0} gal" },
+              "long": { other: "{0} gallons", one: "{0} gallon" },
+              "short": { other: "{0} gal" },
               narrow: { other: "{0}gal" },
               perUnit: {
-                long: "{0} per gallon",
-                short: "{0}/gal US",
+                "long": "{0} per gallon",
+                "short": "{0}/gal US",
                 narrow: "{0}/gal"
               }
             },
             "fluid-ounce": {
-              long: { other: "{0} fluid ounces", one: "{0} fluid ounce" },
-              short: { other: "{0} fl oz" },
+              "long": { other: "{0} fluid ounces", one: "{0} fluid ounce" },
+              "short": { other: "{0} fl oz" },
               narrow: { other: "{0}fl oz" },
               perUnit: {}
             }
           },
           compound: {
-            per: { long: "{0} per {1}", short: "{0}/{1}", narrow: "{0}/{1}" }
+            per: { "long": "{0} per {1}", "short": "{0}/{1}", narrow: "{0}/{1}" }
           }
         },
         currencies: {
@@ -2411,7 +2411,7 @@ before(function () {
           decimal: {
             latn: {
               standard: "#,##0.###",
-              long: {
+              "long": {
                 1000: { other: "0 thousand" },
                 10000: { other: "00 thousand" },
                 100000: { other: "000 thousand" },
@@ -2425,7 +2425,7 @@ before(function () {
                 10000000000000: { other: "00 trillion" },
                 100000000000000: { other: "000 trillion" }
               },
-              short: {
+              "short": {
                 1000: { other: "0K" },
                 10000: { other: "00K" },
                 100000: { other: "000K" },
@@ -2450,7 +2450,7 @@ before(function () {
               standard: "¤#,##0.00",
               accounting: "¤#,##0.00;(¤#,##0.00)",
               unitPattern: "{0} {1}",
-              short: {
+              "short": {
                 1000: { other: "¤0K" },
                 10000: { other: "¤00K" },
                 100000: { other: "¤000K" },
@@ -2483,8 +2483,8 @@ before(function () {
         pm: "PM",
         weekday: {
           narrow: ["S", "M", "T", "W", "T", "F", "S"],
-          short: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-          long: [
+          "short": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+          "long": [
             "Sunday",
             "Monday",
             "Tuesday",
@@ -2496,12 +2496,12 @@ before(function () {
         },
         era: {
           narrow: { BC: "B", AD: "A" },
-          short: { BC: "BC", AD: "AD" },
-          long: { BC: "Before Christ", AD: "Anno Domini" }
+          "short": { BC: "BC", AD: "AD" },
+          "long": { BC: "Before Christ", AD: "Anno Domini" }
         },
         month: {
           narrow: ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"],
-          short: [
+          "short": [
             "Jan",
             "Feb",
             "Mar",
@@ -2515,7 +2515,7 @@ before(function () {
             "Nov",
             "Dec"
           ],
-          long: [
+          "long": [
             "January",
             "February",
             "March",
@@ -2532,999 +2532,999 @@ before(function () {
         },
         timeZoneName: {
           "America/Rio_Branco": {
-            long: ["Acre Standard Time", "Acre Summer Time"]
+            "long": ["Acre Standard Time", "Acre Summer Time"]
           },
-          "Asia/Kabul": { long: ["Afghanistan Time", "Afghanistan Time"] },
+          "Asia/Kabul": { "long": ["Afghanistan Time", "Afghanistan Time"] },
           "Africa/Maputo": {
-            long: ["Central Africa Time", "Central Africa Time"]
+            "long": ["Central Africa Time", "Central Africa Time"]
           },
           "Africa/Bujumbura": {
-            long: ["Central Africa Time", "Central Africa Time"]
+            "long": ["Central Africa Time", "Central Africa Time"]
           },
           "Africa/Gaborone": {
-            long: ["Central Africa Time", "Central Africa Time"]
+            "long": ["Central Africa Time", "Central Africa Time"]
           },
           "Africa/Lubumbashi": {
-            long: ["Central Africa Time", "Central Africa Time"]
+            "long": ["Central Africa Time", "Central Africa Time"]
           },
           "Africa/Blantyre": {
-            long: ["Central Africa Time", "Central Africa Time"]
+            "long": ["Central Africa Time", "Central Africa Time"]
           },
           "Africa/Kigali": {
-            long: ["Central Africa Time", "Central Africa Time"]
+            "long": ["Central Africa Time", "Central Africa Time"]
           },
           "Africa/Lusaka": {
-            long: ["Central Africa Time", "Central Africa Time"]
+            "long": ["Central Africa Time", "Central Africa Time"]
           },
           "Africa/Harare": {
-            long: ["Central Africa Time", "Central Africa Time"]
+            "long": ["Central Africa Time", "Central Africa Time"]
           },
-          "Africa/Nairobi": { long: ["East Africa Time", "East Africa Time"] },
-          "Africa/Djibouti": { long: ["East Africa Time", "East Africa Time"] },
-          "Africa/Asmera": { long: ["East Africa Time", "East Africa Time"] },
+          "Africa/Nairobi": { "long": ["East Africa Time", "East Africa Time"] },
+          "Africa/Djibouti": { "long": ["East Africa Time", "East Africa Time"] },
+          "Africa/Asmera": { "long": ["East Africa Time", "East Africa Time"] },
           "Africa/Addis_Ababa": {
-            long: ["East Africa Time", "East Africa Time"]
+            "long": ["East Africa Time", "East Africa Time"]
           },
-          "Indian/Comoro": { long: ["East Africa Time", "East Africa Time"] },
+          "Indian/Comoro": { "long": ["East Africa Time", "East Africa Time"] },
           "Indian/Antananarivo": {
-            long: ["East Africa Time", "East Africa Time"]
+            "long": ["East Africa Time", "East Africa Time"]
           },
           "Africa/Mogadishu": {
-            long: ["East Africa Time", "East Africa Time"]
+            "long": ["East Africa Time", "East Africa Time"]
           },
           "Africa/Dar_es_Salaam": {
-            long: ["East Africa Time", "East Africa Time"]
+            "long": ["East Africa Time", "East Africa Time"]
           },
-          "Africa/Kampala": { long: ["East Africa Time", "East Africa Time"] },
-          "Indian/Mayotte": { long: ["East Africa Time", "East Africa Time"] },
+          "Africa/Kampala": { "long": ["East Africa Time", "East Africa Time"] },
+          "Indian/Mayotte": { "long": ["East Africa Time", "East Africa Time"] },
           "Africa/Johannesburg": {
-            long: ["South Africa Standard Time", "South Africa Standard Time"]
+            "long": ["South Africa Standard Time", "South Africa Standard Time"]
           },
           "Africa/Maseru": {
-            long: ["South Africa Standard Time", "South Africa Standard Time"]
+            "long": ["South Africa Standard Time", "South Africa Standard Time"]
           },
           "Africa/Mbabane": {
-            long: ["South Africa Standard Time", "South Africa Standard Time"]
+            "long": ["South Africa Standard Time", "South Africa Standard Time"]
           },
           "Africa/Lagos": {
-            long: ["West Africa Standard Time", "West Africa Summer Time"]
+            "long": ["West Africa Standard Time", "West Africa Summer Time"]
           },
           "Africa/Luanda": {
-            long: ["West Africa Standard Time", "West Africa Summer Time"]
+            "long": ["West Africa Standard Time", "West Africa Summer Time"]
           },
           "Africa/Porto-Novo": {
-            long: ["West Africa Standard Time", "West Africa Summer Time"]
+            "long": ["West Africa Standard Time", "West Africa Summer Time"]
           },
           "Africa/Kinshasa": {
-            long: ["West Africa Standard Time", "West Africa Summer Time"]
+            "long": ["West Africa Standard Time", "West Africa Summer Time"]
           },
           "Africa/Bangui": {
-            long: ["West Africa Standard Time", "West Africa Summer Time"]
+            "long": ["West Africa Standard Time", "West Africa Summer Time"]
           },
           "Africa/Brazzaville": {
-            long: ["West Africa Standard Time", "West Africa Summer Time"]
+            "long": ["West Africa Standard Time", "West Africa Summer Time"]
           },
           "Africa/Douala": {
-            long: ["West Africa Standard Time", "West Africa Summer Time"]
+            "long": ["West Africa Standard Time", "West Africa Summer Time"]
           },
           "Africa/Libreville": {
-            long: ["West Africa Standard Time", "West Africa Summer Time"]
+            "long": ["West Africa Standard Time", "West Africa Summer Time"]
           },
           "Africa/Malabo": {
-            long: ["West Africa Standard Time", "West Africa Summer Time"]
+            "long": ["West Africa Standard Time", "West Africa Summer Time"]
           },
           "Africa/Niamey": {
-            long: ["West Africa Standard Time", "West Africa Summer Time"]
+            "long": ["West Africa Standard Time", "West Africa Summer Time"]
           },
           "Africa/Ndjamena": {
-            long: ["West Africa Standard Time", "West Africa Summer Time"]
+            "long": ["West Africa Standard Time", "West Africa Summer Time"]
           },
           "Asia/Aqtobe": {
-            long: ["West Kazakhstan Time", "West Kazakhstan Time"]
+            "long": ["West Kazakhstan Time", "West Kazakhstan Time"]
           },
           "America/Juneau": {
-            long: ["Alaska Standard Time", "Alaska Daylight Time"],
-            short: ["AKST", "AKDT"]
+            "long": ["Alaska Standard Time", "Alaska Daylight Time"],
+            "short": ["AKST", "AKDT"]
           },
           "Asia/Almaty": {
-            long: ["East Kazakhstan Time", "East Kazakhstan Time"]
+            "long": ["East Kazakhstan Time", "East Kazakhstan Time"]
           },
           "America/Manaus": {
-            long: ["Amazon Standard Time", "Amazon Summer Time"]
+            "long": ["Amazon Standard Time", "Amazon Summer Time"]
           },
           "America/Chicago": {
-            long: ["Central Standard Time", "Central Daylight Time"],
-            short: ["CST", "CDT"]
+            "long": ["Central Standard Time", "Central Daylight Time"],
+            "short": ["CST", "CDT"]
           },
           "America/Belize": {
-            long: ["Central Standard Time", "Central Daylight Time"],
-            short: ["CST", "CDT"]
+            "long": ["Central Standard Time", "Central Daylight Time"],
+            "short": ["CST", "CDT"]
           },
           "America/Winnipeg": {
-            long: ["Central Standard Time", "Central Daylight Time"],
-            short: ["CST", "CDT"]
+            "long": ["Central Standard Time", "Central Daylight Time"],
+            "short": ["CST", "CDT"]
           },
           "America/Costa_Rica": {
-            long: ["Central Standard Time", "Central Daylight Time"],
-            short: ["CST", "CDT"]
+            "long": ["Central Standard Time", "Central Daylight Time"],
+            "short": ["CST", "CDT"]
           },
           "America/Guatemala": {
-            long: ["Central Standard Time", "Central Daylight Time"],
-            short: ["CST", "CDT"]
+            "long": ["Central Standard Time", "Central Daylight Time"],
+            "short": ["CST", "CDT"]
           },
           "America/Tegucigalpa": {
-            long: ["Central Standard Time", "Central Daylight Time"],
-            short: ["CST", "CDT"]
+            "long": ["Central Standard Time", "Central Daylight Time"],
+            "short": ["CST", "CDT"]
           },
           "America/Mexico_City": {
-            long: ["Central Standard Time", "Central Daylight Time"],
-            short: ["CST", "CDT"]
+            "long": ["Central Standard Time", "Central Daylight Time"],
+            "short": ["CST", "CDT"]
           },
           "America/El_Salvador": {
-            long: ["Central Standard Time", "Central Daylight Time"],
-            short: ["CST", "CDT"]
+            "long": ["Central Standard Time", "Central Daylight Time"],
+            "short": ["CST", "CDT"]
           },
           "America/New_York": {
-            long: ["Eastern Standard Time", "Eastern Daylight Time"],
-            short: ["EST", "EDT"]
+            "long": ["Eastern Standard Time", "Eastern Daylight Time"],
+            "short": ["EST", "EDT"]
           },
           "America/Nassau": {
-            long: ["Eastern Standard Time", "Eastern Daylight Time"],
-            short: ["EST", "EDT"]
+            "long": ["Eastern Standard Time", "Eastern Daylight Time"],
+            "short": ["EST", "EDT"]
           },
           "America/Toronto": {
-            long: ["Eastern Standard Time", "Eastern Daylight Time"],
-            short: ["EST", "EDT"]
+            "long": ["Eastern Standard Time", "Eastern Daylight Time"],
+            "short": ["EST", "EDT"]
           },
           "America/Port-au-Prince": {
-            long: ["Eastern Standard Time", "Eastern Daylight Time"],
-            short: ["EST", "EDT"]
+            "long": ["Eastern Standard Time", "Eastern Daylight Time"],
+            "short": ["EST", "EDT"]
           },
           "America/Jamaica": {
-            long: ["Eastern Standard Time", "Eastern Daylight Time"],
-            short: ["EST", "EDT"]
+            "long": ["Eastern Standard Time", "Eastern Daylight Time"],
+            "short": ["EST", "EDT"]
           },
           "America/Cayman": {
-            long: ["Eastern Standard Time", "Eastern Daylight Time"],
-            short: ["EST", "EDT"]
+            "long": ["Eastern Standard Time", "Eastern Daylight Time"],
+            "short": ["EST", "EDT"]
           },
           "America/Panama": {
-            long: ["Eastern Standard Time", "Eastern Daylight Time"],
-            short: ["EST", "EDT"]
+            "long": ["Eastern Standard Time", "Eastern Daylight Time"],
+            "short": ["EST", "EDT"]
           },
           "America/Denver": {
-            long: ["Mountain Standard Time", "Mountain Daylight Time"],
-            short: ["MST", "MDT"]
+            "long": ["Mountain Standard Time", "Mountain Daylight Time"],
+            "short": ["MST", "MDT"]
           },
           "America/Edmonton": {
-            long: ["Mountain Standard Time", "Mountain Daylight Time"],
-            short: ["MST", "MDT"]
+            "long": ["Mountain Standard Time", "Mountain Daylight Time"],
+            "short": ["MST", "MDT"]
           },
           "America/Hermosillo": {
-            long: ["Mountain Standard Time", "Mountain Daylight Time"],
-            short: ["MST", "MDT"]
+            "long": ["Mountain Standard Time", "Mountain Daylight Time"],
+            "short": ["MST", "MDT"]
           },
           "America/Los_Angeles": {
-            long: ["Pacific Standard Time", "Pacific Daylight Time"],
-            short: ["PST", "PDT"]
+            "long": ["Pacific Standard Time", "Pacific Daylight Time"],
+            "short": ["PST", "PDT"]
           },
           "America/Vancouver": {
-            long: ["Pacific Standard Time", "Pacific Daylight Time"],
-            short: ["PST", "PDT"]
+            "long": ["Pacific Standard Time", "Pacific Daylight Time"],
+            "short": ["PST", "PDT"]
           },
           "America/Tijuana": {
-            long: ["Pacific Standard Time", "Pacific Daylight Time"],
-            short: ["PST", "PDT"]
+            "long": ["Pacific Standard Time", "Pacific Daylight Time"],
+            "short": ["PST", "PDT"]
           },
           "Asia/Anadyr": {
-            long: ["Anadyr Standard Time", "Anadyr Summer Time"]
+            "long": ["Anadyr Standard Time", "Anadyr Summer Time"]
           },
           "Pacific/Apia": {
-            long: ["Apia Standard Time", "Apia Daylight Time"]
+            "long": ["Apia Standard Time", "Apia Daylight Time"]
           },
           "Asia/Riyadh": {
-            long: ["Arabian Standard Time", "Arabian Daylight Time"]
+            "long": ["Arabian Standard Time", "Arabian Daylight Time"]
           },
           "Asia/Bahrain": {
-            long: ["Arabian Standard Time", "Arabian Daylight Time"]
+            "long": ["Arabian Standard Time", "Arabian Daylight Time"]
           },
           "Asia/Baghdad": {
-            long: ["Arabian Standard Time", "Arabian Daylight Time"]
+            "long": ["Arabian Standard Time", "Arabian Daylight Time"]
           },
           "Asia/Kuwait": {
-            long: ["Arabian Standard Time", "Arabian Daylight Time"]
+            "long": ["Arabian Standard Time", "Arabian Daylight Time"]
           },
           "Asia/Qatar": {
-            long: ["Arabian Standard Time", "Arabian Daylight Time"]
+            "long": ["Arabian Standard Time", "Arabian Daylight Time"]
           },
           "Asia/Aden": {
-            long: ["Arabian Standard Time", "Arabian Daylight Time"]
+            "long": ["Arabian Standard Time", "Arabian Daylight Time"]
           },
           "America/Buenos_Aires": {
-            long: ["Argentina Standard Time", "Argentina Summer Time"]
+            "long": ["Argentina Standard Time", "Argentina Summer Time"]
           },
           "America/Argentina/San_Luis": {
-            long: [
+            "long": [
               "Western Argentina Standard Time",
               "Western Argentina Summer Time"
             ]
           },
           "Asia/Ashgabat": {
-            long: ["Turkmenistan Standard Time", "Turkmenistan Summer Time"]
+            "long": ["Turkmenistan Standard Time", "Turkmenistan Summer Time"]
           },
           "America/Halifax": {
-            long: ["Atlantic Standard Time", "Atlantic Daylight Time"],
-            short: ["AST", "ADT"]
+            "long": ["Atlantic Standard Time", "Atlantic Daylight Time"],
+            "short": ["AST", "ADT"]
           },
           "America/Antigua": {
-            long: ["Atlantic Standard Time", "Atlantic Daylight Time"],
-            short: ["AST", "ADT"]
+            "long": ["Atlantic Standard Time", "Atlantic Daylight Time"],
+            "short": ["AST", "ADT"]
           },
           "America/Anguilla": {
-            long: ["Atlantic Standard Time", "Atlantic Daylight Time"],
-            short: ["AST", "ADT"]
+            "long": ["Atlantic Standard Time", "Atlantic Daylight Time"],
+            "short": ["AST", "ADT"]
           },
           "America/Aruba": {
-            long: ["Atlantic Standard Time", "Atlantic Daylight Time"],
-            short: ["AST", "ADT"]
+            "long": ["Atlantic Standard Time", "Atlantic Daylight Time"],
+            "short": ["AST", "ADT"]
           },
           "America/Barbados": {
-            long: ["Atlantic Standard Time", "Atlantic Daylight Time"],
-            short: ["AST", "ADT"]
+            "long": ["Atlantic Standard Time", "Atlantic Daylight Time"],
+            "short": ["AST", "ADT"]
           },
           "Atlantic/Bermuda": {
-            long: ["Atlantic Standard Time", "Atlantic Daylight Time"],
-            short: ["AST", "ADT"]
+            "long": ["Atlantic Standard Time", "Atlantic Daylight Time"],
+            "short": ["AST", "ADT"]
           },
           "America/Kralendijk": {
-            long: ["Atlantic Standard Time", "Atlantic Daylight Time"],
-            short: ["AST", "ADT"]
+            "long": ["Atlantic Standard Time", "Atlantic Daylight Time"],
+            "short": ["AST", "ADT"]
           },
           "America/Curacao": {
-            long: ["Atlantic Standard Time", "Atlantic Daylight Time"],
-            short: ["AST", "ADT"]
+            "long": ["Atlantic Standard Time", "Atlantic Daylight Time"],
+            "short": ["AST", "ADT"]
           },
           "America/Dominica": {
-            long: ["Atlantic Standard Time", "Atlantic Daylight Time"],
-            short: ["AST", "ADT"]
+            "long": ["Atlantic Standard Time", "Atlantic Daylight Time"],
+            "short": ["AST", "ADT"]
           },
           "America/Grenada": {
-            long: ["Atlantic Standard Time", "Atlantic Daylight Time"],
-            short: ["AST", "ADT"]
+            "long": ["Atlantic Standard Time", "Atlantic Daylight Time"],
+            "short": ["AST", "ADT"]
           },
           "America/Thule": {
-            long: ["Atlantic Standard Time", "Atlantic Daylight Time"],
-            short: ["AST", "ADT"]
+            "long": ["Atlantic Standard Time", "Atlantic Daylight Time"],
+            "short": ["AST", "ADT"]
           },
           "America/Guadeloupe": {
-            long: ["Atlantic Standard Time", "Atlantic Daylight Time"],
-            short: ["AST", "ADT"]
+            "long": ["Atlantic Standard Time", "Atlantic Daylight Time"],
+            "short": ["AST", "ADT"]
           },
           "America/St_Kitts": {
-            long: ["Atlantic Standard Time", "Atlantic Daylight Time"],
-            short: ["AST", "ADT"]
+            "long": ["Atlantic Standard Time", "Atlantic Daylight Time"],
+            "short": ["AST", "ADT"]
           },
           "America/St_Lucia": {
-            long: ["Atlantic Standard Time", "Atlantic Daylight Time"],
-            short: ["AST", "ADT"]
+            "long": ["Atlantic Standard Time", "Atlantic Daylight Time"],
+            "short": ["AST", "ADT"]
           },
           "America/Marigot": {
-            long: ["Atlantic Standard Time", "Atlantic Daylight Time"],
-            short: ["AST", "ADT"]
+            "long": ["Atlantic Standard Time", "Atlantic Daylight Time"],
+            "short": ["AST", "ADT"]
           },
           "America/Martinique": {
-            long: ["Atlantic Standard Time", "Atlantic Daylight Time"],
-            short: ["AST", "ADT"]
+            "long": ["Atlantic Standard Time", "Atlantic Daylight Time"],
+            "short": ["AST", "ADT"]
           },
           "America/Montserrat": {
-            long: ["Atlantic Standard Time", "Atlantic Daylight Time"],
-            short: ["AST", "ADT"]
+            "long": ["Atlantic Standard Time", "Atlantic Daylight Time"],
+            "short": ["AST", "ADT"]
           },
           "America/Puerto_Rico": {
-            long: ["Atlantic Standard Time", "Atlantic Daylight Time"],
-            short: ["AST", "ADT"]
+            "long": ["Atlantic Standard Time", "Atlantic Daylight Time"],
+            "short": ["AST", "ADT"]
           },
           "America/Lower_Princes": {
-            long: ["Atlantic Standard Time", "Atlantic Daylight Time"],
-            short: ["AST", "ADT"]
+            "long": ["Atlantic Standard Time", "Atlantic Daylight Time"],
+            "short": ["AST", "ADT"]
           },
           "America/Port_of_Spain": {
-            long: ["Atlantic Standard Time", "Atlantic Daylight Time"],
-            short: ["AST", "ADT"]
+            "long": ["Atlantic Standard Time", "Atlantic Daylight Time"],
+            "short": ["AST", "ADT"]
           },
           "America/St_Vincent": {
-            long: ["Atlantic Standard Time", "Atlantic Daylight Time"],
-            short: ["AST", "ADT"]
+            "long": ["Atlantic Standard Time", "Atlantic Daylight Time"],
+            "short": ["AST", "ADT"]
           },
           "America/Tortola": {
-            long: ["Atlantic Standard Time", "Atlantic Daylight Time"],
-            short: ["AST", "ADT"]
+            "long": ["Atlantic Standard Time", "Atlantic Daylight Time"],
+            "short": ["AST", "ADT"]
           },
           "America/St_Thomas": {
-            long: ["Atlantic Standard Time", "Atlantic Daylight Time"],
-            short: ["AST", "ADT"]
+            "long": ["Atlantic Standard Time", "Atlantic Daylight Time"],
+            "short": ["AST", "ADT"]
           },
           "Australia/Adelaide": {
-            long: [
+            "long": [
               "Australian Central Standard Time",
               "Australian Central Daylight Time"
             ]
           },
           "Australia/Eucla": {
-            long: [
+            "long": [
               "Australian Central Western Standard Time",
               "Australian Central Western Daylight Time"
             ]
           },
           "Australia/Sydney": {
-            long: [
+            "long": [
               "Australian Eastern Standard Time",
               "Australian Eastern Daylight Time"
             ]
           },
           "Australia/Perth": {
-            long: [
+            "long": [
               "Australian Western Standard Time",
               "Australian Western Daylight Time"
             ]
           },
           "Atlantic/Azores": {
-            long: ["Azores Standard Time", "Azores Summer Time"]
+            "long": ["Azores Standard Time", "Azores Summer Time"]
           },
-          "Asia/Thimphu": { long: ["Bhutan Time", "Bhutan Time"] },
-          "America/La_Paz": { long: ["Bolivia Time", "Bolivia Time"] },
-          "Asia/Kuching": { long: ["Malaysia Time", "Malaysia Time"] },
+          "Asia/Thimphu": { "long": ["Bhutan Time", "Bhutan Time"] },
+          "America/La_Paz": { "long": ["Bolivia Time", "Bolivia Time"] },
+          "Asia/Kuching": { "long": ["Malaysia Time", "Malaysia Time"] },
           "America/Sao_Paulo": {
-            long: ["Brasilia Standard Time", "Brasilia Summer Time"]
+            "long": ["Brasilia Standard Time", "Brasilia Summer Time"]
           },
           "Europe/London": {
-            long: ["Greenwich Mean Time", "Greenwich Mean Time"],
-            short: ["GMT", "GMT"]
+            "long": ["Greenwich Mean Time", "Greenwich Mean Time"],
+            "short": ["GMT", "GMT"]
           },
           "Asia/Brunei": {
-            long: ["Brunei Darussalam Time", "Brunei Darussalam Time"]
+            "long": ["Brunei Darussalam Time", "Brunei Darussalam Time"]
           },
           "Atlantic/Cape_Verde": {
-            long: ["Cape Verde Standard Time", "Cape Verde Summer Time"]
+            "long": ["Cape Verde Standard Time", "Cape Verde Summer Time"]
           },
-          "Antarctica/Casey": { long: ["Casey Time", "Casey Time"] },
+          "Antarctica/Casey": { "long": ["Casey Time", "Casey Time"] },
           "Pacific/Saipan": {
-            long: ["North Mariana Islands Time", "North Mariana Islands Time"]
+            "long": ["North Mariana Islands Time", "North Mariana Islands Time"]
           },
           "Pacific/Guam": {
-            long: ["Guam Standard Time", "Guam Standard Time"]
+            "long": ["Guam Standard Time", "Guam Standard Time"]
           },
           "Pacific/Chatham": {
-            long: ["Chatham Standard Time", "Chatham Daylight Time"]
+            "long": ["Chatham Standard Time", "Chatham Daylight Time"]
           },
           "America/Santiago": {
-            long: ["Chile Standard Time", "Chile Summer Time"]
+            "long": ["Chile Standard Time", "Chile Summer Time"]
           },
           "Asia/Shanghai": {
-            long: ["China Standard Time", "China Daylight Time"]
+            "long": ["China Standard Time", "China Daylight Time"]
           },
           "Asia/Choibalsan": {
-            long: ["Choibalsan Standard Time", "Choibalsan Summer Time"]
+            "long": ["Choibalsan Standard Time", "Choibalsan Summer Time"]
           },
           "Indian/Christmas": {
-            long: ["Christmas Island Time", "Christmas Island Time"]
+            "long": ["Christmas Island Time", "Christmas Island Time"]
           },
           "Indian/Cocos": {
-            long: ["Cocos Islands Time", "Cocos Islands Time"]
+            "long": ["Cocos Islands Time", "Cocos Islands Time"]
           },
           "America/Bogota": {
-            long: ["Colombia Standard Time", "Colombia Summer Time"]
+            "long": ["Colombia Standard Time", "Colombia Summer Time"]
           },
           "Pacific/Rarotonga": {
-            long: [
+            "long": [
               "Cook Islands Standard Time",
               "Cook Islands Half Summer Time"
             ]
           },
           "America/Havana": {
-            long: ["Cuba Standard Time", "Cuba Daylight Time"]
+            "long": ["Cuba Standard Time", "Cuba Daylight Time"]
           },
-          "Antarctica/Davis": { long: ["Davis Time", "Davis Time"] },
+          "Antarctica/Davis": { "long": ["Davis Time", "Davis Time"] },
           "Antarctica/DumontDUrville": {
-            long: ["Dumont-d’Urville Time", "Dumont-d’Urville Time"]
+            "long": ["Dumont-d’Urville Time", "Dumont-d’Urville Time"]
           },
-          "Asia/Dushanbe": { long: ["Tajikistan Time", "Tajikistan Time"] },
-          "America/Paramaribo": { long: ["Suriname Time", "Suriname Time"] },
-          "Asia/Dili": { long: ["East Timor Time", "East Timor Time"] },
+          "Asia/Dushanbe": { "long": ["Tajikistan Time", "Tajikistan Time"] },
+          "America/Paramaribo": { "long": ["Suriname Time", "Suriname Time"] },
+          "Asia/Dili": { "long": ["East Timor Time", "East Timor Time"] },
           "Pacific/Easter": {
-            long: ["Easter Island Standard Time", "Easter Island Summer Time"]
+            "long": ["Easter Island Standard Time", "Easter Island Summer Time"]
           },
-          "America/Guayaquil": { long: ["Ecuador Time", "Ecuador Time"] },
+          "America/Guayaquil": { "long": ["Ecuador Time", "Ecuador Time"] },
           "Europe/Paris": {
-            long: [
+            "long": [
               "Central European Standard Time",
               "Central European Summer Time"
             ]
           },
           "Europe/Andorra": {
-            long: [
+            "long": [
               "Central European Standard Time",
               "Central European Summer Time"
             ]
           },
           "Europe/Tirane": {
-            long: [
+            "long": [
               "Central European Standard Time",
               "Central European Summer Time"
             ]
           },
           "Europe/Vienna": {
-            long: [
+            "long": [
               "Central European Standard Time",
               "Central European Summer Time"
             ]
           },
           "Europe/Sarajevo": {
-            long: [
+            "long": [
               "Central European Standard Time",
               "Central European Summer Time"
             ]
           },
           "Europe/Brussels": {
-            long: [
+            "long": [
               "Central European Standard Time",
               "Central European Summer Time"
             ]
           },
           "Europe/Zurich": {
-            long: [
+            "long": [
               "Central European Standard Time",
               "Central European Summer Time"
             ]
           },
           "Europe/Prague": {
-            long: [
+            "long": [
               "Central European Standard Time",
               "Central European Summer Time"
             ]
           },
           "Europe/Berlin": {
-            long: [
+            "long": [
               "Central European Standard Time",
               "Central European Summer Time"
             ]
           },
           "Europe/Copenhagen": {
-            long: [
+            "long": [
               "Central European Standard Time",
               "Central European Summer Time"
             ]
           },
           "Europe/Madrid": {
-            long: [
+            "long": [
               "Central European Standard Time",
               "Central European Summer Time"
             ]
           },
           "Europe/Gibraltar": {
-            long: [
+            "long": [
               "Central European Standard Time",
               "Central European Summer Time"
             ]
           },
           "Europe/Zagreb": {
-            long: [
+            "long": [
               "Central European Standard Time",
               "Central European Summer Time"
             ]
           },
           "Europe/Budapest": {
-            long: [
+            "long": [
               "Central European Standard Time",
               "Central European Summer Time"
             ]
           },
           "Europe/Rome": {
-            long: [
+            "long": [
               "Central European Standard Time",
               "Central European Summer Time"
             ]
           },
           "Europe/Vaduz": {
-            long: [
+            "long": [
               "Central European Standard Time",
               "Central European Summer Time"
             ]
           },
           "Europe/Luxembourg": {
-            long: [
+            "long": [
               "Central European Standard Time",
               "Central European Summer Time"
             ]
           },
           "Europe/Monaco": {
-            long: [
+            "long": [
               "Central European Standard Time",
               "Central European Summer Time"
             ]
           },
           "Europe/Podgorica": {
-            long: [
+            "long": [
               "Central European Standard Time",
               "Central European Summer Time"
             ]
           },
           "Europe/Skopje": {
-            long: [
+            "long": [
               "Central European Standard Time",
               "Central European Summer Time"
             ]
           },
           "Europe/Malta": {
-            long: [
+            "long": [
               "Central European Standard Time",
               "Central European Summer Time"
             ]
           },
           "Europe/Amsterdam": {
-            long: [
+            "long": [
               "Central European Standard Time",
               "Central European Summer Time"
             ]
           },
           "Europe/Oslo": {
-            long: [
+            "long": [
               "Central European Standard Time",
               "Central European Summer Time"
             ]
           },
           "Europe/Warsaw": {
-            long: [
+            "long": [
               "Central European Standard Time",
               "Central European Summer Time"
             ]
           },
           "Europe/Belgrade": {
-            long: [
+            "long": [
               "Central European Standard Time",
               "Central European Summer Time"
             ]
           },
           "Europe/Stockholm": {
-            long: [
+            "long": [
               "Central European Standard Time",
               "Central European Summer Time"
             ]
           },
           "Europe/Ljubljana": {
-            long: [
+            "long": [
               "Central European Standard Time",
               "Central European Summer Time"
             ]
           },
           "Arctic/Longyearbyen": {
-            long: [
+            "long": [
               "Central European Standard Time",
               "Central European Summer Time"
             ]
           },
           "Europe/Bratislava": {
-            long: [
+            "long": [
               "Central European Standard Time",
               "Central European Summer Time"
             ]
           },
           "Europe/San_Marino": {
-            long: [
+            "long": [
               "Central European Standard Time",
               "Central European Summer Time"
             ]
           },
           "Africa/Tunis": {
-            long: [
+            "long": [
               "Central European Standard Time",
               "Central European Summer Time"
             ]
           },
           "Europe/Vatican": {
-            long: [
+            "long": [
               "Central European Standard Time",
               "Central European Summer Time"
             ]
           },
           "Europe/Bucharest": {
-            long: [
+            "long": [
               "Eastern European Standard Time",
               "Eastern European Summer Time"
             ]
           },
           "Europe/Mariehamn": {
-            long: [
+            "long": [
               "Eastern European Standard Time",
               "Eastern European Summer Time"
             ]
           },
           "Europe/Sofia": {
-            long: [
+            "long": [
               "Eastern European Standard Time",
               "Eastern European Summer Time"
             ]
           },
           "Asia/Nicosia": {
-            long: [
+            "long": [
               "Eastern European Standard Time",
               "Eastern European Summer Time"
             ]
           },
           "Africa/Cairo": {
-            long: [
+            "long": [
               "Eastern European Standard Time",
               "Eastern European Summer Time"
             ]
           },
           "Europe/Helsinki": {
-            long: [
+            "long": [
               "Eastern European Standard Time",
               "Eastern European Summer Time"
             ]
           },
           "Europe/Athens": {
-            long: [
+            "long": [
               "Eastern European Standard Time",
               "Eastern European Summer Time"
             ]
           },
           "Asia/Amman": {
-            long: [
+            "long": [
               "Eastern European Standard Time",
               "Eastern European Summer Time"
             ]
           },
           "Asia/Beirut": {
-            long: [
+            "long": [
               "Eastern European Standard Time",
               "Eastern European Summer Time"
             ]
           },
           "Asia/Damascus": {
-            long: [
+            "long": [
               "Eastern European Standard Time",
               "Eastern European Summer Time"
             ]
           },
           "Europe/Minsk": {
-            long: [
+            "long": [
               "Further-eastern European Time",
               "Further-eastern European Time"
             ]
           },
           "Europe/Kaliningrad": {
-            long: [
+            "long": [
               "Further-eastern European Time",
               "Further-eastern European Time"
             ]
           },
           "Atlantic/Canary": {
-            long: [
+            "long": [
               "Western European Standard Time",
               "Western European Summer Time"
             ]
           },
           "Atlantic/Faeroe": {
-            long: [
+            "long": [
               "Western European Standard Time",
               "Western European Summer Time"
             ]
           },
           "Atlantic/Stanley": {
-            long: [
+            "long": [
               "Falkland Islands Standard Time",
               "Falkland Islands Summer Time"
             ]
           },
-          "Pacific/Fiji": { long: ["Fiji Standard Time", "Fiji Summer Time"] },
+          "Pacific/Fiji": { "long": ["Fiji Standard Time", "Fiji Summer Time"] },
           "America/Cayenne": {
-            long: ["French Guiana Time", "French Guiana Time"]
+            "long": ["French Guiana Time", "French Guiana Time"]
           },
           "Indian/Kerguelen": {
-            long: [
+            "long": [
               "French Southern & Antarctic Time",
               "French Southern & Antarctic Time"
             ]
           },
-          "Asia/Bishkek": { long: ["Kyrgyzstan Time", "Kyrgyzstan Time"] },
-          "Pacific/Galapagos": { long: ["Galapagos Time", "Galapagos Time"] },
-          "Pacific/Gambier": { long: ["Gambier Time", "Gambier Time"] },
+          "Asia/Bishkek": { "long": ["Kyrgyzstan Time", "Kyrgyzstan Time"] },
+          "Pacific/Galapagos": { "long": ["Galapagos Time", "Galapagos Time"] },
+          "Pacific/Gambier": { "long": ["Gambier Time", "Gambier Time"] },
           "Pacific/Tarawa": {
-            long: ["Gilbert Islands Time", "Gilbert Islands Time"]
+            "long": ["Gilbert Islands Time", "Gilbert Islands Time"]
           },
           "Atlantic/Reykjavik": {
-            long: ["Greenwich Mean Time", "Greenwich Mean Time"],
-            short: ["GMT", "GMT"]
+            "long": ["Greenwich Mean Time", "Greenwich Mean Time"],
+            "short": ["GMT", "GMT"]
           },
           "Africa/Ouagadougou": {
-            long: ["Greenwich Mean Time", "Greenwich Mean Time"],
-            short: ["GMT", "GMT"]
+            "long": ["Greenwich Mean Time", "Greenwich Mean Time"],
+            "short": ["GMT", "GMT"]
           },
           "Africa/Abidjan": {
-            long: ["Greenwich Mean Time", "Greenwich Mean Time"],
-            short: ["GMT", "GMT"]
+            "long": ["Greenwich Mean Time", "Greenwich Mean Time"],
+            "short": ["GMT", "GMT"]
           },
           "Africa/Accra": {
-            long: ["Greenwich Mean Time", "Greenwich Mean Time"],
-            short: ["GMT", "GMT"]
+            "long": ["Greenwich Mean Time", "Greenwich Mean Time"],
+            "short": ["GMT", "GMT"]
           },
           "Africa/Banjul": {
-            long: ["Greenwich Mean Time", "Greenwich Mean Time"],
-            short: ["GMT", "GMT"]
+            "long": ["Greenwich Mean Time", "Greenwich Mean Time"],
+            "short": ["GMT", "GMT"]
           },
           "Africa/Conakry": {
-            long: ["Greenwich Mean Time", "Greenwich Mean Time"],
-            short: ["GMT", "GMT"]
+            "long": ["Greenwich Mean Time", "Greenwich Mean Time"],
+            "short": ["GMT", "GMT"]
           },
           "Africa/Bamako": {
-            long: ["Greenwich Mean Time", "Greenwich Mean Time"],
-            short: ["GMT", "GMT"]
+            "long": ["Greenwich Mean Time", "Greenwich Mean Time"],
+            "short": ["GMT", "GMT"]
           },
           "Africa/Nouakchott": {
-            long: ["Greenwich Mean Time", "Greenwich Mean Time"],
-            short: ["GMT", "GMT"]
+            "long": ["Greenwich Mean Time", "Greenwich Mean Time"],
+            "short": ["GMT", "GMT"]
           },
           "Atlantic/St_Helena": {
-            long: ["Greenwich Mean Time", "Greenwich Mean Time"],
-            short: ["GMT", "GMT"]
+            "long": ["Greenwich Mean Time", "Greenwich Mean Time"],
+            "short": ["GMT", "GMT"]
           },
           "Africa/Freetown": {
-            long: ["Greenwich Mean Time", "Greenwich Mean Time"],
-            short: ["GMT", "GMT"]
+            "long": ["Greenwich Mean Time", "Greenwich Mean Time"],
+            "short": ["GMT", "GMT"]
           },
           "Africa/Dakar": {
-            long: ["Greenwich Mean Time", "Greenwich Mean Time"],
-            short: ["GMT", "GMT"]
+            "long": ["Greenwich Mean Time", "Greenwich Mean Time"],
+            "short": ["GMT", "GMT"]
           },
           "Africa/Lome": {
-            long: ["Greenwich Mean Time", "Greenwich Mean Time"],
-            short: ["GMT", "GMT"]
+            "long": ["Greenwich Mean Time", "Greenwich Mean Time"],
+            "short": ["GMT", "GMT"]
           },
           "America/Scoresbysund": {
-            long: ["East Greenland Standard Time", "East Greenland Summer Time"]
+            "long": ["East Greenland Standard Time", "East Greenland Summer Time"]
           },
           "America/Godthab": {
-            long: ["West Greenland Standard Time", "West Greenland Summer Time"]
+            "long": ["West Greenland Standard Time", "West Greenland Summer Time"]
           },
-          "Asia/Dubai": { long: ["Gulf Standard Time", "Gulf Standard Time"] },
-          "Asia/Muscat": { long: ["Gulf Standard Time", "Gulf Standard Time"] },
-          "America/Guyana": { long: ["Guyana Time", "Guyana Time"] },
+          "Asia/Dubai": { "long": ["Gulf Standard Time", "Gulf Standard Time"] },
+          "Asia/Muscat": { "long": ["Gulf Standard Time", "Gulf Standard Time"] },
+          "America/Guyana": { "long": ["Guyana Time", "Guyana Time"] },
           "Pacific/Honolulu": {
-            long: [
+            "long": [
               "Hawaii-Aleutian Standard Time",
               "Hawaii-Aleutian Daylight Time"
             ],
-            short: ["HAST", "HADT"]
+            "short": ["HAST", "HADT"]
           },
           "Asia/Hong_Kong": {
-            long: ["Hong Kong Standard Time", "Hong Kong Summer Time"]
+            "long": ["Hong Kong Standard Time", "Hong Kong Summer Time"]
           },
-          "Asia/Hovd": { long: ["Hovd Standard Time", "Hovd Summer Time"] },
+          "Asia/Hovd": { "long": ["Hovd Standard Time", "Hovd Summer Time"] },
           "Asia/Calcutta": {
-            long: ["India Standard Time", "India Standard Time"]
+            "long": ["India Standard Time", "India Standard Time"]
           },
-          "Asia/Colombo": { long: ["Lanka Time", "Lanka Time"] },
-          "Indian/Chagos": { long: ["Indian Ocean Time", "Indian Ocean Time"] },
-          "Asia/Bangkok": { long: ["Indochina Time", "Indochina Time"] },
-          "Asia/Phnom_Penh": { long: ["Indochina Time", "Indochina Time"] },
-          "Asia/Vientiane": { long: ["Indochina Time", "Indochina Time"] },
+          "Asia/Colombo": { "long": ["Lanka Time", "Lanka Time"] },
+          "Indian/Chagos": { "long": ["Indian Ocean Time", "Indian Ocean Time"] },
+          "Asia/Bangkok": { "long": ["Indochina Time", "Indochina Time"] },
+          "Asia/Phnom_Penh": { "long": ["Indochina Time", "Indochina Time"] },
+          "Asia/Vientiane": { "long": ["Indochina Time", "Indochina Time"] },
           "Asia/Makassar": {
-            long: ["Central Indonesia Time", "Central Indonesia Time"]
+            "long": ["Central Indonesia Time", "Central Indonesia Time"]
           },
           "Asia/Jayapura": {
-            long: ["Eastern Indonesia Time", "Eastern Indonesia Time"]
+            "long": ["Eastern Indonesia Time", "Eastern Indonesia Time"]
           },
           "Asia/Jakarta": {
-            long: ["Western Indonesia Time", "Western Indonesia Time"]
+            "long": ["Western Indonesia Time", "Western Indonesia Time"]
           },
-          "Asia/Tehran": { long: ["Iran Standard Time", "Iran Daylight Time"] },
+          "Asia/Tehran": { "long": ["Iran Standard Time", "Iran Daylight Time"] },
           "Asia/Irkutsk": {
-            long: ["Irkutsk Standard Time", "Irkutsk Summer Time"]
+            "long": ["Irkutsk Standard Time", "Irkutsk Summer Time"]
           },
           "Asia/Jerusalem": {
-            long: ["Israel Standard Time", "Israel Daylight Time"]
+            "long": ["Israel Standard Time", "Israel Daylight Time"]
           },
           "Asia/Tokyo": {
-            long: ["Japan Standard Time", "Japan Daylight Time"]
+            "long": ["Japan Standard Time", "Japan Daylight Time"]
           },
           "Asia/Kamchatka": {
-            long: [
+            "long": [
               "Petropavlovsk-Kamchatski Standard Time",
               "Petropavlovsk-Kamchatski Summer Time"
             ]
           },
           "Asia/Karachi": {
-            long: ["Pakistan Standard Time", "Pakistan Summer Time"]
+            "long": ["Pakistan Standard Time", "Pakistan Summer Time"]
           },
           "Asia/Qyzylorda": {
-            long: ["Qyzylorda Standard Time", "Qyzylorda Summer Time"]
+            "long": ["Qyzylorda Standard Time", "Qyzylorda Summer Time"]
           },
           "Asia/Seoul": {
-            long: ["Korean Standard Time", "Korean Daylight Time"]
+            "long": ["Korean Standard Time", "Korean Daylight Time"]
           },
-          "Pacific/Kosrae": { long: ["Kosrae Time", "Kosrae Time"] },
+          "Pacific/Kosrae": { "long": ["Kosrae Time", "Kosrae Time"] },
           "Asia/Krasnoyarsk": {
-            long: ["Krasnoyarsk Standard Time", "Krasnoyarsk Summer Time"]
+            "long": ["Krasnoyarsk Standard Time", "Krasnoyarsk Summer Time"]
           },
           "Europe/Samara": {
-            long: ["Samara Standard Time", "Samara Summer Time"]
+            "long": ["Samara Standard Time", "Samara Summer Time"]
           },
           "Pacific/Kiritimati": {
-            long: ["Line Islands Time", "Line Islands Time"]
+            "long": ["Line Islands Time", "Line Islands Time"]
           },
           "Australia/Lord_Howe": {
-            long: ["Lord Howe Standard Time", "Lord Howe Daylight Time"]
+            "long": ["Lord Howe Standard Time", "Lord Howe Daylight Time"]
           },
-          "Asia/Macau": { long: ["Macao Standard Time", "Macao Summer Time"] },
+          "Asia/Macau": { "long": ["Macao Standard Time", "Macao Summer Time"] },
           "Antarctica/Macquarie": {
-            long: ["Macquarie Island Time", "Macquarie Island Time"]
+            "long": ["Macquarie Island Time", "Macquarie Island Time"]
           },
           "Asia/Magadan": {
-            long: ["Magadan Standard Time", "Magadan Summer Time"]
+            "long": ["Magadan Standard Time", "Magadan Summer Time"]
           },
-          "Indian/Maldives": { long: ["Maldives Time", "Maldives Time"] },
-          "Pacific/Marquesas": { long: ["Marquesas Time", "Marquesas Time"] },
+          "Indian/Maldives": { "long": ["Maldives Time", "Maldives Time"] },
+          "Pacific/Marquesas": { "long": ["Marquesas Time", "Marquesas Time"] },
           "Pacific/Majuro": {
-            long: ["Marshall Islands Time", "Marshall Islands Time"]
+            "long": ["Marshall Islands Time", "Marshall Islands Time"]
           },
           "Indian/Mauritius": {
-            long: ["Mauritius Standard Time", "Mauritius Summer Time"]
+            "long": ["Mauritius Standard Time", "Mauritius Summer Time"]
           },
-          "Antarctica/Mawson": { long: ["Mawson Time", "Mawson Time"] },
+          "Antarctica/Mawson": { "long": ["Mawson Time", "Mawson Time"] },
           "America/Santa_Isabel": {
-            long: [
+            "long": [
               "Northwest Mexico Standard Time",
               "Northwest Mexico Daylight Time"
             ]
           },
           "America/Mazatlan": {
-            long: [
+            "long": [
               "Mexican Pacific Standard Time",
               "Mexican Pacific Daylight Time"
             ]
           },
           "Asia/Ulaanbaatar": {
-            long: ["Ulaanbaatar Standard Time", "Ulaanbaatar Summer Time"]
+            "long": ["Ulaanbaatar Standard Time", "Ulaanbaatar Summer Time"]
           },
           "Europe/Moscow": {
-            long: ["Moscow Standard Time", "Moscow Summer Time"]
+            "long": ["Moscow Standard Time", "Moscow Summer Time"]
           },
-          "Asia/Rangoon": { long: ["Myanmar Time", "Myanmar Time"] },
-          "Pacific/Nauru": { long: ["Nauru Time", "Nauru Time"] },
-          "Asia/Katmandu": { long: ["Nepal Time", "Nepal Time"] },
+          "Asia/Rangoon": { "long": ["Myanmar Time", "Myanmar Time"] },
+          "Pacific/Nauru": { "long": ["Nauru Time", "Nauru Time"] },
+          "Asia/Katmandu": { "long": ["Nepal Time", "Nepal Time"] },
           "Pacific/Noumea": {
-            long: ["New Caledonia Standard Time", "New Caledonia Summer Time"]
+            "long": ["New Caledonia Standard Time", "New Caledonia Summer Time"]
           },
           "Pacific/Auckland": {
-            long: ["New Zealand Standard Time", "New Zealand Daylight Time"]
+            "long": ["New Zealand Standard Time", "New Zealand Daylight Time"]
           },
           "Antarctica/McMurdo": {
-            long: ["New Zealand Standard Time", "New Zealand Daylight Time"]
+            "long": ["New Zealand Standard Time", "New Zealand Daylight Time"]
           },
           "America/St_Johns": {
-            long: ["Newfoundland Standard Time", "Newfoundland Daylight Time"]
+            "long": ["Newfoundland Standard Time", "Newfoundland Daylight Time"]
           },
-          "Pacific/Niue": { long: ["Niue Time", "Niue Time"] },
+          "Pacific/Niue": { "long": ["Niue Time", "Niue Time"] },
           "Pacific/Norfolk": {
-            long: [
+            "long": [
               "Norfolk Island Standard Time",
               "Norfolk Island Daylight Time"
             ]
           },
           "America/Noronha": {
-            long: [
+            "long": [
               "Fernando de Noronha Standard Time",
               "Fernando de Noronha Summer Time"
             ]
           },
           "Asia/Novosibirsk": {
-            long: ["Novosibirsk Standard Time", "Novosibirsk Summer Time"]
+            "long": ["Novosibirsk Standard Time", "Novosibirsk Summer Time"]
           },
-          "Asia/Omsk": { long: ["Omsk Standard Time", "Omsk Summer Time"] },
-          "Pacific/Palau": { long: ["Palau Time", "Palau Time"] },
+          "Asia/Omsk": { "long": ["Omsk Standard Time", "Omsk Summer Time"] },
+          "Pacific/Palau": { "long": ["Palau Time", "Palau Time"] },
           "Pacific/Port_Moresby": {
-            long: ["Papua New Guinea Time", "Papua New Guinea Time"]
+            "long": ["Papua New Guinea Time", "Papua New Guinea Time"]
           },
           "America/Asuncion": {
-            long: ["Paraguay Standard Time", "Paraguay Summer Time"]
+            "long": ["Paraguay Standard Time", "Paraguay Summer Time"]
           },
-          "America/Lima": { long: ["Peru Standard Time", "Peru Summer Time"] },
+          "America/Lima": { "long": ["Peru Standard Time", "Peru Summer Time"] },
           "Asia/Manila": {
-            long: ["Philippine Standard Time", "Philippine Summer Time"]
+            "long": ["Philippine Standard Time", "Philippine Summer Time"]
           },
           "Pacific/Enderbury": {
-            long: ["Phoenix Islands Time", "Phoenix Islands Time"]
+            "long": ["Phoenix Islands Time", "Phoenix Islands Time"]
           },
           "America/Miquelon": {
-            long: [
+            "long": [
               "St. Pierre & Miquelon Standard Time",
               "St. Pierre & Miquelon Daylight Time"
             ]
           },
-          "Pacific/Pitcairn": { long: ["Pitcairn Time", "Pitcairn Time"] },
-          "Pacific/Ponape": { long: ["Ponape Time", "Ponape Time"] },
-          "Asia/Pyongyang": { long: ["Pyongyang Time", "Pyongyang Time"] },
-          "Indian/Reunion": { long: ["Réunion Time", "Réunion Time"] },
-          "Antarctica/Rothera": { long: ["Rothera Time", "Rothera Time"] },
+          "Pacific/Pitcairn": { "long": ["Pitcairn Time", "Pitcairn Time"] },
+          "Pacific/Ponape": { "long": ["Ponape Time", "Ponape Time"] },
+          "Asia/Pyongyang": { "long": ["Pyongyang Time", "Pyongyang Time"] },
+          "Indian/Reunion": { "long": ["Réunion Time", "Réunion Time"] },
+          "Antarctica/Rothera": { "long": ["Rothera Time", "Rothera Time"] },
           "Asia/Sakhalin": {
-            long: ["Sakhalin Standard Time", "Sakhalin Summer Time"]
+            "long": ["Sakhalin Standard Time", "Sakhalin Summer Time"]
           },
           "Pacific/Pago_Pago": {
-            long: ["Samoa Standard Time", "Samoa Daylight Time"]
+            "long": ["Samoa Standard Time", "Samoa Daylight Time"]
           },
-          "Indian/Mahe": { long: ["Seychelles Time", "Seychelles Time"] },
+          "Indian/Mahe": { "long": ["Seychelles Time", "Seychelles Time"] },
           "Asia/Singapore": {
-            long: ["Singapore Standard Time", "Singapore Standard Time"]
+            "long": ["Singapore Standard Time", "Singapore Standard Time"]
           },
           "Pacific/Guadalcanal": {
-            long: ["Solomon Islands Time", "Solomon Islands Time"]
+            "long": ["Solomon Islands Time", "Solomon Islands Time"]
           },
           "Atlantic/South_Georgia": {
-            long: ["South Georgia Time", "South Georgia Time"]
+            "long": ["South Georgia Time", "South Georgia Time"]
           },
           "Asia/Yekaterinburg": {
-            long: ["Yekaterinburg Standard Time", "Yekaterinburg Summer Time"]
+            "long": ["Yekaterinburg Standard Time", "Yekaterinburg Summer Time"]
           },
-          "Antarctica/Syowa": { long: ["Syowa Time", "Syowa Time"] },
-          "Pacific/Tahiti": { long: ["Tahiti Time", "Tahiti Time"] },
+          "Antarctica/Syowa": { "long": ["Syowa Time", "Syowa Time"] },
+          "Pacific/Tahiti": { "long": ["Tahiti Time", "Tahiti Time"] },
           "Asia/Taipei": {
-            long: ["Taipei Standard Time", "Taipei Daylight Time"]
+            "long": ["Taipei Standard Time", "Taipei Daylight Time"]
           },
           "Asia/Tashkent": {
-            long: ["Uzbekistan Standard Time", "Uzbekistan Summer Time"]
+            "long": ["Uzbekistan Standard Time", "Uzbekistan Summer Time"]
           },
-          "Pacific/Fakaofo": { long: ["Tokelau Time", "Tokelau Time"] },
+          "Pacific/Fakaofo": { "long": ["Tokelau Time", "Tokelau Time"] },
           "Pacific/Tongatapu": {
-            long: ["Tonga Standard Time", "Tonga Summer Time"]
+            "long": ["Tonga Standard Time", "Tonga Summer Time"]
           },
-          "Pacific/Truk": { long: ["Chuuk Time", "Chuuk Time"] },
-          "Pacific/Funafuti": { long: ["Tuvalu Time", "Tuvalu Time"] },
+          "Pacific/Truk": { "long": ["Chuuk Time", "Chuuk Time"] },
+          "Pacific/Funafuti": { "long": ["Tuvalu Time", "Tuvalu Time"] },
           "America/Montevideo": {
-            long: ["Uruguay Standard Time", "Uruguay Summer Time"]
+            "long": ["Uruguay Standard Time", "Uruguay Summer Time"]
           },
           "Pacific/Efate": {
-            long: ["Vanuatu Standard Time", "Vanuatu Summer Time"]
+            "long": ["Vanuatu Standard Time", "Vanuatu Summer Time"]
           },
-          "America/Caracas": { long: ["Venezuela Time", "Venezuela Time"] },
+          "America/Caracas": { "long": ["Venezuela Time", "Venezuela Time"] },
           "Asia/Vladivostok": {
-            long: ["Vladivostok Standard Time", "Vladivostok Summer Time"]
+            "long": ["Vladivostok Standard Time", "Vladivostok Summer Time"]
           },
           "Europe/Volgograd": {
-            long: ["Volgograd Standard Time", "Volgograd Summer Time"]
+            "long": ["Volgograd Standard Time", "Volgograd Summer Time"]
           },
-          "Antarctica/Vostok": { long: ["Vostok Time", "Vostok Time"] },
-          "Pacific/Wake": { long: ["Wake Island Time", "Wake Island Time"] },
+          "Antarctica/Vostok": { "long": ["Vostok Time", "Vostok Time"] },
+          "Pacific/Wake": { "long": ["Wake Island Time", "Wake Island Time"] },
           "Pacific/Wallis": {
-            long: ["Wallis & Futuna Time", "Wallis & Futuna Time"]
+            "long": ["Wallis & Futuna Time", "Wallis & Futuna Time"]
           },
           "Asia/Yakutsk": {
-            long: ["Yakutsk Standard Time", "Yakutsk Summer Time"]
+            "long": ["Yakutsk Standard Time", "Yakutsk Summer Time"]
           },
           UTC: {
-            long: ["Coordinated Universal Time", "Coordinated Universal Time"],
-            short: ["UTC", "UTC"]
+            "long": ["Coordinated Universal Time", "Coordinated Universal Time"],
+            "short": ["UTC", "UTC"]
           }
         },
         gmtFormat: "GMT{0}",
         hourFormat: "+HH:mm;-HH:mm",
         dateFormat: {
           full: "EEEE, MMMM d, y",
-          long: "MMMM d, y",
+          "long": "MMMM d, y",
           medium: "MMM d, y",
-          short: "M/d/yy"
+          "short": "M/d/yy"
         },
         timeFormat: {
           full: "h:mm:ss a zzzz",
-          long: "h:mm:ss a z",
+          "long": "h:mm:ss a z",
           medium: "h:mm:ss a",
-          short: "h:mm a"
+          "short": "h:mm a"
         },
         dateTimeFormat: {
           full: "{1} 'at' {0}",
-          long: "{1} 'at' {0}",
+          "long": "{1} 'at' {0}",
           medium: "{1}, {0}",
-          short: "{1}, {0}"
+          "short": "{1}, {0}"
         },
         formats: {
           gregory: {
