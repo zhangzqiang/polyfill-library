@@ -3,6 +3,6 @@
 
 describe('Intl.Locale', function () {
   it('should be able to resolve locale list', function () {
-    proclaim.deepEqual(Intl.Locale('en-US').minimize().toString(), ['en']);
+    proclaim.deepEqual(new Intl.Locale('en-US').minimize().toString(), 'en');
   });
 });
