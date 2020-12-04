@@ -5,7 +5,7 @@ function Call(F, V /* [, argumentsList] */) { // eslint-disable-line no-unused-v
 	var argumentsList = arguments.length > 2 ? arguments[2] : [];
 	// 2. If IsCallable(F) is false, throw a TypeError exception.
 	if (IsCallable(F) === false) {
-		throw new TypeError(Object.prototype.toString.call(F) + 'is not a function.');
+		throw new TypeError(Object.prototype.toString.call(F) + ' is not a function.');
 	}
 	// 3. Return ? F.[[Call]](V, argumentsList).
 	return F.apply(V, argumentsList);

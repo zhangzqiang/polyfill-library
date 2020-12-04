@@ -40,6 +40,7 @@ it('throws when an entry object is absent', function () {
 });
 
 it('returns empty object if given an empty array', function () {
+    console.log(Object.fromEntries);
     proclaim.deepStrictEqual(Object.fromEntries([]), {});
 });
 
