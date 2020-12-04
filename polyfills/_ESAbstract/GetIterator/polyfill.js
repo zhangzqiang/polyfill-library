@@ -4,10 +4,7 @@
 function GetIterator(obj /*, method */) { // eslint-disable-line no-unused-vars
 	// 1. If method is not present, then
 		// a. Set method to ? GetMethod(obj, @@iterator).
-	console.log(obj, typeof obj);
-	console.log('symbol', Symbol.iterator, typeof Symbol.iterator);
 	var method = arguments.length > 1 ? arguments[1] : GetMethod(obj, Symbol.iterator);
-	console.log('get iterator method', method);
 	// 2. Let iterator be ? Call(method, obj).
 	var iterator = Call(method, obj);
 	// 3. If Type(iterator) is not Object, throw a TypeError exception.
