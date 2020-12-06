@@ -212,9 +212,10 @@ const printProgress = (function() {
       }
       if (message) {
         out.push(
-          ` • Browser: ${job.name.padEnd(
+          ` • Browser: ${_.padEnd(
+            job.name,
             " ",
-            20
+            10
           )} Test config: ${job.configForLog} ${message}`
         );
       }
