@@ -99,18 +99,40 @@ const tunnelId =
   (process.env.CIRCLE_BUILD_NUM || process.env.NODE_ENV || "null") +
   "_" +
   new Date().toISOString();
-const jobs = browsers.map(browser => {
-  const capability = useragentToBrowserObject(browser);
-  return new TestJob(
-    browser,
-    url,
-    mode,
-    capability,
-    tunnelId,
-    testBrowserTimeout,
-    pollTick
-  );
+
+const capabilities = browsers.map(browser => {
+  return useragentToBrowserObject(browser);
 });
+
+const jobs = [
+  ...(capabilities.map(capability => {
+    return new TestJob(
+      browser,
+      url,
+      mode,
+      capability,
+      tunnelId,
+      testBrowserTimeout,
+      pollTick
+    );
+  })),
+  ...(capabilities.map(capability => {
+    return new TestJob(
+      browser,
+      url + '&polyfillCombinations=yes',
+      mode,
+      capability,
+      tunnelId,
+      testBrowserTimeout,
+      pollTick
+    );
+  }))
+];
+
+jobs.forEach((job) => {
+  console.log('will test with url :', job.url);
+});
+
 const tunnel = new Tunnel();
 
 const openTunnel = promisify(tunnel.start.bind(tunnel));
