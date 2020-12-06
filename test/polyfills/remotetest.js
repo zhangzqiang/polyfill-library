@@ -100,47 +100,59 @@ const tunnelId =
   "_" +
   new Date().toISOString();
 
-const browserConfigs = browsers.map(browser => {
-  return {
+const jobConfigs = browsers.flatMap(browser => {
+  let configs = [];
+  const baseConfig = {
     browser: browser,
-    needsSharding: browser === 'ie/8.0',
-    capability: useragentToBrowserObject(browser), 
+    shard: false,
+    capability: useragentToBrowserObject(browser),
   };
+
+  if (browser === 'ie/8.0' || browser === 'ie/9.0') {
+    configs = [
+      {
+        ...baseConfig,
+        shard: 1,
+      },
+      {
+        ...baseConfig,
+        shard: 2,
+      }
+    ];
+  } else {
+    configs = [
+      baseConfig
+    ];
+  }
+  
+  return configs.flatMap((config) => {
+    return [
+      {
+        ...config,
+        polyfillCombinations: false,
+      },
+      {
+        ...config,
+        polyfillCombinations: true,
+      }
+    ] 
+  })
 });
 
 let jobs = [];
 
-browserConfigs.forEach(browserConfig => {
-  let jobURLs = [
+jobConfigs.forEach(jobConfig => {
+  jobs.push(new TestJob(
+    jobConfig.browser,
     url,
-    url + '&polyfillCombinations=yes'
-  ];
-
-  if (browserConfig.needsSharding) {
-    jobURLs = jobURLs.flatMap((jobURL) => {
-      return [
-        jobURL + '&shard=1',
-        jobURL + '&shard=2',
-        jobURL + '&shard=3'
-      ];
-    });
-  }
-
-  jobURLs.forEach((jobURL) => {
-    jobs.push(new TestJob(
-      browserConfig.browser,
-      jobURL,
-      mode,
-      browserConfig.capability,
-      tunnelId,
-      testBrowserTimeout,
-      pollTick
-    ));
-  });
-});
-
-jobs.forEach((job) => {
-  console.log('will test with url :', job.url);
+    mode,
+    jobConfig.capability,
+    tunnelId,
+    testBrowserTimeout,
+    pollTick,
+    jobConfig.polyfillCombinations,
+    jobConfig.shard
+  ));
 });
 
 const tunnel = new Tunnel();
@@ -203,7 +215,7 @@ const printProgress = (function() {
           ` • Browser: ${job.name.padEnd(
             " ",
             20
-          )} Testing mode: ${job.mode.padEnd(" ", 8)} ${message}`
+          )} Test config: ${job.configForLog} ${message}`
         );
       }
     });

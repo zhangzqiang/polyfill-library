@@ -232,7 +232,7 @@ function createEndpoint(template) {
     response.status(200);
 
     if (shard) {
-      features = features.slice((shard - 1) * (features.length / 3), (shard) * (features.length / 3));
+      features = features.slice((shard - 1) * (features.length / 2), (shard) * (features.length / 2));
     }
 
     response.set({
