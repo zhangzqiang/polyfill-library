@@ -185,7 +185,17 @@ async function testablePolyfills(isIE8, ua) {
     }
   }
 
-  polyfilldata.sort(function(a, b) {
+  polyfilldata.sort(function (a, b) {
+    // console.clear() test must run first to preserve console output of other tests.
+    // to run first it must be last in the list.
+    if (a.feature === 'console.clear') {
+      return 1;
+    }
+
+    if (b.feature === 'console.clear') {
+      return -1;
+    }
+
     return a.feature > b.feature ? -1 : 1;
   });
 
