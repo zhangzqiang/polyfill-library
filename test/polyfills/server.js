@@ -69,7 +69,7 @@ app.get(
   async (request, response) => {
     const ua = request.get("User-Agent");
     const isIE8 = polyfillio.normalizeUserAgent(ua) === "ie/8.0.0";
-    const polyfillCombinations = request.query.polyfillCombinations || "no";
+    const polyfillCombinations = (request.query.polyfillCombinations || "no") === "yes";
     const feature = request.query.feature || "";
     const includePolyfills = request.query.includePolyfills || "no";
     const always = request.query.always || "no";
