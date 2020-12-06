@@ -51,12 +51,12 @@ module.exports = class TestJob {
     this.url = url;
     if (polyfillCombinations) {
       this.polyfillCombinations = true;
-      this.url = this.url + 'polyfillCombinations=yes';
+      this.url = this.url + '&polyfillCombinations=yes';
     }
 
     if (shard) {
       this.shard = shard;
-      this.url = this.url + `shard=${shard}`;
+      this.url = this.url + `&shard=${shard}`;
     }
   }
 
