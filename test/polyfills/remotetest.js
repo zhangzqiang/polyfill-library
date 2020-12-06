@@ -100,34 +100,44 @@ const tunnelId =
   "_" +
   new Date().toISOString();
 
-const capabilities = browsers.map(browser => {
-  return useragentToBrowserObject(browser);
+const browserConfigs = browsers.map(browser => {
+  return {
+    browser: browser,
+    needsSharding: browser === 'ie/8.0',
+    capability: useragentToBrowserObject(browser), 
+  };
 });
 
-const jobs = [
-  ...(capabilities.map(capability => {
-    return new TestJob(
-      browser,
-      url,
+let jobs = [];
+
+browserConfigs.forEach(browserConfig => {
+  let jobURLs = [
+    url,
+    url + '&polyfillCombinations=yes'
+  ];
+
+  if (browserConfig.needsSharding) {
+    jobURLs = jobURLs.flatMap((jobURL) => {
+      return [
+        jobURL + '&shard=1',
+        jobURL + '&shard=2',
+        jobURL + '&shard=3'
+      ];
+    });
+  }
+
+  jobURLs.forEach((jobURL) => {
+    jobs.push(new TestJob(
+      browserConfig.browser,
+      jobURL,
       mode,
-      capability,
+      browserConfig.capability,
       tunnelId,
       testBrowserTimeout,
       pollTick
-    );
-  })),
-  ...(capabilities.map(capability => {
-    return new TestJob(
-      browser,
-      url + '&polyfillCombinations=yes',
-      mode,
-      capability,
-      tunnelId,
-      testBrowserTimeout,
-      pollTick
-    );
-  }))
-];
+    ));
+  });
+});
 
 jobs.forEach((job) => {
   console.log('will test with url :', job.url);

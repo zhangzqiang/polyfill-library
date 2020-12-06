@@ -200,6 +200,7 @@ function createEndpoint(template) {
     const feature = request.query.feature || "";
     const includePolyfills = request.query.includePolyfills || "no";
     const polyfillCombinations = request.query.polyfillCombinations || "no";
+    const shard = request.query.shard || false;
     const always = request.query.always || "no";
 
     if (includePolyfills !== "yes" && includePolyfills !== "no") {
@@ -225,10 +226,14 @@ function createEndpoint(template) {
     }
 
     // Filter for querystring args
-    const features = feature
+    let features = feature
       ? polyfills.filter(polyfill => feature === polyfill.feature)
       : polyfills;
     response.status(200);
+
+    if (shard) {
+      features = features.slice((shard - 1) * (features.length / 3), (shard) * (features.length / 3));
+    }
 
     response.set({
       "Content-Type": "text/html; charset=utf-8"
