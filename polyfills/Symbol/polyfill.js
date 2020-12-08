@@ -191,7 +191,7 @@
 		return that;
 	};
 
-	var source = create(null);
+	var source = objectCreate(null);
 	var sourceConstructor = {value: Symbol};
 	var sourceMap = function (uid) {
 		return source[uid];
