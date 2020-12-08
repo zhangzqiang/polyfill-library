@@ -102,7 +102,7 @@
 		var uid = '' + key;
 		return onlySymbols(uid) ? (
 			hOP.call(this, uid) &&
-			this[internalSymbol]['@@' + uid]
+			this[internalSymbol] && this[internalSymbol]['@@' + uid]
 		) : pIE.call(this, key);
 	};
 	var setAndGetSymbol = function (uid) {
