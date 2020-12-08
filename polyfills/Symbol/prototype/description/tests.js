@@ -64,7 +64,9 @@ it('works with functions', function () {
 });
 
 it('works with no input', function () {
-    proclaim.strictEqual(Symbol().description, undefined);
+    var s = Symbol();
+    proclaim.ok(typeof s !== "undefined");
+    proclaim.strictEqual(s.description, undefined);
 });
 
 // non symbols
