@@ -1,10 +1,6 @@
 /* global Symbol, Type, Proxy */
 
 (function (global) {
-  if (!('Proxy' in global)) {
-    return;
-  }
-
   var supportsGetters = (function() {
     try {
       var a = {};
@@ -91,6 +87,13 @@
       return string;
     }
   });
+
+  // Safari 9 needs the polyfill but doesn't implement "Proxy".
+  // We do a best effort above. The description for empty-isch values will always be "undefined".
+  // Below we use "Proxy" to better handle these cases.
+  if (!('Proxy' in global)) {
+    return;
+  }
 
   var symbolProxyHandler = {
     apply: function (target, that, args) {
