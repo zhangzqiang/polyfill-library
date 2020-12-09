@@ -16,7 +16,7 @@ CreateMethodProperty(String.prototype, 'replaceAll', function replaceAll(searchV
 			// 2.b.ii. Perform ? RequireObjectCoercible(flags).
 			RequireObjectCoercible(flags)
 			// 2.b.iii. If ? ToString(flags) does not contain "g", throw a TypeError exception.
-			if (!ToString(flags).includes('g')) {
+			if (ToString(flags).indexOf('g') === -1 && searchValue.global !== true) {
 				throw TypeError('');
 			}
 		}

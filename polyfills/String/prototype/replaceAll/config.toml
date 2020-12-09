@@ -19,7 +19,9 @@ dependencies = [
     "_ESAbstract.IsRegExp",
     "_ESAbstract.RequireObjectCoercible",
     "_ESAbstract.StringIndexOf",
-    "_ESAbstract.ToString"
+    "_ESAbstract.ToString",
+    "RegExp.prototype.flags",
+    "Symbol.replace"
 ]
 
 #### Specification Link
@@ -61,18 +63,12 @@ license = "MIT"
 # If all versions of a browser require the polyfill you can use the wildcard asterisk (*):
 # For specific versions you can specify a number, for example if a polyfill is required in Internet Explorer 8 and below you can use "<9"
 [browsers]
-android = "*"
-bb = "*"
-chrome = "<85"
-edge = "<85"
-edge_mob = "<85"
-firefox = "<77"
-ios_chr = "<13.4"
-ios_saf = "<13.4"
-ie = "*"
-ie_mob = "*"
-opera = "<71"
-op_mini = "*"
-safari = "<13.1"
-firefox_mob = "<79"
-samsung_mob = "*"
+chrome = "50 - 84"
+edge = "79 - 84"
+edge_mob = "79 - 84"
+firefox = "49 - 76"
+ios_chr = "10 - 13.3"
+ios_saf = "10 - 13.3"
+opera = "37 - 70"
+safari = "10 - 13"
+samsung_mob = ">=5"

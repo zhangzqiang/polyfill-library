@@ -59,6 +59,7 @@ describe('String.prototype.replaceAll', function () {
             'origami.origami.origami'.replaceAll(/\./, 'fox');
         }, TypeError);
     });
+
     it('works correctly if searchValue is a regex with a global flag', function() {
         proclaim.deepStrictEqual('origami.origami.origami'.replaceAll(/\./g, 'fox'), 'origamifoxorigamifoxorigami');
     });
